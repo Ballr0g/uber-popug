@@ -1,8 +1,13 @@
 plugins {
-    id("java")
+    java
 }
 
-group = "org.uber.popug"
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+group = "org.uber.popug.auth.service"
 version = "0.0.1"
 
 val junitVersion: String by project
