@@ -14,6 +14,8 @@ val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
 val mapstructVersion: String by project
 val lombokVersion: String by project
+val liquibaseVersion: String by project
+val postgresVersion: String by project
 
 val openApiGeneratedPath: String = "${buildDir}/generated/openapi"
 
@@ -49,6 +51,10 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
     implementation("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
+    // Liquibase.
+    implementation("org.liquibase:liquibase-core:${liquibaseVersion}")
+    // PostgreSQL.
+    implementation("org.postgresql:postgresql:${postgresVersion}")
 
     // --> Compile-Only Dependencies <--
     // Lombok.
