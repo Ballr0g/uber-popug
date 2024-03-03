@@ -45,10 +45,10 @@ components:
         - taskAssigneeId
       properties:
         taskId:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
           description: 'ID of the task created.'
         taskAssigneeId:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
           description: 'ID of the task assignee.'
