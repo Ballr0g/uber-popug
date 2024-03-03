@@ -12,6 +12,8 @@ val junitVersion: String by project
 val springBootVersion: String by project
 val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
+val mapstructVersion: String by project
+val lombokVersion: String by project
 
 val openApiGeneratedPath: String = "${buildDir}/generated/openapi"
 
@@ -32,6 +34,12 @@ repositories {
 }
 
 dependencies {
+    // MapStruct - annotation processing.
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+
+    // MapStruct - implementation.
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+
     // Spring Boot starter web.
     implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -41,7 +49,13 @@ dependencies {
     // Jakarta.
     implementation("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
 
+    // Lombok.
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+
+    // JUnit API.
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+
+    // JUnit engine.
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
