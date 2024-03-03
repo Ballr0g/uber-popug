@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: uber-popug-task-tracker-postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: 'db_uber_popug_task_tracker'
+      POSTGRES_USER: 'dbusername'
+      POSTGRES_PASSWORD: 'dbpassword'
+    labels:
+      org.springframework.boot.ignore: true
