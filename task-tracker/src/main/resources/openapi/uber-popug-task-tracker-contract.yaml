@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: 'uber-popug-task-tracker OpenAPI 3.1 contract.'
+  description: 'uber-popug-task-tracker - service for task management of Uber Popug Co. employees.'
+  version: 0.0.1
+paths:
+  /tasks:
+    post:
+      operationId: postTasks
+      description: 'Creates a new task and assigns it to a random employee.'
+      requestBody:
+        required: true
+        description: 'Data for the new task created.'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTasksRequestDto'
+      responses:
+        '201':
+          description: '[201] Successful response with task ID and task assignee ID.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostTasksResponseDto'
+
+components:
+  schemas:
+    PostTasksRequestDto:
+      type: object
+      description: '[Request] Info required to create a task: description'
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: 'Description of the new task, length - [1; 255].'
+
+    PostTasksResponseDto:
+      type: object
+      description: '[Response] Task successfully created and assigned.'
+      required:
+        - taskId
+        - taskAssigneeId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task created.'
+        taskAssigneeId:
+          type: string
+          format: uuid
+          description: 'ID of the task assignee.'
