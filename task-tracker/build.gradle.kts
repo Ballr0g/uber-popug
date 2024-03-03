@@ -34,27 +34,31 @@ repositories {
 }
 
 dependencies {
+    // --> Annotation Processors <--
+    // Lombok - annotation processing.
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     // MapStruct - annotation processing.
     annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 
+    // --> Implementation Dependencies <--
     // MapStruct - implementation.
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-
     // Spring Boot starter web.
     implementation("org.springframework.boot:spring-boot-starter-web")
-
     // Swagger V3 annotations.
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
-
     // Jakarta.
     implementation("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
 
+    // --> Compile-Only Dependencies <--
     // Lombok.
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
 
+    // --> Test Implementation Dependencies <--
     // JUnit API.
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
 
+    // --> Test Runtime-Only Dependencies <--
     // JUnit engine.
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
