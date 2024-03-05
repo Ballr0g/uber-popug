@@ -14,7 +14,7 @@ public interface TasksDtoMapper {
     TaskForCreation postTaskRequestsDtoToBusiness(PostTasksRequestDto postTasksRequestDto);
 
     @Mapping(source = "publicTaskId", target = "taskId")
-    @Mapping(source = "assignee.assigneeId", target = "taskAssigneeId")
+    @Mapping(source = "assignee.publicAssigneeId", target = "taskAssigneeId")
     PostTasksResponseDto postTasksResponseDtoFromBusiness(Task task);
 
 }
