@@ -20,7 +20,8 @@ databaseChangeLog:
                     type: uuid
                     remarks: 'Globally unique id of a user, provided by an external system.'
                     constraints:
-                      primaryKey: true
+                      nullable: false
+                      unique: true
                 - column:
                     name: login
                     type: varchar(63)
