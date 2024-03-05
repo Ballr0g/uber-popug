@@ -1,0 +1,23 @@
+databaseChangeLog:
+  -   changeSet:
+        id: '1.0.0-01-0'
+        author: 'd.sagalov'
+        comment: 'Create table users'
+        changes:
+          - createTable:
+              tableName: users
+              remarks: 'The table for storing users of the task tracker.'
+              columns:
+                - column:
+                    name: ext_user_id
+                    type: uuid
+                    remarks: 'Unique id of a user, provided by an external system.'
+                    constraints:
+                      primaryKey: true
+                - column:
+                    name: login
+                    type: varchar(63)
+                    remarks: 'Globally unique name of a user.'
+                    constraints:
+                      nullable: false
+                      unique: true

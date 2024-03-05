@@ -2,3 +2,15 @@ databaseChangeLog:
   - include:
       file: 'changesets/00-create_schema_task_tracker.yaml'
       relativeToChangelogFile: true
+  - include:
+      file: 'changesets/01-create_table_users.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/02-create_table_user_roles.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/03-create_table_users_to_user_roles.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/04-create_table_tasks.yaml'
+      relativeToChangelogFile: true
