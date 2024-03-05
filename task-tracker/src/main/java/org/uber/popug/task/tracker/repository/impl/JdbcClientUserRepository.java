@@ -21,11 +21,11 @@ import java.util.UUID;
 public class JdbcClientUserRepository implements UserRepository {
     private static final String GET_USERS_FOR_ROLE_SQL = /*language=sql*/
             """
-            SELECT u.ext_user_id, u.login, ur.role_id, ur.role_name
+            SELECT u.user_id, u.ext_public_user_id, u.login, ur.role_id, ur.role_name
             FROM users u
-            INNER JOIN users_to_user_roles uur ON u.ext_user_id = uur.user_id
+            INNER JOIN users_to_user_roles uur ON u.user_id = uur.user_id
             INNER JOIN user_roles ur ON uur.role_id = ur.role_id
-            WHERE ur.role_name IN :roleNames
+            WHERE ur.role_name IN (:roleNames)
             """;
     private final JdbcClient jdbcClient;
 
@@ -39,7 +39,7 @@ public class JdbcClientUserRepository implements UserRepository {
 
         Map<Long, UserEntity> usersWithRoles = new HashMap<>();
         for (var userToRole : usersToRoleEntries) {
-            if (usersWithRoles.containsKey(userToRole.userId())) {
+            if (!usersWithRoles.containsKey(userToRole.userId())) {
                 addUserToMap(usersWithRoles, userToRole);
             } else {
                 addUserRoleToMap(usersWithRoles, userToRole);
@@ -51,7 +51,7 @@ public class JdbcClientUserRepository implements UserRepository {
 
     private List<UserToRoleEntity> selectUserToRolesEntriesForRolesFromDb(Set<UserRole> expectedRoles) {
         return jdbcClient.sql(GET_USERS_FOR_ROLE_SQL)
-                .param("roleNames", expectedRoles)
+                .param("roleNames", expectedRoles.stream().map(UserRole::getRoleName).toList())
                 .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
                         rs.getLong("user_id"),
                         rs.getObject("ext_public_user_id", UUID.class),
