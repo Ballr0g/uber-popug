@@ -47,6 +47,8 @@ dependencies {
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
     // Spring Boot starter web.
     implementation("org.springframework.boot:spring-boot-starter-web")
+    // Spring Boot starter JDBC.
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     // Swagger V3 annotations.
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
