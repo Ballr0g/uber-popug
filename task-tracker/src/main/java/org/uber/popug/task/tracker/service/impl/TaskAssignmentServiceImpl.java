@@ -1,13 +1,26 @@
 package org.uber.popug.task.tracker.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.domain.task.TaskForCreation;
-import org.uber.popug.task.tracker.exception.NotImplementedException;
+import org.uber.popug.task.tracker.domain.task.TaskIdProvider;
+import org.uber.popug.task.tracker.mapping.UsersPersistenceMapper;
+import org.uber.popug.task.tracker.repository.UserRepository;
+import org.uber.popug.task.tracker.service.RandomUserEntityService;
 import org.uber.popug.task.tracker.service.TaskAssignmentService;
 
+@RequiredArgsConstructor
 public class TaskAssignmentServiceImpl implements TaskAssignmentService {
+    private final UserRepository userRepository;
+    private final RandomUserEntityService randomUserEntityService;
+    private final UsersPersistenceMapper usersPersistenceMapper;
+    private final TaskIdProvider taskIdProvider;
     @Override
     public Task assignNewTask(TaskForCreation task) {
-        throw new NotImplementedException(TaskAssignmentService.class, "assignNewTask");
+        final var availableTaskAssignees = userRepository.getDevelopers();
+        final var selectedTaskAssigneeEntity = randomUserEntityService.getRandomUserEntityFromList(availableTaskAssignees);
+        final var taskAssignee = usersPersistenceMapper.userEntityToTaskAssignee(selectedTaskAssigneeEntity);
+
+        return Task.create(taskIdProvider, task.taskDescription(), taskAssignee);
     }
 }

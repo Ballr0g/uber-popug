@@ -2,26 +2,52 @@ package org.uber.popug.task.tracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.uber.popug.task.tracker.domain.task.TaskIdProvider;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
+import org.uber.popug.task.tracker.mapping.UsersPersistenceMapper;
+import org.uber.popug.task.tracker.repository.TaskRepository;
+import org.uber.popug.task.tracker.repository.UserRepository;
+import org.uber.popug.task.tracker.service.RandomUserEntityService;
 import org.uber.popug.task.tracker.service.TaskAssignmentService;
 import org.uber.popug.task.tracker.service.TaskTrackerService;
+import org.uber.popug.task.tracker.service.impl.JavaRandomUserEntityService;
 import org.uber.popug.task.tracker.service.impl.TaskAssignmentServiceImpl;
 import org.uber.popug.task.tracker.service.impl.TaskTrackerServiceImpl;
+
+import java.util.random.RandomGenerator;
 
 @Configuration(proxyBeanMethods = false)
 public class TaskServicesConfig {
 
     @Bean
-    public TaskAssignmentService taskAssignmentService() {
-        return new TaskAssignmentServiceImpl();
+    public RandomUserEntityService randomUserEntityService(
+            RandomGenerator randomGenerator
+    ) {
+        return new JavaRandomUserEntityService(randomGenerator);
+    }
+
+    @Bean
+    public TaskAssignmentService taskAssignmentService(
+            UserRepository userRepository,
+            RandomUserEntityService randomUserEntityService,
+            UsersPersistenceMapper usersPersistenceMapper,
+            TaskIdProvider taskIdProvider
+    ) {
+        return new TaskAssignmentServiceImpl(
+                userRepository,
+                randomUserEntityService,
+                usersPersistenceMapper,
+                taskIdProvider
+        );
     }
 
     @Bean
     public TaskTrackerService taskTrackerService(
             TasksDtoMapper tasksDtoMapper,
-            TaskAssignmentService taskAssignmentService
+            TaskAssignmentService taskAssignmentService,
+            TaskRepository taskRepository
     ) {
-        return new TaskTrackerServiceImpl(tasksDtoMapper, taskAssignmentService);
+        return new TaskTrackerServiceImpl(tasksDtoMapper, taskAssignmentService, taskRepository);
     }
 
 }
