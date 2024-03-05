@@ -16,15 +16,18 @@ spring:
   mvc:
     converters:
       preferred-json-mapper: jackson
-  liquibase:
-    enabled: true
-    changelog: classpath:/db/changelog/changelog.yaml
-    contexts: ${spring.profiles.active:}
-  datasource:
-    username: ${DB_USERNAME:dbusername}
-    password: ${DB_PASSWORD:dbpassword}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_uber_popug_task_tracker}
   docker:
     compose:
       enabled: true
       file: task-tracker/docker-compose.yml
+  datasource:
+    username: ${DB_USERNAME:dbusername}
+    password: ${DB_PASSWORD:dbpassword}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_uber_popug_task_tracker}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 5000
+      validation-timeout: 2000
+      leak-detection-threshold: 300000
+  liquibase:
+    changelog: classpath:/db/changelog/changelog.yaml
