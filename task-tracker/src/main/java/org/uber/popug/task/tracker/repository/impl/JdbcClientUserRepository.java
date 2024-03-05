@@ -6,10 +6,10 @@ import org.uber.popug.task.tracker.domain.userrole.UserRole;
 import org.uber.popug.task.tracker.entity.user.UserEntity;
 import org.uber.popug.task.tracker.entity.user.UserToRoleEntity;
 import org.uber.popug.task.tracker.entity.userrole.UserRoleEntity;
-import org.uber.popug.task.tracker.exception.NotImplementedException;
 import org.uber.popug.task.tracker.repository.UserRepository;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,23 +31,57 @@ public class JdbcClientUserRepository implements UserRepository {
 
     @Override
     public List<UserEntity> getDevelopers() {
-        throw new NotImplementedException(JdbcClientUserRepository.class, "getDevelopers");
+        return getUsersOfRoles(Set.of(UserRole.DEVELOPER));
     }
 
-    public List<UserEntity> getUsersOfRoles(Set<UserRole> expectedRoles) {
-        throw new NotImplementedException(JdbcClientUserRepository.class, "getUsersOfRoles");
-//        final var userIdsToRoles = jdbcClient.sql(GET_USERS_FOR_ROLE_SQL)
-//                .param("roleNames", expectedRoles)
-//                .query((ResultSet rs, int rowNumber) -> {
-//                    return new UserToRoleEntity(
-//                            rs.getObject("ext_user_id", UUID.class),
-//                            rs.getString("login"),
-//                            new UserRoleEntity(
-//                                    rs.getLong("role_id"),
-//                                    rs.getString("role_name")
-//                            )
-//                    );
-//                })
-//                .list();
+    private List<UserEntity> getUsersOfRoles(Set<UserRole> expectedRoles) {
+        final var usersToRoleEntries = selectUserToRolesEntriesForRolesFromDb(expectedRoles);
+
+        Map<Long, UserEntity> usersWithRoles = new HashMap<>();
+        for (var userToRole : usersToRoleEntries) {
+            if (usersWithRoles.containsKey(userToRole.userId())) {
+                addUserToMap(usersWithRoles, userToRole);
+            } else {
+                addUserRoleToMap(usersWithRoles, userToRole);
+            }
+        }
+
+        return new ArrayList<>(usersWithRoles.values());
+    }
+
+    private List<UserToRoleEntity> selectUserToRolesEntriesForRolesFromDb(Set<UserRole> expectedRoles) {
+        return jdbcClient.sql(GET_USERS_FOR_ROLE_SQL)
+                .param("roleNames", expectedRoles)
+                .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
+                        rs.getLong("user_id"),
+                        rs.getObject("ext_public_user_id", UUID.class),
+                        rs.getString("login"),
+                        new UserRoleEntity(
+                                rs.getLong("role_id"),
+                                rs.getString("role_name")
+                        )
+                ))
+                .list();
+    }
+
+    private static void addUserToMap(Map<Long, UserEntity> usersWithRoles, UserToRoleEntity newUser) {
+        final var rolesSet = new HashSet<UserRoleEntity>();
+        rolesSet.add(newUser.userRoleEntity());
+
+        usersWithRoles.put(
+                newUser.userId(),
+                new UserEntity(
+                        newUser.userId(),
+                        newUser.extPublicUserId(),
+                        newUser.userLogin(),
+                        rolesSet
+                )
+        );
+    }
+
+    private static void addUserRoleToMap(Map<Long, UserEntity> usersWithRoles, UserToRoleEntity userWithNewRole) {
+        final var userForNewRole = usersWithRoles.get(userWithNewRole.userId());
+        final var rolesOfUserUpdated = userForNewRole.roles();
+        rolesOfUserUpdated.add(userWithNewRole.userRoleEntity());
     }
 }
