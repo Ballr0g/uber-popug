@@ -31,3 +31,4 @@ spring:
       leak-detection-threshold: 300000
   liquibase:
     changelog: classpath:/db/changelog/changelog.yaml
+    default-schema: task_tracker
