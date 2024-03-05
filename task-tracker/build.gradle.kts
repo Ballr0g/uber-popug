@@ -14,6 +14,8 @@ val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
 val mapstructVersion: String by project
 val lombokVersion: String by project
+val liquibaseVersion: String by project
+val postgresVersion: String by project
 
 val openApiGeneratedPath: String = "${buildDir}/generated/openapi"
 
@@ -45,14 +47,23 @@ dependencies {
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
     // Spring Boot starter web.
     implementation("org.springframework.boot:spring-boot-starter-web")
+    // Spring Boot starter JDBC.
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     // Swagger V3 annotations.
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
     implementation("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
+    // Liquibase.
+    implementation("org.liquibase:liquibase-core:${liquibaseVersion}")
+    // PostgreSQL.
+    implementation("org.postgresql:postgresql:${postgresVersion}")
 
     // --> Compile-Only Dependencies <--
     // Lombok.
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
+
+    // --> Development-Only Dependencies <--
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
     // --> Test Implementation Dependencies <--
     // JUnit API.
