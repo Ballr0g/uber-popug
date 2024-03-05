@@ -60,6 +60,9 @@ dependencies {
     // Lombok.
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
 
+    // --> Development-Only Dependencies <--
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+
     // --> Test Implementation Dependencies <--
     // JUnit API.
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

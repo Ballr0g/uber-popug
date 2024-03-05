@@ -6,6 +6,9 @@ server:
   shutdown: graceful
 
 spring:
+  profiles:
+    active:
+      - ${SPRING_PROFILE_NAME:dev}
   lifecycle:
     timeout-per-shutdown-phase: 4m
   main:
@@ -13,3 +16,15 @@ spring:
   mvc:
     converters:
       preferred-json-mapper: jackson
+  liquibase:
+    enabled: true
+    changelog: classpath:/db/changelog/changelog.yaml
+    contexts: ${spring.profiles.active:}
+  datasource:
+    username: ${DB_USERNAME:dbusername}
+    password: ${DB_PASSWORD:dbpassword}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_uber_popug_task_tracker}
+  docker:
+    compose:
+      enabled: true
+      file: task-tracker/docker-compose.yml
