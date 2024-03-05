@@ -17,13 +17,13 @@ databaseChangeLog:
                       primaryKey: true
                 - column:
                     name: user_id
-                    type: uuid
-                    remarks: 'Id of a user entry mapped to a role.'
+                    type: bigint
+                    remarks: 'Technical id of a user entry mapped to a role.'
                     constraints:
                       nullable: false
                       foreignKeyName: fk_user_entries_on_users_to_user_roles
                       referencedTableName: users
-                      referencedColumnNames: ext_user_id
+                      referencedColumnNames: user_id
                 - column:
                     name: role_id
                     type: bigint
