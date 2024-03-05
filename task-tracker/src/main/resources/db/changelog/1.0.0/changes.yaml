@@ -14,3 +14,12 @@ databaseChangeLog:
   - include:
       file: 'changesets/04-create_table_tasks.yaml'
       relativeToChangelogFile: true
+  - changeSet:
+      id: '1.0.0-05-0'
+      author: 'd.sagalov'
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            encoding: utf8
+            path: 'scripts/POPUG-003-insert_initial_user_roles.sql'
+            relativeToChangelogFile: true
