@@ -9,10 +9,10 @@ import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
 import org.uber.popug.task.tracker.service.RandomUserEntityService;
 import org.uber.popug.task.tracker.service.TaskAssignmentService;
-import org.uber.popug.task.tracker.service.TaskTrackerService;
+import org.uber.popug.task.tracker.service.TaskAddingService;
 import org.uber.popug.task.tracker.service.impl.JavaRandomUserEntityService;
 import org.uber.popug.task.tracker.service.impl.TaskAssignmentServiceImpl;
-import org.uber.popug.task.tracker.service.impl.TaskTrackerServiceImpl;
+import org.uber.popug.task.tracker.service.impl.TaskAddingServiceImpl;
 
 import java.util.random.RandomGenerator;
 
@@ -42,12 +42,12 @@ public class TaskServicesConfig {
     }
 
     @Bean
-    public TaskTrackerService taskTrackerService(
+    public TaskAddingService taskTrackerService(
             TasksDtoMapper tasksDtoMapper,
             TaskAssignmentService taskAssignmentService,
             TaskRepository taskRepository
     ) {
-        return new TaskTrackerServiceImpl(tasksDtoMapper, taskAssignmentService, taskRepository);
+        return new TaskAddingServiceImpl(tasksDtoMapper, taskAssignmentService, taskRepository);
     }
 
 }
