@@ -17,7 +17,7 @@ import org.uber.popug.task.tracker.service.impl.TaskAddingServiceImpl;
 import java.util.random.RandomGenerator;
 
 @Configuration(proxyBeanMethods = false)
-public class TaskServicesConfig {
+public class TaskCreationServicesConfig {
 
     @Bean
     public RandomUserEntityService randomUserEntityService(
