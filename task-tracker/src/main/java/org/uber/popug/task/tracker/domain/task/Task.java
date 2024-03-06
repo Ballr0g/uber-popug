@@ -5,6 +5,7 @@ import jakarta.annotation.Nonnull;
 import java.util.UUID;
 
 public record Task(
+        long taskId,
         @Nonnull UUID publicTaskId,
         @Nonnull String description,
         @Nonnull Status status,
@@ -21,7 +22,8 @@ public record Task(
             @Nonnull TaskAssignee assignee
     ) {
         return new Task(
-                taskIdProvider.generateTaskId(),
+                taskIdProvider.generateDbTaskId(),
+                taskIdProvider.generatePublicTaskId(),
                 description,
                 Status.OPEN,
                 assignee

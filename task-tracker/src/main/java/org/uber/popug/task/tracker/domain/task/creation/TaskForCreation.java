@@ -1,4 +1,4 @@
-package org.uber.popug.task.tracker.domain.task;
+package org.uber.popug.task.tracker.domain.task.creation;
 
 import jakarta.annotation.Nonnull;
 
