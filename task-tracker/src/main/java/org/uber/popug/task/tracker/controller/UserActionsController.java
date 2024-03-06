@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
-import org.uber.popug.task.tracker.rest.generated.api.UsersApi;
+import org.uber.popug.task.tracker.rest.generated.api.UserActionsApi;
 import org.uber.popug.task.tracker.rest.generated.model.PatchTasksCompleteResponseDto;
 import org.uber.popug.task.tracker.service.TaskCompletionService;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-public class UserActionsController implements UsersApi {
+public class UserActionsController implements UserActionsApi {
 
     private final TaskCompletionService taskCompletionService;
 
