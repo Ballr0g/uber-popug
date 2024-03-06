@@ -3,7 +3,7 @@ package org.uber.popug.task.tracker.mapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.uber.popug.task.tracker.domain.task.Task;
-import org.uber.popug.task.tracker.domain.task.TaskForCreation;
+import org.uber.popug.task.tracker.domain.task.creation.TaskForCreation;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksRequestDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksResponseDto;
 

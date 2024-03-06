@@ -1,7 +1,7 @@
 package org.uber.popug.task.tracker.service;
 
-import org.uber.popug.task.tracker.domain.task.TaskForCompletion;
+import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
 
 public interface TaskCompletionService {
-    void completeTask(TaskForCompletion task);
+    void completeTask(TaskForCompletionPublic task);
 }
