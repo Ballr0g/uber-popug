@@ -97,6 +97,7 @@ tasks {
             "java8" to "false",
             "library" to "spring-boot",
             "openApiNullable"  to "false",
+            "useTags" to "true",
             "useBeanValidation" to "true",
             "useSpringBoot3" to "true",
             "serializableModel" to "true",
