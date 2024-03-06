@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
+import org.uber.popug.task.tracker.exception.NotImplementedException;
 import org.uber.popug.task.tracker.rest.generated.api.UserActionsApi;
+import org.uber.popug.task.tracker.rest.generated.model.GetTasksByUserResponseDto;
 import org.uber.popug.task.tracker.rest.generated.model.PatchTasksCompleteResponseDto;
 import org.uber.popug.task.tracker.service.TaskCompletionService;
 
@@ -25,6 +27,11 @@ public class UserActionsController implements UserActionsApi {
                         .taskAssigneeId(userId)
                         .taskId(taskId)
         );
+    }
+
+    @Override
+    public ResponseEntity<GetTasksByUserResponseDto> getTasksByUser(UUID userId) {
+        throw new NotImplementedException(UserActionsApi.class, "getTasksByUser");
     }
 
 }

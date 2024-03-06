@@ -24,6 +24,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostTasksResponseDto'
+
   /tasks/reassign-all:
     post:
       operationId: reassignAllTasks
@@ -33,6 +34,30 @@ paths:
       responses:
         '200':
           description: '[200] Successfully shuffled all the tasks.'
+
+  /users/{userId}/tasks:
+    get:
+      operationId: getTasksByUser
+      tags:
+        - UserActions
+      description: 'Retrieves all tasks of a specific user by their id.'
+      parameters:
+        - name: userId
+          in: path
+          description: 'Id of the user the tasks are requested for.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: '[200] Successfully retrieved all tasks assigned to this user.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTasksByUserResponseDto'
+
+
   /users/{userId}/tasks/{taskId}/complete:
     patch:
       operationId: completeTask
@@ -107,3 +132,49 @@ components:
           type: string
           format: uuid
           description: 'ID of the assignee who completed the task.'
+
+    GetTasksByUserResponseDto:
+      type: object
+      description: '[Response] All tasks currently assigned to a specific user.'
+      required:
+        - userId
+        - userTasks
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: 'ID of the user the tasks are assigned to.'
+        userTasks:
+          type: array
+          uniqueItems: true
+          description: '[Unique] Set of tasks assigned to the requested user.'
+          items:
+            $ref: '#/components/schemas/GetTasksByUserTaskDto'
+
+    GetTasksByUserTaskDto:
+      type: object
+      description: '[Response] A single task assigned to a specific user.'
+      required:
+        - taskId
+        - description
+        - status
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task.'
+        description:
+          type: string
+          description: 'Description of the task'
+        status:
+          $ref: '#/components/schemas/TaskStatusDto'
+
+    TaskStatusDto:
+      type: string
+      description: >
+        Current status of the task:<br>
+        - <b>open</b>: The task is currently open.<br>
+        - <b>group_environment</b>: The task is already completed.<br>
+      enum:
+        - open
+        - completed
