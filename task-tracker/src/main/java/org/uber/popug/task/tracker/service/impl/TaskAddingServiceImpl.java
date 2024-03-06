@@ -6,10 +6,10 @@ import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksRequestDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksResponseDto;
 import org.uber.popug.task.tracker.service.TaskAssignmentService;
-import org.uber.popug.task.tracker.service.TaskTrackerService;
+import org.uber.popug.task.tracker.service.TaskAddingService;
 
 @RequiredArgsConstructor
-public class TaskTrackerServiceImpl implements TaskTrackerService {
+public class TaskAddingServiceImpl implements TaskAddingService {
     private final TasksDtoMapper tasksDtoMapper;
     private final TaskAssignmentService taskAssignmentService;
     private final TaskRepository taskRepository;
