@@ -24,6 +24,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostTasksResponseDto'
+  /tasks/reassign-all:
+    post:
+      operationId: reassignAllTasks
+      tags:
+        - TasksAdminApi
+      description: 'Reassigns all the tasks between available users.'
+      responses:
+        '200':
+          description: '[200] Successfully shuffled all the tasks.'
   /users/{userId}/tasks/{taskId}/complete:
     patch:
       operationId: completeTask
