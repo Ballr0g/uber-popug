@@ -7,6 +7,8 @@ paths:
   /tasks:
     post:
       operationId: postTasks
+      tags:
+        - TasksApi
       description: 'Creates a new task and assigns it to a random employee.'
       requestBody:
         required: true
@@ -22,6 +24,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostTasksResponseDto'
+  /users/{userId}/tasks/{taskId}/complete:
+    patch:
+      operationId: completeTask
+      tags:
+        - UserActionsApi
+      description: 'Completes a task with given id for specific user.'
+      parameters:
+        - name: userId
+          in: path
+          description: 'Id of the user completing the task.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: taskId
+          in: path
+          description: 'Id of the task completed by the user.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: '[200] Successfully changed the status of the task to completed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchTasksCompleteResponseDto'
 
 components:
   schemas:
@@ -39,7 +69,7 @@ components:
 
     PostTasksResponseDto:
       type: object
-      description: '[Response] Task successfully created and assigned.'
+      description: '[Response] Task successfully created and assigned to the user specified.'
       required:
         - taskId
         - taskAssigneeId
@@ -52,3 +82,19 @@ components:
           type: string
           format: uuid
           description: 'ID of the task assignee.'
+
+    PatchTasksCompleteResponseDto:
+      type: object
+      description: '[Response] Task specified successfully completed by the given user.'
+      required:
+        - taskId
+        - taskAssigneeId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task completed.'
+        taskAssigneeId:
+          type: string
+          format: uuid
+          description: 'ID of the assignee who completed the task.'
