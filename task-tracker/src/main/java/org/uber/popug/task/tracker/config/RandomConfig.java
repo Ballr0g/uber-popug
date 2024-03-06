@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.random.RandomGenerator;
 
 @Configuration(proxyBeanMethods = false)
-public class RandomConfiguration {
+public class RandomConfig {
 
     @Bean
     public RandomGenerator javaRandom() {
