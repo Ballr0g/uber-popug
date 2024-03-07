@@ -4,6 +4,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
+import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 import org.uber.popug.task.tracker.mapping.TasksPersistenceMapper;
 import org.uber.popug.task.tracker.mapping.UsersPersistenceMapper;
 
@@ -23,6 +24,11 @@ public class MappersConfig {
     @Bean
     public TasksPersistenceMapper tasksPersistenceMapper() {
         return Mappers.getMapper(TasksPersistenceMapper.class);
+    }
+
+    @Bean
+    public TasksKafkaEventMapper tasksKafkaEventMapper() {
+        return Mappers.getMapper(TasksKafkaEventMapper.class);
     }
 
 }
