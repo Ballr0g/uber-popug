@@ -38,6 +38,15 @@ public class JdbcClientUserRepository implements UserRepository {
             WHERE u.ext_public_user_id = :publicUserId
             """;
 
+    private static final String FIND_USER_BY_ID_SQL = /*language=sql*/
+            """
+            SELECT u.user_id, u.ext_public_user_id, u.login, ur.role_id, ur.role_name
+            FROM users u
+            INNER JOIN users_to_user_roles uur ON u.user_id = uur.user_id
+            INNER JOIN user_roles ur ON uur.role_id = ur.role_id
+            WHERE u.user_id = :userId
+            """;
+
     private final JdbcClient jdbcClient;
 
     @Override
@@ -48,21 +57,28 @@ public class JdbcClientUserRepository implements UserRepository {
     @Override
     public Optional<UserEntity> findByPublicId(UUID publicUserId) {
         final var userToRoles = getRolesPerUserByPublicId(publicUserId);
+        return mergeRolesToUser(userToRoles);
+    }
 
-        if (userToRoles.isEmpty()) {
-            return Optional.empty();
-        }
+    @Override
+    public Optional<UserEntity> findById(long userId) {
+        final var userToRoles = getRolesPerUserById(userId);
+        return mergeRolesToUser(userToRoles);
+    }
 
-        final var userRoles = new HashSet<UserRoleEntity>();
-        userToRoles.forEach(userToRoleEntity -> userRoles.add(userToRoleEntity.userRoleEntity()));
-        final var user = userToRoles.get(0);
-
-        return Optional.of(new UserEntity(
-                user.userId(),
-                user.extPublicUserId(),
-                user.userLogin(),
-                userRoles
-        ));
+    private List<UserToRoleEntity> getRolesPerUserById(long userId) {
+        return jdbcClient.sql(FIND_USER_BY_ID_SQL)
+                .param("userId", userId)
+                .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
+                        rs.getLong("user_id"),
+                        rs.getObject("ext_public_user_id", UUID.class),
+                        rs.getString("login"),
+                        new UserRoleEntity(
+                                rs.getLong("role_id"),
+                                rs.getString("role_name")
+                        )
+                ))
+                .list();
     }
 
     private List<UserToRoleEntity> getRolesPerUserByPublicId(UUID publicUserId) {
@@ -78,6 +94,23 @@ public class JdbcClientUserRepository implements UserRepository {
                         )
                 ))
                 .list();
+    }
+
+    private Optional<UserEntity> mergeRolesToUser(List<UserToRoleEntity> userToRoles) {
+        if (userToRoles.isEmpty()) {
+            return Optional.empty();
+        }
+
+        final var userRoles = new HashSet<UserRoleEntity>();
+        userToRoles.forEach(userToRoleEntity -> userRoles.add(userToRoleEntity.userRoleEntity()));
+        final var user = userToRoles.get(0);
+
+        return Optional.of(new UserEntity(
+                user.userId(),
+                user.extPublicUserId(),
+                user.userLogin(),
+                userRoles
+        ));
     }
 
     private List<UserEntity> getUsersOfRoles(Set<UserRole> expectedRoles) {
