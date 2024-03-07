@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.entity.task.TaskEntity;
 import org.uber.popug.task.tracker.entity.user.UserEntity;
+import org.uber.popug.task.tracker.kafka.producer.dto.TaskCompletedEvent;
 import org.uber.popug.task.tracker.kafka.producer.dto.TaskCreatedEvent;
 import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
 
@@ -29,5 +30,14 @@ public interface TasksKafkaEventMapper {
             expression = "java(java.time.ZonedDateTime.now(java.time.ZoneId.of(\"UTC\")).toLocalDateTime())"
     )
     TaskReassignedEvent toTaskReassignedEventFromBusiness(TaskEntity task, UserEntity previousAssignee, UserEntity newAssignee);
+
+    @Mapping(source = "task.publicTaskId", target = "publicId")
+    @Mapping(source = "assignee.extPublicUserId", target = "publicAssigneeId")
+    @Mapping(source = "task.description", target = "description")
+    @Mapping(
+            target = "completionDate",
+            expression = "java(java.time.ZonedDateTime.now(java.time.ZoneId.of(\"UTC\")).toLocalDateTime())"
+    )
+    TaskCompletedEvent toTaskCompletedEventFromEntities(TaskEntity task, UserEntity assignee);
 
 }

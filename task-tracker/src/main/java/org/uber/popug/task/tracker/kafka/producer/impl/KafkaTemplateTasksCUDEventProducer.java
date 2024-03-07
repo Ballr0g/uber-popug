@@ -6,6 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.dto.TaskCompletedEvent;
 import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 
@@ -34,6 +35,13 @@ public class KafkaTemplateTasksCUDEventProducer implements TasksCUDEventProducer
         taskReassignedEvents.stream()
                 .map(task -> task.asProducerRecord(tasksLifecycleKafkaTopicName))
                 .forEach(kafkaTemplate::send);
+    }
+
+    @Override
+    public void sendTaskCompletionEvent(TaskCompletedEvent taskCompletedEvent) {
+        final var kafkaTaskProducerRecord = taskCompletedEvent.asProducerRecord(tasksLifecycleKafkaTopicName);
+
+        kafkaTemplate.send(kafkaTaskProducerRecord);
     }
 
 }
