@@ -21,6 +21,8 @@ public interface TaskRepository {
 
     List<TaskEntity> readAllTasks();
 
+    List<TaskEntity> findTasksByAssigneeId(long assigneeId);
+
     int reassignTask(TaskEntity task, UserEntity newAssignee);
 
 }
