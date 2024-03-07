@@ -10,6 +10,7 @@ version = "0.0.1"
 
 val junitVersion: String by project
 val springBootVersion: String by project
+val springKafkaVersion: String by project
 val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
 val mapstructVersion: String by project
@@ -50,6 +51,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     // Spring Boot starter JDBC.
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    // Spring Kafka.
+    implementation("org.springframework.kafka:spring-kafka:${springKafkaVersion}")
     // Swagger V3 annotations.
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
