@@ -30,6 +30,13 @@ public class JdbcClientTaskRepository implements TaskRepository {
             WHERE t.public_task_id = :publicTaskId
             """;
 
+    private static final String FIND_TASK_BY_ID_SQL = /*language=sql*/
+            """
+            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
+            FROM tasks t
+            WHERE t.task_id = :taskId
+            """;
+
     private static final String COMPLETE_TASK_SQL = /*language=sql*/
             """
             UPDATE tasks
@@ -88,6 +95,14 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 .param("taskId", task.taskId())
                 .param("assigneeId", task.assigneeId())
                 .update();
+    }
+
+    @Override
+    public Optional<TaskEntity> findById(long taskId) {
+        return jdbcClient.sql(FIND_TASK_BY_ID_SQL)
+                .param("taskId", taskId)
+                .query(TaskEntity.class)
+                .optional();
     }
 
     @Override

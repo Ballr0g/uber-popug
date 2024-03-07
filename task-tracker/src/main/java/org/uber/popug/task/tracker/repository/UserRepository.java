@@ -7,7 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
+
     List<UserEntity> getDevelopers();
 
     Optional<UserEntity> findByPublicId(UUID publicUserId);
+
+    Optional<UserEntity> findById(long userId);
+
 }

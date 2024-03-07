@@ -2,6 +2,8 @@ package org.uber.popug.task.tracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
+import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
 import org.uber.popug.task.tracker.service.TaskCompletionService;
@@ -23,8 +25,17 @@ public class TaskCompletionServicesConfig {
     @Bean
     public TaskCompletionService taskCompletionService(
             TaskMembershipCheckingService taskMembershipCheckingService,
-            TaskRepository taskRepository
+            TaskRepository taskRepository,
+            UserRepository userRepository,
+            TasksKafkaEventMapper tasksKafkaEventMapper,
+            TasksCUDEventProducer tasksCUDEventProducer
     ) {
-        return new TaskCompletionServiceImpl(taskMembershipCheckingService, taskRepository);
+        return new TaskCompletionServiceImpl(
+                taskMembershipCheckingService,
+                taskRepository,
+                userRepository,
+                tasksKafkaEventMapper,
+                tasksCUDEventProducer
+        );
     }
 }

@@ -32,3 +32,10 @@ spring:
   liquibase:
     changelog: classpath:/db/changelog/changelog.yaml
     default-schema: task_tracker
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      client-id: uber-popug-task-tracker-1
+
+kafka:
+  topic: task-lifecycle.stream.1

@@ -3,6 +3,7 @@ package org.uber.popug.task.tracker.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.uber.popug.task.tracker.domain.task.TaskIdProvider;
+import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
 import org.uber.popug.task.tracker.mapping.UsersPersistenceMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
@@ -45,9 +46,10 @@ public class TaskCreationServicesConfig {
     public TaskAddingService taskTrackerService(
             TasksDtoMapper tasksDtoMapper,
             TaskAssignmentService taskAssignmentService,
-            TaskRepository taskRepository
+            TaskRepository taskRepository,
+            TasksCUDEventProducer tasksCUDEventProducer
     ) {
-        return new TaskAddingServiceImpl(tasksDtoMapper, taskAssignmentService, taskRepository);
+        return new TaskAddingServiceImpl(tasksDtoMapper, taskAssignmentService, taskRepository, tasksCUDEventProducer);
     }
 
 }
