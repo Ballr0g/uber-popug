@@ -56,6 +56,13 @@ public class JdbcClientTaskRepository implements TaskRepository {
             WHERE task_id = :taskId
             """;
 
+    private static final String FIND_TASKS_BY_ASSIGNEE_ID_SQL = /*language=sql*/
+            """
+            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
+            FROM tasks t
+            WHERE t.assignee_id = :assigneeId
+            """;
+
     private final JdbcClient jdbcClient;
 
     @Override
@@ -94,6 +101,14 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public List<TaskEntity> readAllTasks() {
         return jdbcClient.sql(SELECT_ALL_OPEN_TASKS_SQL)
+                .query(TaskEntity.class)
+                .list();
+    }
+
+    @Override
+    public List<TaskEntity> findTasksByAssigneeId(long assigneeId) {
+        return jdbcClient.sql(FIND_TASKS_BY_ASSIGNEE_ID_SQL)
+                .param("assigneeId", assigneeId)
                 .query(TaskEntity.class)
                 .list();
     }
