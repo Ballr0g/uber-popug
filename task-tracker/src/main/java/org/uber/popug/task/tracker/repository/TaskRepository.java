@@ -17,6 +17,8 @@ public interface TaskRepository {
 
     int complete(TaskForCompletion task);
 
+    Optional<TaskEntity> findById(long taskId);
+
     Optional<TaskEntity> findByPublicId(UUID publicTaskId);
 
     List<TaskEntity> readAllTasks();
