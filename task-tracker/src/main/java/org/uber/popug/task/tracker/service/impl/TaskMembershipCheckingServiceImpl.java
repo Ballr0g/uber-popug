@@ -26,8 +26,8 @@ public class TaskMembershipCheckingServiceImpl implements TaskMembershipChecking
 
             return taskAssigneeEntity.userId() == taskForCompletionEntity.assigneeId()
                     ? Optional.of(new TaskForCompletion(
-                            taskAssigneeEntity.userId(),
-                    taskForCompletionEntity.assigneeId()))
+                    taskForCompletionEntity.taskId(),
+                    taskAssigneeEntity.userId()))
                     : Optional.empty();
         }
 
