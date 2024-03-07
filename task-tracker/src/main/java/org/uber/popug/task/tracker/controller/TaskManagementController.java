@@ -8,7 +8,6 @@ import org.uber.popug.task.tracker.rest.generated.api.TasksCreationApi;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksRequestDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostTasksResponseDto;
 import org.uber.popug.task.tracker.service.TaskAddingService;
-import org.uber.popug.task.tracker.service.TaskReassignmentService;
 
 @RestController
 @RequiredArgsConstructor
