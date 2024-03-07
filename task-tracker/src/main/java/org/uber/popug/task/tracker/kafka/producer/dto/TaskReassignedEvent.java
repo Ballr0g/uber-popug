@@ -26,14 +26,14 @@ public record TaskReassignedEvent(
 
     @Override
     public ProducerRecord<String, Object> asProducerRecord(String topicName) {
-        final var taskCreatedEventProducerRecord = new ProducerRecord<>(
+        final var taskReassignedEventProducerRecord = new ProducerRecord<>(
                 topicName,
                 recordKey(),
                 recordValue()
         );
-        TASK_REASSIGNED_EVENT_TYPE.forEach(recordHeader -> taskCreatedEventProducerRecord.headers().add(recordHeader));
+        TASK_REASSIGNED_EVENT_TYPE.forEach(recordHeader -> taskReassignedEventProducerRecord.headers().add(recordHeader));
 
-        return taskCreatedEventProducerRecord;
+        return taskReassignedEventProducerRecord;
     }
 
     @Override
