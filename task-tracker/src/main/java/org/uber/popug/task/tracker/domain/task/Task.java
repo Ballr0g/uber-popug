@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 import java.util.UUID;
 
 public record Task(
-        long taskId,
+        long id,
         @Nonnull UUID publicTaskId,
         @Nonnull String description,
         @Nonnull Status status,
