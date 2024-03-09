@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface TasksDtoMapper {
 
-    @Mapping(source = "description", target = "taskDescription")
+    @Mapping(source = "description", target = "description")
     TaskForCreation postTaskRequestsDtoToBusiness(PostAddTaskRequestDto postTasksRequestDto);
 
     @Mapping(source = "publicId", target = "id")
