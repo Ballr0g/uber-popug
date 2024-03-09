@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record UserEntity(
-        long userId,
+        long id,
         @Nonnull UUID extPublicUserId,
         @Nonnull String login,
         @Nonnull Set<UserRoleEntity> roles

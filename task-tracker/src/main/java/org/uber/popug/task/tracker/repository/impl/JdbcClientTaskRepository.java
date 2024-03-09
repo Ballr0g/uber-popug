@@ -131,7 +131,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public int reassignTask(TaskEntity task, UserEntity newAssignee) {
         return jdbcClient.sql(REASSIGN_TASK_SQL)
-                .param("assigneeId", newAssignee.userId())
+                .param("assigneeId", newAssignee.id())
                 .param("taskId", task.id())
                 .update();
     }
