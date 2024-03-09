@@ -1,46 +1,45 @@
 package org.uber.popug.task.tracker.kafka.producer.event.business;
 
 import jakarta.annotation.Nonnull;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.header.internals.RecordHeader;
-import org.uber.popug.task.tracker.kafka.producer.KafkaProducerRecordEvent;
+import lombok.Getter;
+import org.uber.popug.task.tracker.kafka.producer.event.EventBase;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-public record TaskCreatedEvent(
-        @Nonnull UUID publicId,
-        @Nonnull UUID publicAssigneeId,
-        @Nonnull String description,
-        @Nonnull LocalDateTime creationDate
-) implements KafkaProducerRecordEvent<String, Object> {
-    private static final List<RecordHeader> TASK_CREATED_EVENT_TYPE = List.of(
-            new RecordHeader("type", "task.created".getBytes(StandardCharsets.UTF_8)),
-            new RecordHeader("version", "1.0".getBytes(StandardCharsets.UTF_8)),
-            new RecordHeader("producer", "uber-popug.task-tracker".getBytes(StandardCharsets.UTF_8))
-    );
+@Getter
+public class TaskCreatedEvent extends EventBase<String, Object> {
 
-    @Override
-    public ProducerRecord<String, Object> asProducerRecord(String topicName) {
-        final var taskCreatedEventProducerRecord = new ProducerRecord<>(
-                topicName,
-                recordKey(),
-                recordValue()
-        );
-        TASK_CREATED_EVENT_TYPE.forEach(recordHeader -> taskCreatedEventProducerRecord.headers().add(recordHeader));
+    private static final String TASK_CREATED_EVENT_NAME = "task.created";
+    private static final String TASK_CREATED_EVENT_VERSION = "1.0";
 
-        return taskCreatedEventProducerRecord;
+    @Nonnull private final UUID publicId;
+    @Nonnull private final UUID publicAssigneeId;
+    @Nonnull private final String description;
+    @Nonnull private final LocalDateTime creationDate;
+
+    public TaskCreatedEvent(
+            @Nonnull UUID publicId,
+            @Nonnull UUID publicAssigneeId,
+            @Nonnull String description,
+            @Nonnull LocalDateTime creationDate
+    ) {
+        super(TASK_CREATED_EVENT_NAME, TASK_CREATED_EVENT_VERSION);
+
+        this.publicId = publicId;
+        this.publicAssigneeId = publicAssigneeId;
+        this.description = description;
+        this.creationDate = creationDate;
     }
 
     @Override
     public String recordKey() {
-        return publicId().toString();
+        return getPublicId().toString();
     }
 
     @Override
     public Object recordValue() {
         return this;
     }
+
 }

@@ -1,38 +1,35 @@
 package org.uber.popug.task.tracker.kafka.producer.event.business;
 
 import jakarta.annotation.Nonnull;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.header.internals.RecordHeader;
-import org.uber.popug.task.tracker.kafka.producer.KafkaProducerRecordEvent;
+import lombok.Getter;
+import org.uber.popug.task.tracker.kafka.producer.event.EventBase;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-public record TaskCompletedEvent(
-        @Nonnull UUID publicId,
-        @Nonnull UUID extPublicAssigneeId,
-        @Nonnull String description,
-        @Nonnull LocalDateTime completionDate
-) implements KafkaProducerRecordEvent<String, Object> {
+@Getter
+public class TaskCompletedEvent extends EventBase<String, Object> {
 
-    private static final List<RecordHeader> TASK_COMPLETED_EVENT_TYPE = List.of(
-            new RecordHeader("type", "task.completed".getBytes(StandardCharsets.UTF_8)),
-            new RecordHeader("version", "1.0".getBytes(StandardCharsets.UTF_8)),
-            new RecordHeader("producer", "uber-popug.task-tracker".getBytes(StandardCharsets.UTF_8))
-    );
+    private static final String TASK_COMPLETED_EVENT_NAME = "task.completed";
+    private static final String TASK_COMPLETED_EVENT_VERSION = "1.0";
 
-    @Override
-    public ProducerRecord<String, Object> asProducerRecord(String topicName) {
-        final var taskCompletedEventProducerRecord = new ProducerRecord<>(
-                topicName,
-                recordKey(),
-                recordValue()
-        );
-        TASK_COMPLETED_EVENT_TYPE.forEach(recordHeader -> taskCompletedEventProducerRecord.headers().add(recordHeader));
+    @Nonnull private final UUID publicId;
+    @Nonnull private final UUID extPublicAssigneeId;
+    @Nonnull private final String description;
+    @Nonnull private final LocalDateTime completionDate;
 
-        return taskCompletedEventProducerRecord;
+    public TaskCompletedEvent(
+            @Nonnull UUID publicId,
+            @Nonnull UUID extPublicAssigneeId,
+            @Nonnull String description,
+            @Nonnull LocalDateTime completionDate
+    ) {
+        super(TASK_COMPLETED_EVENT_NAME, TASK_COMPLETED_EVENT_VERSION);
+
+        this.publicId = publicId;
+        this.extPublicAssigneeId = extPublicAssigneeId;
+        this.description = description;
+        this.completionDate = completionDate;
     }
 
     @Override
@@ -44,4 +41,5 @@ public record TaskCompletedEvent(
     public Object recordValue() {
         return this;
     }
+
 }
