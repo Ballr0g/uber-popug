@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record TaskEntity(
         long taskId,
-        @Nonnull UUID publicTaskId,
+        @Nonnull UUID publicId,
         long assigneeId,
         @Nonnull String description,
         @Nonnull Status status
