@@ -13,7 +13,7 @@ public interface TaskRepository {
 
     long generateNextDbTaskId();
 
-    int save(Task task);
+    int add(Task task);
 
     int complete(TaskForCompletion task);
 
