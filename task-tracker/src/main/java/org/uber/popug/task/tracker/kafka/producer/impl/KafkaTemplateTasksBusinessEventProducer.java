@@ -5,15 +5,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.uber.popug.task.tracker.domain.task.Task;
-import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskCompletedEvent;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
+import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCompletedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-public class KafkaTemplateTasksCUDEventProducer implements TasksCUDEventProducer {
+public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEventProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final TasksKafkaEventMapper tasksKafkaEventMapper;

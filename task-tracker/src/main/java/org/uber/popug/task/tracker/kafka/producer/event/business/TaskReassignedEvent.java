@@ -1,4 +1,4 @@
-package org.uber.popug.task.tracker.kafka.producer.dto;
+package org.uber.popug.task.tracker.kafka.producer.event.business;
 
 import jakarta.annotation.Nonnull;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,29 +10,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record TaskCompletedEvent(
+public record TaskReassignedEvent(
         @Nonnull UUID publicId,
-        @Nonnull UUID extPublicAssigneeId,
+        @Nonnull UUID previousAssigneePublicId,
+        @Nonnull UUID newAssigneePublicId,
         @Nonnull String description,
-        @Nonnull LocalDateTime completionDate
+        @Nonnull LocalDateTime reassignmentDate
 ) implements KafkaProducerRecordEvent<String, Object> {
 
-    private static final List<RecordHeader> TASK_COMPLETED_EVENT_TYPE = List.of(
-            new RecordHeader("type", "task.completed".getBytes(StandardCharsets.UTF_8)),
+    private static final List<RecordHeader> TASK_REASSIGNED_EVENT_TYPE = List.of(
+            new RecordHeader("type", "task.reassigned".getBytes(StandardCharsets.UTF_8)),
             new RecordHeader("version", "1.0".getBytes(StandardCharsets.UTF_8)),
             new RecordHeader("producer", "uber-popug.task-tracker".getBytes(StandardCharsets.UTF_8))
     );
 
     @Override
     public ProducerRecord<String, Object> asProducerRecord(String topicName) {
-        final var taskCompletedEventProducerRecord = new ProducerRecord<>(
+        final var taskReassignedEventProducerRecord = new ProducerRecord<>(
                 topicName,
                 recordKey(),
                 recordValue()
         );
-        TASK_COMPLETED_EVENT_TYPE.forEach(recordHeader -> taskCompletedEventProducerRecord.headers().add(recordHeader));
+        TASK_REASSIGNED_EVENT_TYPE.forEach(recordHeader -> taskReassignedEventProducerRecord.headers().add(recordHeader));
 
-        return taskCompletedEventProducerRecord;
+        return taskReassignedEventProducerRecord;
     }
 
     @Override
