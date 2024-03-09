@@ -13,28 +13,28 @@ public class TaskCreatedEvent extends EventBase<String, Object> {
     private static final String TASK_CREATED_EVENT_NAME = "task.created";
     private static final String TASK_CREATED_EVENT_VERSION = "1.0";
 
-    @Nonnull private final UUID publicId;
-    @Nonnull private final UUID publicAssigneeId;
-    @Nonnull private final String description;
+    @Nonnull private final UUID taskId;
+    @Nonnull private final UUID assigneeId;
+    @Nonnull private final String taskDescription;
     @Nonnull private final LocalDateTime creationDate;
 
     public TaskCreatedEvent(
-            @Nonnull UUID publicId,
-            @Nonnull UUID publicAssigneeId,
-            @Nonnull String description,
+            @Nonnull UUID taskId,
+            @Nonnull UUID assigneeId,
+            @Nonnull String taskDescription,
             @Nonnull LocalDateTime creationDate
     ) {
         super(TASK_CREATED_EVENT_NAME, TASK_CREATED_EVENT_VERSION);
 
-        this.publicId = publicId;
-        this.publicAssigneeId = publicAssigneeId;
-        this.description = description;
+        this.taskId = taskId;
+        this.assigneeId = assigneeId;
+        this.taskDescription = taskDescription;
         this.creationDate = creationDate;
     }
 
     @Override
     public String recordKey() {
-        return getPublicId().toString();
+        return getTaskId().toString();
     }
 
     @Override
