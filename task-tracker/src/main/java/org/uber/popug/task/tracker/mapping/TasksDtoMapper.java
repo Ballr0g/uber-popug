@@ -5,8 +5,8 @@ import org.mapstruct.Mapping;
 import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.domain.task.creation.TaskForCreation;
 import org.uber.popug.task.tracker.rest.generated.model.GetTasksByUserTaskDto;
-import org.uber.popug.task.tracker.rest.generated.model.PostTasksRequestDto;
-import org.uber.popug.task.tracker.rest.generated.model.PostTasksResponseDto;
+import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskRequestDto;
+import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskResponseDto;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ import java.util.List;
 public interface TasksDtoMapper {
 
     @Mapping(source = "description", target = "taskDescription")
-    TaskForCreation postTaskRequestsDtoToBusiness(PostTasksRequestDto postTasksRequestDto);
+    TaskForCreation postTaskRequestsDtoToBusiness(PostAddTaskRequestDto postTasksRequestDto);
 
     @Mapping(source = "publicTaskId", target = "taskId")
     @Mapping(source = "assignee.publicAssigneeId", target = "taskAssigneeId")
-    PostTasksResponseDto postTasksResponseDtoFromBusiness(Task task);
+    PostAddTaskResponseDto postTasksResponseDtoFromBusiness(Task task);
 
     @Mapping(source = "publicTaskId", target = "taskId")
     @Mapping(source = "description", target = "description")
