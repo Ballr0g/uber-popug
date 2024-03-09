@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public record TaskCompletedEvent(
         @Nonnull UUID publicId,
-        @Nonnull UUID publicAssigneeId,
+        @Nonnull UUID extPublicAssigneeId,
         @Nonnull String description,
         @Nonnull LocalDateTime completionDate
 ) implements KafkaProducerRecordEvent<String, Object> {
