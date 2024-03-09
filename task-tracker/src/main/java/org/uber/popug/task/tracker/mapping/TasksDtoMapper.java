@@ -16,11 +16,11 @@ public interface TasksDtoMapper {
     @Mapping(source = "description", target = "taskDescription")
     TaskForCreation postTaskRequestsDtoToBusiness(PostAddTaskRequestDto postTasksRequestDto);
 
-    @Mapping(source = "publicTaskId", target = "id")
+    @Mapping(source = "publicId", target = "id")
     @Mapping(source = "assignee.publicId", target = "taskAssigneeId")
     PostAddTaskResponseDto postTasksResponseDtoFromBusiness(Task task);
 
-    @Mapping(source = "publicTaskId", target = "id")
+    @Mapping(source = "publicId", target = "id")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "status", target = "status")
     GetTasksByUserTaskDto getTasksByUserResponseDtoFromBusiness(Task task);

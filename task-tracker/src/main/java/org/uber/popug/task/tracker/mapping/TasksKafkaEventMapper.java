@@ -12,7 +12,7 @@ import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
 @Mapper
 public interface TasksKafkaEventMapper {
 
-    @Mapping(source = "publicTaskId", target = "publicId")
+    @Mapping(source = "publicId", target = "publicId")
     @Mapping(source = "assignee.publicId", target = "publicId")
     @Mapping(source = "description", target = "description")
     @Mapping(
@@ -21,7 +21,7 @@ public interface TasksKafkaEventMapper {
     )
     TaskCreatedEvent toTaskCreatedEventFromBusiness(Task task);
 
-    @Mapping(source = "task.publicTaskId", target = "publicId")
+    @Mapping(source = "task.publicId", target = "publicId")
     @Mapping(source = "previousAssignee.extPublicUserId", target = "previousAssigneePublicId")
     @Mapping(source = "newAssignee.extPublicUserId", target = "newAssigneePublicId")
     @Mapping(source = "task.description", target = "description")
@@ -31,7 +31,7 @@ public interface TasksKafkaEventMapper {
     )
     TaskReassignedEvent toTaskReassignedEventFromBusiness(TaskEntity task, UserEntity previousAssignee, UserEntity newAssignee);
 
-    @Mapping(source = "task.publicTaskId", target = "publicId")
+    @Mapping(source = "task.publicId", target = "publicId")
     @Mapping(source = "assignee.extPublicUserId", target = "publicId")
     @Mapping(source = "task.description", target = "description")
     @Mapping(
