@@ -22,8 +22,8 @@ public interface TasksKafkaEventMapper {
     TaskCreatedEvent toTaskCreatedEventFromBusiness(Task task);
 
     @Mapping(source = "task.publicId", target = "publicId")
-    @Mapping(source = "previousAssignee.extPublicUserId", target = "previousAssigneePublicId")
-    @Mapping(source = "newAssignee.extPublicUserId", target = "newAssigneePublicId")
+    @Mapping(source = "previousAssignee.extPublicId", target = "previousAssigneePublicId")
+    @Mapping(source = "newAssignee.extPublicId", target = "newAssigneePublicId")
     @Mapping(source = "task.description", target = "description")
     @Mapping(
             target = "reassignmentDate",
@@ -32,7 +32,7 @@ public interface TasksKafkaEventMapper {
     TaskReassignedEvent toTaskReassignedEventFromBusiness(TaskEntity task, UserEntity previousAssignee, UserEntity newAssignee);
 
     @Mapping(source = "task.publicId", target = "publicId")
-    @Mapping(source = "assignee.extPublicUserId", target = "publicId")
+    @Mapping(source = "assignee.extPublicId", target = "publicId")
     @Mapping(source = "task.description", target = "description")
     @Mapping(
             target = "completionDate",
