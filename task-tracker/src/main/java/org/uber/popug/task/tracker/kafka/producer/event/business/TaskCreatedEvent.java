@@ -1,4 +1,4 @@
-package org.uber.popug.task.tracker.kafka.producer.dto;
+package org.uber.popug.task.tracker.kafka.producer.event.business;
 
 import jakarta.annotation.Nonnull;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,35 +10,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record TaskReassignedEvent(
+public record TaskCreatedEvent(
         @Nonnull UUID publicId,
-        @Nonnull UUID previousAssigneePublicId,
-        @Nonnull UUID newAssigneePublicId,
+        @Nonnull UUID publicAssigneeId,
         @Nonnull String description,
-        @Nonnull LocalDateTime reassignmentDate
+        @Nonnull LocalDateTime creationDate
 ) implements KafkaProducerRecordEvent<String, Object> {
-
-    private static final List<RecordHeader> TASK_REASSIGNED_EVENT_TYPE = List.of(
-            new RecordHeader("type", "task.reassigned".getBytes(StandardCharsets.UTF_8)),
+    private static final List<RecordHeader> TASK_CREATED_EVENT_TYPE = List.of(
+            new RecordHeader("type", "task.created".getBytes(StandardCharsets.UTF_8)),
             new RecordHeader("version", "1.0".getBytes(StandardCharsets.UTF_8)),
             new RecordHeader("producer", "uber-popug.task-tracker".getBytes(StandardCharsets.UTF_8))
     );
 
     @Override
     public ProducerRecord<String, Object> asProducerRecord(String topicName) {
-        final var taskReassignedEventProducerRecord = new ProducerRecord<>(
+        final var taskCreatedEventProducerRecord = new ProducerRecord<>(
                 topicName,
                 recordKey(),
                 recordValue()
         );
-        TASK_REASSIGNED_EVENT_TYPE.forEach(recordHeader -> taskReassignedEventProducerRecord.headers().add(recordHeader));
+        TASK_CREATED_EVENT_TYPE.forEach(recordHeader -> taskCreatedEventProducerRecord.headers().add(recordHeader));
 
-        return taskReassignedEventProducerRecord;
+        return taskCreatedEventProducerRecord;
     }
 
     @Override
     public String recordKey() {
-        return publicId.toString();
+        return publicId().toString();
     }
 
     @Override

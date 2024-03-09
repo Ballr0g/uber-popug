@@ -2,7 +2,7 @@ package org.uber.popug.task.tracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
@@ -19,14 +19,14 @@ public class TaskReassignmentServicesConfig {
             UserRepository userRepository,
             RandomUserEntityService randomUserEntityService,
             TasksKafkaEventMapper tasksKafkaEventMapper,
-            TasksCUDEventProducer tasksCUDEventProducer
+            TasksBusinessEventProducer tasksBusinessEventProducer
     ) {
         return new TaskReassignmentServiceImpl(
                 taskRepository,
                 userRepository,
                 randomUserEntityService,
                 tasksKafkaEventMapper,
-                tasksCUDEventProducer
+                tasksBusinessEventProducer
         );
     }
 

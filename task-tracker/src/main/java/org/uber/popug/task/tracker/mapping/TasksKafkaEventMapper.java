@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.entity.task.TaskEntity;
 import org.uber.popug.task.tracker.entity.user.UserEntity;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskCompletedEvent;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskCreatedEvent;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCompletedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCreatedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
 
 @Mapper
 public interface TasksKafkaEventMapper {

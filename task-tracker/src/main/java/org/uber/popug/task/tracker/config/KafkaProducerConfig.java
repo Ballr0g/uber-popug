@@ -9,8 +9,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
-import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksCUDEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksBusinessEventProducer;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 
 import java.util.HashMap;
@@ -38,11 +38,11 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public TasksCUDEventProducer tasksCUDProducer(
+    public TasksBusinessEventProducer tasksCUDProducer(
             KafkaTemplate<String, Object> kafkaTemplate,
             TasksKafkaEventMapper tasksKafkaEventMapper
     ) {
-        return new KafkaTemplateTasksCUDEventProducer(kafkaTemplate, tasksKafkaEventMapper);
+        return new KafkaTemplateTasksBusinessEventProducer(kafkaTemplate, tasksKafkaEventMapper);
     }
 
 }

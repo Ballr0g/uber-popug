@@ -1,12 +1,12 @@
 package org.uber.popug.task.tracker.kafka.producer;
 
 import org.uber.popug.task.tracker.domain.task.Task;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskCompletedEvent;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCompletedEvent;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
 
 import java.util.List;
 
-public interface TasksCUDEventProducer {
+public interface TasksBusinessEventProducer {
 
     void sendTaskCreationEvent(Task task);
 

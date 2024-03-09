@@ -3,8 +3,8 @@ package org.uber.popug.task.tracker.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.uber.popug.task.tracker.entity.task.TaskEntity;
 import org.uber.popug.task.tracker.entity.user.UserEntity;
-import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
-import org.uber.popug.task.tracker.kafka.producer.dto.TaskReassignedEvent;
+import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
@@ -21,7 +21,7 @@ public class TaskReassignmentServiceImpl implements TaskReassignmentService {
     private final UserRepository userRepository;
     private final RandomUserEntityService randomUserEntityService;
     private final TasksKafkaEventMapper tasksKafkaEventMapper;
-    private final TasksCUDEventProducer tasksCUDEventProducer;
+    private final TasksBusinessEventProducer tasksBusinessEventProducer;
 
     @Override
     public void reassignAllTasks() {
@@ -30,7 +30,7 @@ public class TaskReassignmentServiceImpl implements TaskReassignmentService {
 
         final var reassignedTasks = new ArrayList<TaskReassignedEvent>();
         allTasks.forEach(task -> reassignedTasks.add(reassignTask(task, allDevelopers)));
-        tasksCUDEventProducer.sendTaskReassignmentEvents(reassignedTasks);
+        tasksBusinessEventProducer.sendTaskReassignmentEvents(reassignedTasks);
     }
 
     private TaskReassignedEvent reassignTask(TaskEntity task, List<UserEntity> availableDevelopers) {

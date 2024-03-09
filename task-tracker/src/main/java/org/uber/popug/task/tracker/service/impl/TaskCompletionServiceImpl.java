@@ -3,7 +3,7 @@ package org.uber.popug.task.tracker.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletion;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
-import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
 import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
@@ -17,7 +17,7 @@ public class TaskCompletionServiceImpl implements TaskCompletionService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final TasksKafkaEventMapper tasksKafkaEventMapper;
-    private final TasksCUDEventProducer tasksCUDEventProducer;
+    private final TasksBusinessEventProducer tasksBusinessEventProducer;
 
     @Override
     public void completeTask(TaskForCompletionPublic task) {
@@ -34,7 +34,7 @@ public class TaskCompletionServiceImpl implements TaskCompletionService {
                 taskEntity.get(), assigneeEntity.get()
         );
 
-        tasksCUDEventProducer.sendTaskCompletionEvent(taskCompletedEvent);
+        tasksBusinessEventProducer.sendTaskCompletionEvent(taskCompletedEvent);
     }
 
 }
