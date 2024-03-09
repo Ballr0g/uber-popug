@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.UUID;
 
 public record TaskEntity(
-        long taskId,
+        long id,
         @Nonnull UUID publicId,
         long assigneeId,
         @Nonnull String description,
