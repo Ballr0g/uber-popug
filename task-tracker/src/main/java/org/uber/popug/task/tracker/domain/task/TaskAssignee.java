@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 import java.util.UUID;
 
 public record TaskAssignee(
-        long assigneeId,
+        long id,
         @Nonnull UUID publicAssigneeId,
         @Nonnull String assigneeLogin
 ) {

@@ -17,7 +17,7 @@ public interface TasksPersistenceMapper {
     @Mapping(source = "assigneeEntity", target = "assignee")
     Task taskEntityToBusiness(TaskEntity taskEntity, UserEntity assigneeEntity);
 
-    @Mapping(source = "userId", target = "assigneeId")
+    @Mapping(source = "userId", target = "id")
     @Mapping(source = "extPublicUserId", target = "publicAssigneeId")
     @Mapping(source = "login", target = "assigneeLogin")
     TaskAssignee userEntityToTaskAssignee(UserEntity assigneeEntity);
