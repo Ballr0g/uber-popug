@@ -17,56 +17,56 @@ public class JdbcClientTaskRepository implements TaskRepository {
 
     private static final String INSERT_TASK_SQL = /*language=sql*/
             """
-            INSERT INTO tasks
-                (task_id, public_task_id, assignee_id, description)
+            INSERT INTO TASK_TRACKER.TASKS
+                (id, public_id, assignee_id, description)
             VALUES
-                (:taskId, :publicTaskId, :assigneeId, :description)
+                (:id, :publicId, :assigneeId, :description)
             """;
 
     private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /*language=sql*/
             """
-            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
-            FROM tasks t
-            WHERE t.public_task_id = :publicTaskId
+            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            FROM TASK_TRACKER.TASKS t
+            WHERE t.public_id = :publicId
             """;
 
     private static final String FIND_TASK_BY_ID_SQL = /*language=sql*/
             """
-            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
-            FROM tasks t
-            WHERE t.task_id = :taskId
+            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            FROM TASK_TRACKER.TASKS t
+            WHERE t.id = :id
             """;
 
     private static final String COMPLETE_TASK_SQL = /*language=sql*/
             """
-            UPDATE tasks
+            UPDATE TASK_TRACKER.TASKS
             SET status = 'COMPLETED'
-            WHERE task_id = :taskId AND assignee_id = :assigneeId
+            WHERE id = :id AND assignee_id = :assigneeId
             """;
 
     private static final String GENERATE_NEXT_TASK_ID_SQL = /*language=sql*/
             """
-            SELECT NEXTVAL('tasks_task_id_seq')
+            SELECT NEXTVAL('TASK_TRACKER.tasks_id_seq')
             """;
 
     private static final String SELECT_ALL_OPEN_TASKS_SQL = /*language=sql*/
             """
-            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
-            FROM tasks t
+            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            FROM TASK_TRACKER.TASKS t
             WHERE t.status = 'OPEN'
             """;
 
     private static final String REASSIGN_TASK_SQL = /*language=sql*/
             """
-            UPDATE tasks
+            UPDATE TASK_TRACKER.TASKS
             SET assignee_id = :assigneeId
-            WHERE task_id = :taskId
+            WHERE id = :id
             """;
 
     private static final String FIND_TASKS_BY_ASSIGNEE_ID_SQL = /*language=sql*/
             """
-            SELECT t.task_id, t.public_task_id, t.assignee_id, t.description, t.status
-            FROM tasks t
+            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            FROM TASK_TRACKER.TASKS t
             WHERE t.assignee_id = :assigneeId
             """;
 
@@ -82,8 +82,8 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public int add(Task task) {
         return jdbcClient.sql(INSERT_TASK_SQL)
-                .param("taskId", task.id())
-                .param("publicTaskId", task.publicId())
+                .param("id", task.id())
+                .param("publicId", task.publicId())
                 .param("assigneeId", task.assignee().id())
                 .param("description", task.description())
                 .update();
@@ -92,7 +92,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public int complete(TaskForCompletion task) {
         return jdbcClient.sql(COMPLETE_TASK_SQL)
-                .param("taskId", task.taskId())
+                .param("id", task.taskId())
                 .param("assigneeId", task.assigneeId())
                 .update();
     }
@@ -100,7 +100,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public Optional<TaskEntity> findById(long taskId) {
         return jdbcClient.sql(FIND_TASK_BY_ID_SQL)
-                .param("taskId", taskId)
+                .param("id", taskId)
                 .query(TaskEntity.class)
                 .optional();
     }
@@ -108,7 +108,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     @Override
     public Optional<TaskEntity> findByPublicId(UUID publicTaskId) {
         return jdbcClient.sql(FIND_TASK_BY_PUBLIC_ID_SQL)
-                .param("publicTaskId", publicTaskId)
+                .param("publicId", publicTaskId)
                 .query(TaskEntity.class)
                 .optional();
     }
@@ -132,7 +132,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     public int reassignTask(TaskEntity task, UserEntity newAssignee) {
         return jdbcClient.sql(REASSIGN_TASK_SQL)
                 .param("assigneeId", newAssignee.id())
-                .param("taskId", task.id())
+                .param("id", task.id())
                 .update();
     }
 
