@@ -84,7 +84,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
         return jdbcClient.sql(INSERT_TASK_SQL)
                 .param("taskId", task.taskId())
                 .param("publicTaskId", task.publicTaskId())
-                .param("assigneeId", task.assignee().assigneeId())
+                .param("assigneeId", task.assignee().id())
                 .param("description", task.description())
                 .update();
     }

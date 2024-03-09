@@ -8,7 +8,7 @@ import org.uber.popug.task.tracker.entity.user.UserEntity;
 @Mapper
 public interface UsersPersistenceMapper {
 
-    @Mapping(source = "userId", target = "assigneeId")
+    @Mapping(source = "userId", target = "id")
     @Mapping(source = "login", target = "assigneeLogin")
     @Mapping(source = "extPublicUserId", target = "publicAssigneeId")
     TaskAssignee userEntityToTaskAssignee(UserEntity userEntity);
