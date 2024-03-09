@@ -4,6 +4,6 @@ import jakarta.annotation.Nonnull;
 
 public record UserRoleEntity(
         long id,
-        @Nonnull String roleName
+        @Nonnull String name
 ) {
 }
