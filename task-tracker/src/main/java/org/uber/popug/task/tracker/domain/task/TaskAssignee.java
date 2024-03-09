@@ -7,6 +7,6 @@ import java.util.UUID;
 public record TaskAssignee(
         long id,
         @Nonnull UUID publicId,
-        @Nonnull String assigneeLogin
+        @Nonnull String login
 ) {
 }
