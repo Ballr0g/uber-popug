@@ -21,7 +21,7 @@ public class TaskAddingServiceImpl implements TaskAddingService {
     public PostTasksResponseDto addNewTask(PostTasksRequestDto postTasksRequestDto) {
         final var taskForCreation = tasksDtoMapper.postTaskRequestsDtoToBusiness(postTasksRequestDto);
         final var assignedTask = taskAssignmentService.assignNewTask(taskForCreation);
-        taskRepository.save(assignedTask);
+        taskRepository.add(assignedTask);
         tasksCUDEventProducer.sendTaskCreationEvent(assignedTask);
 
         return tasksDtoMapper.postTasksResponseDtoFromBusiness(assignedTask);

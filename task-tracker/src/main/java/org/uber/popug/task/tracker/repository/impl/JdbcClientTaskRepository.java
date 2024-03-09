@@ -80,7 +80,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
     }
 
     @Override
-    public int save(Task task) {
+    public int add(Task task) {
         return jdbcClient.sql(INSERT_TASK_SQL)
                 .param("taskId", task.taskId())
                 .param("publicTaskId", task.publicTaskId())
