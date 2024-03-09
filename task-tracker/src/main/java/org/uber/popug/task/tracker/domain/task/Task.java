@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public record Task(
         long id,
-        @Nonnull UUID publicTaskId,
+        @Nonnull UUID publicId,
         @Nonnull String description,
         @Nonnull Status status,
         @Nonnull TaskAssignee assignee
