@@ -13,31 +13,31 @@ public class TaskReassignedEvent extends EventBase<String, Object> {
     private static final String TASK_REASSIGNED_EVENT_NAME = "task.reassigned";
     private static final String TASK_REASSIGNED_EVENT_VERSION = "1.0";
 
-    @Nonnull private final UUID publicId;
-    @Nonnull private final UUID previousAssigneePublicId;
-    @Nonnull private final UUID newAssigneePublicId;
-    @Nonnull private final String description;
+    @Nonnull private final UUID taskId;
+    @Nonnull private final UUID previousAssigneeId;
+    @Nonnull private final UUID newAssigneeId;
+    @Nonnull private final String taskDescription;
     @Nonnull private final LocalDateTime reassignmentDate;
 
     public TaskReassignedEvent(
-            @Nonnull UUID publicId,
-            @Nonnull UUID previousAssigneePublicId,
-            @Nonnull UUID newAssigneePublicId,
-            @Nonnull String description,
+            @Nonnull UUID taskId,
+            @Nonnull UUID previousAssigneeId,
+            @Nonnull UUID newAssigneeId,
+            @Nonnull String taskDescription,
             @Nonnull LocalDateTime reassignmentDate
     ) {
         super(TASK_REASSIGNED_EVENT_NAME, TASK_REASSIGNED_EVENT_VERSION);
 
-        this.publicId = publicId;
-        this.previousAssigneePublicId = previousAssigneePublicId;
-        this.newAssigneePublicId = newAssigneePublicId;
-        this.description = description;
+        this.taskId = taskId;
+        this.previousAssigneeId = previousAssigneeId;
+        this.newAssigneeId = newAssigneeId;
+        this.taskDescription = taskDescription;
         this.reassignmentDate = reassignmentDate;
     }
 
     @Override
     public String recordKey() {
-        return getPublicId().toString();
+        return getTaskId().toString();
     }
 
     @Override
