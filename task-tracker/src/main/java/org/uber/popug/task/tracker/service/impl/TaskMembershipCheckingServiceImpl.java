@@ -24,10 +24,10 @@ public class TaskMembershipCheckingServiceImpl implements TaskMembershipChecking
             final var taskAssigneeEntity = taskAssigneeEntityOptional.get();
             final var taskForCompletionEntity = taskForCompletionEntityOptional.get();
 
-            return taskAssigneeEntity.userId() == taskForCompletionEntity.assigneeId()
+            return taskAssigneeEntity.id() == taskForCompletionEntity.assigneeId()
                     ? Optional.of(new TaskForCompletion(
                     taskForCompletionEntity.id(),
-                    taskAssigneeEntity.userId()))
+                    taskAssigneeEntity.id()))
                     : Optional.empty();
         }
 

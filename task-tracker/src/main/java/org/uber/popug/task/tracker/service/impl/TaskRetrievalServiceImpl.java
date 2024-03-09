@@ -27,7 +27,7 @@ public class TaskRetrievalServiceImpl implements TaskRetrievalService {
         }
 
         final var assignee = assigneeOptional.get();
-        final var tasksForUser = taskRepository.findTasksByAssigneeId(assignee.userId());
+        final var tasksForUser = taskRepository.findTasksByAssigneeId(assignee.id());
 
         return tasksForUser.stream()
                 .map(task -> tasksPersistenceMapper.taskEntityToBusiness(task, assignee))
