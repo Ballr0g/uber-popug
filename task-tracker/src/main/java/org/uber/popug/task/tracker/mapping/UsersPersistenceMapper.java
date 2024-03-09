@@ -10,7 +10,7 @@ public interface UsersPersistenceMapper {
 
     @Mapping(source = "userId", target = "id")
     @Mapping(source = "login", target = "assigneeLogin")
-    @Mapping(source = "extPublicUserId", target = "publicAssigneeId")
+    @Mapping(source = "extPublicUserId", target = "publicId")
     TaskAssignee userEntityToTaskAssignee(UserEntity userEntity);
 
 }
