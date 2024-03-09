@@ -6,24 +6,24 @@ info:
 paths:
   /tasks:
     post:
-      operationId: postTasks
+      operationId: addTask
       tags:
         - TasksCreation
-      description: 'Creates a new task and assigns it to a random employee.'
+      description: 'Creates and adds a new task and assigns it to a random employee.'
       requestBody:
         required: true
         description: 'Data for the new task created.'
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostTasksRequestDto'
+              $ref: '#/components/schemas/PostAddTaskRequestDto'
       responses:
         '201':
           description: '[201] Successful response with task ID and task assignee ID.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PostTasksResponseDto'
+                $ref: '#/components/schemas/PostAddTaskResponseDto'
 
   /tasks/reassign-all:
     post:
@@ -89,7 +89,7 @@ paths:
 
 components:
   schemas:
-    PostTasksRequestDto:
+    PostAddTaskRequestDto:
       type: object
       description: '[Request] Info required to create a task: description'
       required:
@@ -101,7 +101,7 @@ components:
           maxLength: 255
           description: 'Description of the new task, length - [1; 255].'
 
-    PostTasksResponseDto:
+    PostAddTaskResponseDto:
       type: object
       description: '[Response] Task successfully created and assigned to the user specified.'
       required:
