@@ -22,29 +22,32 @@ import java.util.UUID;
 public class JdbcClientUserRepository implements UserRepository {
     private static final String GET_USERS_FOR_ROLE_SQL = /*language=sql*/
             """
-            SELECT u.user_id, u.ext_public_user_id, u.login, ur.role_id, ur.role_name
-            FROM users u
-            INNER JOIN users_to_user_roles uur ON u.user_id = uur.user_id
-            INNER JOIN user_roles ur ON uur.role_id = ur.role_id
-            WHERE ur.role_name IN (:roleNames)
+            SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
+                   ur.id AS user_role_id, ur.name AS user_role_name
+            FROM TASK_TRACKER.USERS u
+            INNER JOIN TASK_TRACKER.USERS_TO_USER_ROLES uur ON u.id = uur.user_id
+            INNER JOIN TASK_TRACKER.USER_ROLES ur ON ur.id = uur.role_id
+            WHERE ur.name IN (:roleNames)
             """;
 
     private static final String FIND_USER_BY_PUBLIC_ID_SQL = /*language=sql*/
             """
-            SELECT u.user_id, u.ext_public_user_id, u.login, ur.role_id, ur.role_name
-            FROM users u
-            INNER JOIN users_to_user_roles uur ON u.user_id = uur.user_id
-            INNER JOIN user_roles ur ON uur.role_id = ur.role_id
-            WHERE u.ext_public_user_id = :publicUserId
+            SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
+                   ur.id AS user_role_id, ur.name AS user_role_name
+            FROM TASK_TRACKER.USERS u
+            INNER JOIN TASK_TRACKER.USERS_TO_USER_ROLES uur ON u.id = uur.user_id
+            INNER JOIN TASK_TRACKER.USER_ROLES ur ON ur.id = uur.role_id
+            WHERE u.ext_public_id = :extPublicUserId
             """;
 
     private static final String FIND_USER_BY_ID_SQL = /*language=sql*/
             """
-            SELECT u.user_id, u.ext_public_user_id, u.login, ur.role_id, ur.role_name
-            FROM users u
-            INNER JOIN users_to_user_roles uur ON u.user_id = uur.user_id
-            INNER JOIN user_roles ur ON uur.role_id = ur.role_id
-            WHERE u.user_id = :userId
+            SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
+                   ur.id AS user_role_id, ur.name AS user_role_name
+            FROM TASK_TRACKER.USERS u
+            INNER JOIN TASK_TRACKER.USERS_TO_USER_ROLES uur ON u.id = uur.user_id
+            INNER JOIN TASK_TRACKER.USER_ROLES ur ON ur.id = uur.role_id
+            WHERE u.id = :userId
             """;
 
     private final JdbcClient jdbcClient;
@@ -72,10 +75,10 @@ public class JdbcClientUserRepository implements UserRepository {
                 .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
                         rs.getLong("user_id"),
                         rs.getObject("ext_public_user_id", UUID.class),
-                        rs.getString("login"),
+                        rs.getString("user_login"),
                         new UserRoleEntity(
-                                rs.getLong("role_id"),
-                                rs.getString("role_name")
+                                rs.getLong("user_role_id"),
+                                rs.getString("user_role_name")
                         )
                 ))
                 .list();
@@ -83,14 +86,14 @@ public class JdbcClientUserRepository implements UserRepository {
 
     private List<UserToRoleEntity> getRolesPerUserByPublicId(UUID publicUserId) {
         return jdbcClient.sql(FIND_USER_BY_PUBLIC_ID_SQL)
-                .param("publicUserId", publicUserId)
+                .param("extPublicUserId", publicUserId)
                 .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
                         rs.getLong("user_id"),
                         rs.getObject("ext_public_user_id", UUID.class),
-                        rs.getString("login"),
+                        rs.getString("user_login"),
                         new UserRoleEntity(
-                                rs.getLong("role_id"),
-                                rs.getString("role_name")
+                                rs.getLong("user_role_id"),
+                                rs.getString("user_role_name")
                         )
                 ))
                 .list();
@@ -134,10 +137,10 @@ public class JdbcClientUserRepository implements UserRepository {
                 .query((ResultSet rs, int rowNumber) -> new UserToRoleEntity(
                         rs.getLong("user_id"),
                         rs.getObject("ext_public_user_id", UUID.class),
-                        rs.getString("login"),
+                        rs.getString("user_login"),
                         new UserRoleEntity(
-                                rs.getLong("role_id"),
-                                rs.getString("role_name")
+                                rs.getLong("user_role_id"),
+                                rs.getString("user_role_name")
                         )
                 ))
                 .list();

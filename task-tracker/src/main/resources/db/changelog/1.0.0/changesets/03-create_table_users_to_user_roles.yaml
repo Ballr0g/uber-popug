@@ -6,6 +6,7 @@ databaseChangeLog:
         changes:
           - createTable:
               tableName: users_to_user_roles
+              schemaName: task_tracker
               remarks: 'The intermediate table for mapping users to their roles.'
               columns:
                 - column:
@@ -23,7 +24,8 @@ databaseChangeLog:
                       nullable: false
                       foreignKeyName: fk_user_entries_on_users_to_user_roles
                       referencedTableName: users
-                      referencedColumnNames: user_id
+                      referencedTableSchemaName: task_tracker
+                      referencedColumnNames: id
                 - column:
                     name: role_id
                     type: bigint
@@ -32,4 +34,5 @@ databaseChangeLog:
                       nullable: false
                       foreignKeyName: fk_user_role_entries_on_users_to_user_roles
                       referencedTableName: user_roles
-                      referencedColumnNames: role_id
+                      referencedTableSchemaName: task_tracker
+                      referencedColumnNames: id
