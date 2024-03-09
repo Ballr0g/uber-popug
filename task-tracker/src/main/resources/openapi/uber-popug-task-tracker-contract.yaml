@@ -93,9 +93,9 @@ components:
       type: object
       description: '[Request] Info required to create a task: description'
       required:
-        - description
+        - taskDescription
       properties:
-        description:
+        taskDescription:
           type: string
           minLength: 1
           maxLength: 255
@@ -156,14 +156,14 @@ components:
       description: '[Response] A single task assigned to a specific user.'
       required:
         - taskId
-        - description
+        - taskDescription
         - status
       properties:
         taskId:
           type: string
           format: uuid
           description: 'ID of the task.'
-        description:
+        taskDescription:
           type: string
           description: 'Description of the task'
         status:
