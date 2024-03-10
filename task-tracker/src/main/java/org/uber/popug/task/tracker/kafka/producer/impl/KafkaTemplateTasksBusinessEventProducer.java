@@ -8,7 +8,7 @@ import org.uber.popug.task.tracker.domain.task.Task;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
 import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCompletedEvent;
 import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
-import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
+import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
 
 import java.util.List;
 
@@ -16,15 +16,15 @@ import java.util.List;
 public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEventProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final TasksKafkaEventMapper tasksKafkaEventMapper;
+    private final TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper;
 
-    @Value("${kafka.topic}")
-    private String tasksLifecycleKafkaTopicName;
+    @Value("${kafka.tasks-business}")
+    private String tasksBusinessKafkaTopicName;
 
     @Override
     public void sendTaskCreationEvent(Task task) {
-        final var kafkaTaskMessage = tasksKafkaEventMapper.toTaskCreatedEventFromBusiness(task);
-        final var kafkaTaskProducerRecord = kafkaTaskMessage.asProducerRecord(tasksLifecycleKafkaTopicName);
+        final var kafkaTaskMessage = tasksBusinessKafkaEventMapper.toTaskCreatedEventFromBusiness(task);
+        final var kafkaTaskProducerRecord = kafkaTaskMessage.asProducerRecord(tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(kafkaTaskProducerRecord);
     }
@@ -33,13 +33,13 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Transactional
     public void sendTaskReassignmentEvents(List<TaskReassignedEvent> taskReassignedEvents) {
         taskReassignedEvents.stream()
-                .map(task -> task.asProducerRecord(tasksLifecycleKafkaTopicName))
+                .map(task -> task.asProducerRecord(tasksBusinessKafkaTopicName))
                 .forEach(kafkaTemplate::send);
     }
 
     @Override
     public void sendTaskCompletionEvent(TaskCompletedEvent taskCompletedEvent) {
-        final var kafkaTaskProducerRecord = taskCompletedEvent.asProducerRecord(tasksLifecycleKafkaTopicName);
+        final var kafkaTaskProducerRecord = taskCompletedEvent.asProducerRecord(tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(kafkaTaskProducerRecord);
     }

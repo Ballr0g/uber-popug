@@ -3,8 +3,9 @@ package org.uber.popug.task.tracker.config;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.uber.popug.task.tracker.mapping.TasksCUDKafkaEventMapper;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
-import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
+import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.task.tracker.mapping.TasksPersistenceMapper;
 import org.uber.popug.task.tracker.mapping.UsersPersistenceMapper;
 
@@ -27,8 +28,13 @@ public class MappersConfig {
     }
 
     @Bean
-    public TasksKafkaEventMapper tasksKafkaEventMapper() {
-        return Mappers.getMapper(TasksKafkaEventMapper.class);
+    public TasksBusinessKafkaEventMapper tasksKafkaEventMapper() {
+        return Mappers.getMapper(TasksBusinessKafkaEventMapper.class);
+    }
+
+    @Bean
+    public TasksCUDKafkaEventMapper tasksCUDKafkaEventMapper() {
+        return Mappers.getMapper(TasksCUDKafkaEventMapper.class);
     }
 
 }

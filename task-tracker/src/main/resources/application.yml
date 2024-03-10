@@ -37,4 +37,5 @@ spring:
       client-id: uber-popug-task-tracker-1
 
 kafka:
-  topic: task-lifecycle.stream.1
+  tasks-business: task-workflow-actions.1
+  tasks-cud: task-lifecycle.stream.1
