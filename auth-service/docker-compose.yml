@@ -15,22 +15,24 @@ services:
       - uber-popug-auth-keycloak-network
 
   keycloak:
-    image: jboss/keycloak:16.1.1
+    image: quay.io/keycloak/keycloak:24.0.1
     container_name: uber-popug-auth-service-keycloak
     environment:
-      DB_VENDOR: postgres
-      DB_ADDR: uber-popug-auth-service-postgres
-      DB_DATABASE: db_uber_popug_auth_service
-      DB_USER: ${POSTGRES_USER:-dbusername}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-dbpassword}
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin_password
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://uber-popug-auth-service-postgres/db_uber_popug_auth_service
+      KC_DB_USERNAME: ${POSTGRES_USER:-dbusername}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-dbpassword}
+      KC_HTTP_PORT: 8484
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_password
     ports:
-      - "8484:8080"
+      - "8484:8484"
     depends_on:
       - postgres
     networks:
       - uber-popug-auth-keycloak-network
+    command:
+      - "start-dev"
 
 networks:
   uber-popug-auth-keycloak-network:
