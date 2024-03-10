@@ -2,6 +2,7 @@ package org.uber.popug.task.tracker.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskRequestDto;
@@ -16,6 +17,7 @@ public class TaskAddingServiceImpl implements TaskAddingService {
     private final TaskAssignmentService taskAssignmentService;
     private final TaskRepository taskRepository;
     private final TasksBusinessEventProducer tasksBusinessEventProducer;
+    private final TasksCUDEventProducer tasksCUDEventProducer;
 
     @Override
     public PostAddTaskResponseDto addNewTask(PostAddTaskRequestDto postTasksRequestDto) {
@@ -23,6 +25,7 @@ public class TaskAddingServiceImpl implements TaskAddingService {
         final var assignedTask = taskAssignmentService.assignNewTask(taskForCreation);
         taskRepository.add(assignedTask);
         tasksBusinessEventProducer.sendTaskCreationEvent(assignedTask);
+        tasksCUDEventProducer.sendTaskCreatedReplicationEvent(assignedTask);
 
         return tasksDtoMapper.postTasksResponseDtoFromBusiness(assignedTask);
     }

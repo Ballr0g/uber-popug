@@ -10,8 +10,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
 import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksBusinessEventProducer;
-import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
+import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksCUDEventProducer;
+import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
+import org.uber.popug.task.tracker.mapping.TasksCUDKafkaEventMapper;
 
 import java.util.HashMap;
 
@@ -38,11 +41,19 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public TasksBusinessEventProducer tasksCUDProducer(
+    public TasksBusinessEventProducer tasksBusinessEventProducer(
             KafkaTemplate<String, Object> kafkaTemplate,
-            TasksKafkaEventMapper tasksKafkaEventMapper
+            TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper
     ) {
-        return new KafkaTemplateTasksBusinessEventProducer(kafkaTemplate, tasksKafkaEventMapper);
+        return new KafkaTemplateTasksBusinessEventProducer(kafkaTemplate, tasksBusinessKafkaEventMapper);
+    }
+
+    @Bean
+    public TasksCUDEventProducer tasksCUDEventProducer(
+            KafkaTemplate<String, Object> kafkaTemplate,
+            TasksCUDKafkaEventMapper tasksCUDKafkaEventMapper
+    ) {
+        return new KafkaTemplateTasksCUDEventProducer(kafkaTemplate, tasksCUDKafkaEventMapper);
     }
 
 }

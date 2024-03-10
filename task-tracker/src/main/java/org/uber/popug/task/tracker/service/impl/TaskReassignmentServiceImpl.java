@@ -5,7 +5,7 @@ import org.uber.popug.task.tracker.entity.task.TaskEntity;
 import org.uber.popug.task.tracker.entity.user.UserEntity;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
 import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
-import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
+import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
 import org.uber.popug.task.tracker.service.RandomUserEntityService;
@@ -20,7 +20,7 @@ public class TaskReassignmentServiceImpl implements TaskReassignmentService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final RandomUserEntityService randomUserEntityService;
-    private final TasksKafkaEventMapper tasksKafkaEventMapper;
+    private final TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper;
     private final TasksBusinessEventProducer tasksBusinessEventProducer;
 
     @Override
@@ -39,7 +39,7 @@ public class TaskReassignmentServiceImpl implements TaskReassignmentService {
 
         taskRepository.reassignTask(task, newTaskAssignee);
 
-        return tasksKafkaEventMapper.toTaskReassignedEventFromBusiness(
+        return tasksBusinessKafkaEventMapper.toTaskReassignedEventFromBusiness(
                 task,
                 previousAssignee.get(),
                 newTaskAssignee

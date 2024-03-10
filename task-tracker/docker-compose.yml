@@ -15,7 +15,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
-    container_name: uber-popug-task-events-stream-zookeeper
+    container_name: uber-popug-task-tracker-kafka-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -24,7 +24,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
-    container_name: uber-popug-task-events-stream
+    container_name: uber-popug-task-tracker-kafka
     depends_on:
       - zookeeper
     ports:
@@ -39,11 +39,9 @@ services:
 
   init-kafka:
     image: confluentinc/cp-kafka:7.4.4
-    container_name: uber-popug-task-events-stream-init
+    container_name: uber-popug-task-tracker-kafka-init
     depends_on:
       - kafka
-    environment:
-      TASKS_LIFECYCLE_STREAM_KAFKA_TOPIC: task-lifecycle.stream.1
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
@@ -52,7 +50,9 @@ services:
 
       echo -e 'Creating kafka topics...'
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists \
-      --topic ${TASKS_LIFECYCLE_STREAM_KAFKA_TOPIC} --replication-factor 1 --partitions 1
+      --topic task-workflow-actions.1 --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists \
+      --topic task-lifecycle.stream.1 --replication-factor 1 --partitions 1
 
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka:9092 --list

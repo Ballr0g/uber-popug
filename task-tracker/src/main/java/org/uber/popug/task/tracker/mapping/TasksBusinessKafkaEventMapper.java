@@ -10,7 +10,7 @@ import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCreatedEven
 import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEvent;
 
 @Mapper
-public interface TasksKafkaEventMapper {
+public interface TasksBusinessKafkaEventMapper {
 
     @Mapping(source = "publicId", target = "taskId")
     @Mapping(source = "assignee.extPublicId", target = "assigneeId")
