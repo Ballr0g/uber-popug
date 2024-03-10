@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletion;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
-import org.uber.popug.task.tracker.mapping.TasksKafkaEventMapper;
+import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.task.tracker.repository.TaskRepository;
 import org.uber.popug.task.tracker.repository.UserRepository;
 import org.uber.popug.task.tracker.service.TaskCompletionService;
@@ -16,7 +16,7 @@ public class TaskCompletionServiceImpl implements TaskCompletionService {
     private final TaskMembershipCheckingService taskMembershipCheckingService;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-    private final TasksKafkaEventMapper tasksKafkaEventMapper;
+    private final TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper;
     private final TasksBusinessEventProducer tasksBusinessEventProducer;
 
     @Override
@@ -30,7 +30,7 @@ public class TaskCompletionServiceImpl implements TaskCompletionService {
 
         final var taskEntity = taskRepository.findById(task.taskId());
         final var assigneeEntity = userRepository.findById(task.assigneeId());
-        final var taskCompletedEvent = tasksKafkaEventMapper.toTaskCompletedEventFromEntities(
+        final var taskCompletedEvent = tasksBusinessKafkaEventMapper.toTaskCompletedEventFromEntities(
                 taskEntity.get(), assigneeEntity.get()
         );
 
