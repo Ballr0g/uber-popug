@@ -51,6 +51,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     // Spring Boot starter JDBC.
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    // Spring Boot starter security.
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    // Spring Boot starter OAuth2 resource server.
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     // Spring Kafka.
     implementation("org.springframework.kafka:spring-kafka:${springKafkaVersion}")
     // Swagger V3 annotations.
