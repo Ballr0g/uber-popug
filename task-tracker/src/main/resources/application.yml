@@ -49,5 +49,5 @@ kafka:
 jwt:
   auth:
     converter:
-      resource-id: uber-popug-task-tracker
+      resource-id: uber-popug-task-tracker-services
       principle-attribute: preferred_username
