@@ -13,6 +13,12 @@ spring:
     timeout-per-shutdown-phase: 4m
   main:
     banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8484/realms/uber-popug-ates
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
   mvc:
     converters:
       preferred-json-mapper: jackson
@@ -39,3 +45,9 @@ spring:
 kafka:
   tasks-business: task-workflow-actions.1
   tasks-cud: task-lifecycle.stream.1
+
+jwt:
+  auth:
+    converter:
+      resource-id: uber-popug-task-tracker
+      principle-attribute: preferred_username
