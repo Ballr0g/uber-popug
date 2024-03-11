@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: uber-popug-auth-service-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dbusername}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dbpassword}
+      POSTGRES_DB: db_uber_popug_auth_service
+    ports:
+      - "5431:5431"
+    restart: unless-stopped
+    networks:
+      - uber-popug-auth-keycloak-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: uber-popug-auth-service-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://uber-popug-auth-service-postgres/db_uber_popug_auth_service
+      KC_DB_USERNAME: ${POSTGRES_USER:-dbusername}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-dbpassword}
+      KC_HTTP_PORT: 8484
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_password
+    ports:
+      - "8484:8484"
+    depends_on:
+      - postgres
+    networks:
+      - uber-popug-auth-keycloak-network
+    command:
+      - "start-dev"
+
+networks:
+  uber-popug-auth-keycloak-network:
+    driver: bridge

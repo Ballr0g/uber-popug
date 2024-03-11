@@ -2,6 +2,7 @@ package org.uber.popug.task.tracker.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.uber.popug.task.tracker.domain.task.completion.TaskForCompletionPublic;
 import org.uber.popug.task.tracker.mapping.TasksDtoMapper;
@@ -22,6 +23,7 @@ public class UserActionsController implements UserActionsApi {
     private final TasksDtoMapper tasksDtoMapper;
 
     @Override
+    @PreAuthorize("hasRole('client_developer')")
     public ResponseEntity<PatchTasksCompleteResponseDto> completeTask(UUID userId, UUID taskId) {
         taskCompletionService.completeTask(new TaskForCompletionPublic(taskId, userId));
 
@@ -33,6 +35,7 @@ public class UserActionsController implements UserActionsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('client_developer')")
     public ResponseEntity<GetTasksByUserResponseDto> getTasksByUser(UUID userId) {
         final var tasksForUser = taskRetrievalService.getTasksForPublicAssigneeId(userId);
 
