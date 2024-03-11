@@ -1,0 +1,53 @@
+logging:
+  level:
+    org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter: DEBUG
+
+server:
+  shutdown: graceful
+
+spring:
+  profiles:
+    active:
+      - ${SPRING_PROFILE_NAME:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: 4m
+  main:
+    banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8484/realms/uber-popug-ates
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
+  docker:
+    compose:
+      enabled: true
+      file: task-tracker/docker-compose.yml
+  datasource:
+    username: ${DB_USERNAME:dbusername}
+    password: ${DB_PASSWORD:dbpassword}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_uber_popug_task_tracker}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 5000
+      validation-timeout: 2000
+      leak-detection-threshold: 300000
+  liquibase:
+    changelog: classpath:/db/changelog/changelog.yaml
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      client-id: uber-popug-task-tracker-1
+
+kafka:
+  tasks-business: task-workflow-actions.1
+  tasks-cud: task-lifecycle.stream.1
+
+jwt:
+  auth:
+    converter:
+      resource-id: uber-popug-task-tracker-services
+      principle-attribute: preferred_username

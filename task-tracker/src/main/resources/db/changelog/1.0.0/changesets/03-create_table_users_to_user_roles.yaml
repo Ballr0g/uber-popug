@@ -1,0 +1,38 @@
+databaseChangeLog:
+  -   changeSet:
+        id: '1.0.0-03-0'
+        author: 'd.sagalov'
+        comment: 'Create table users_to_user_roles'
+        changes:
+          - createTable:
+              tableName: users_to_user_roles
+              schemaName: task_tracker
+              remarks: 'The intermediate table for mapping users to their roles.'
+              columns:
+                - column:
+                    name: id
+                    type: bigint
+                    remarks: 'Unique id of a user-role mapping.'
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                - column:
+                    name: user_id
+                    type: bigint
+                    remarks: 'Technical id of a user entry mapped to a role.'
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_user_entries_on_users_to_user_roles
+                      referencedTableName: users
+                      referencedTableSchemaName: task_tracker
+                      referencedColumnNames: id
+                - column:
+                    name: role_id
+                    type: bigint
+                    remarks: 'Id of a role mapped to a user.'
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_user_role_entries_on_users_to_user_roles
+                      referencedTableName: user_roles
+                      referencedTableSchemaName: task_tracker
+                      referencedColumnNames: id
