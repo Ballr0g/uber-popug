@@ -15,7 +15,7 @@ services:
       - uber-popug-auth-keycloak-network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.1
+    image: quay.io/keycloak/keycloak:21.1.1
     container_name: uber-popug-auth-service-keycloak
     environment:
       KC_DB: postgres
