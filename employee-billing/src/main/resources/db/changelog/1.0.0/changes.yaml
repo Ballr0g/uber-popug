@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - include:
+      file: 'changesets/00-create_schema_employee_billing.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/01-create_table_users.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/02-create_table_user_roles.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/03-create_table_users_to_user_roles.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/04-create_table_tasks.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/05-create_table_billing_accounts.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/06-create_table_billing_cycles.yaml'
+      relativeToChangelogFile: true
+  - include:
+      file: 'changesets/07-create_table_billing_operations.yaml'
+      relativeToChangelogFile: true

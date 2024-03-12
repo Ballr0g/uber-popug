@@ -1,0 +1,34 @@
+logging:
+  level:
+    org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter: DEBUG
+
+server:
+  shutdown: graceful
+  port: 8085
+
+spring:
+  profiles:
+    active:
+      - ${SPRING_PROFILE_NAME:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: 4m
+  main:
+    banner-mode: off
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
+  docker:
+    compose:
+      enabled: true
+      file: employee-billing/docker-compose.yml
+  datasource:
+    username: ${DB_USERNAME:dbusername}
+    password: ${DB_PASSWORD:dbpassword}
+    url: ${DB_URL:jdbc:postgresql://localhost:5430/db_uber_popug_employee_billing}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 5000
+      validation-timeout: 2000
+      leak-detection-threshold: 300000
+  liquibase:
+    changelog: classpath:/db/changelog/changelog.yaml
