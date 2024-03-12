@@ -4,6 +4,7 @@ logging:
 
 server:
   shutdown: graceful
+  port: 8085
 
 spring:
   profiles:

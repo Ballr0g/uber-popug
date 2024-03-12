@@ -5,7 +5,7 @@ services:
     image: postgres:16.2
     container_name: uber-popug-employee-billing-postgres
     ports:
-      - '5430:5430'
+      - '5430:5432'
     environment:
       POSTGRES_DB: 'db_uber_popug_employee_billing'
       POSTGRES_USER: 'dbusername'
