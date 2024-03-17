@@ -1,5 +1,6 @@
 package org.uber.popug.employee.billing.repository;
 
+import org.uber.popug.employee.billing.entity.composite.TaskToAssigneeEntity;
 import org.uber.popug.employee.billing.entity.task.TaskEntity;
 
 import java.util.Optional;
@@ -11,6 +12,6 @@ public interface TaskRepository {
 
     int saveReplicated(TaskEntity task);
 
-    Optional<TaskEntity> findTaskByPublicId(UUID publicTaskId);
+    Optional<TaskToAssigneeEntity> findTaskToAssigneeByPublicTaskId(UUID publicTaskId);
 
 }

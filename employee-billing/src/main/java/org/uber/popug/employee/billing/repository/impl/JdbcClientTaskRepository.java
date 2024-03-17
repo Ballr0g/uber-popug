@@ -2,9 +2,12 @@ package org.uber.popug.employee.billing.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.uber.popug.employee.billing.entity.composite.TaskToAssigneeEntity;
 import org.uber.popug.employee.billing.entity.task.TaskEntity;
+import org.uber.popug.employee.billing.entity.user.UserEntity;
 import org.uber.popug.employee.billing.repository.TaskRepository;
 
+import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,11 +27,15 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 (:id, :extPublicId, :assigneeId, :description, :assignmentCost, :completionCost)
             """;
 
-    private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /* language=postgresql */
+    private static final String FIND_TASK_TO_USER_ENTITY_BY_PUBLIC_TASK_ID_SQL = /* language=postgresql */
             """
-            SELECT id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
-            FROM EMPLOYEE_BILLING.TASKS
-            WHERE ext_public_id = :extPublicId
+            SELECT t.id AS task_id, t.ext_public_id AS ext_public_task_id, t.assignee_id AS assignee_id,
+                   t.description AS task_description, t.status AS task_status,
+                   t.assignment_cost AS task_assignment_cost, t.completion_cost AS task_completion_cost,
+                   u.ext_public_id AS ext_public_assignee_id, u.login AS assignee_login
+            FROM EMPLOYEE_BILLING.TASKS t
+            INNER JOIN EMPLOYEE_BILLING.USERS u ON u.id = t.assignee_id
+            WHERE t.ext_public_id = :extPublicTaskId
             """;
 
 
@@ -54,10 +61,26 @@ public class JdbcClientTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Optional<TaskEntity> findTaskByPublicId(UUID publicTaskId) {
-        return jdbcClient.sql(FIND_TASK_BY_PUBLIC_ID_SQL)
-                .param("extPublicId", publicTaskId)
-                .query(TaskEntity.class)
+    public Optional<TaskToAssigneeEntity> findTaskToAssigneeByPublicTaskId(UUID publicTaskId) {
+        return jdbcClient.sql(FIND_TASK_TO_USER_ENTITY_BY_PUBLIC_TASK_ID_SQL)
+                .param("extPublicTaskId", publicTaskId)
+                .query((ResultSet rs, int rowNum) ->
+                        new TaskToAssigneeEntity(
+                                new TaskEntity(
+                                        rs.getLong("task_id"),
+                                        rs.getObject("ext_public_task_id", UUID.class),
+                                        rs.getLong("assignee_id"),
+                                        rs.getString("task_description"),
+                                        rs.getObject("task_status", TaskEntity.Status.class),
+                                        rs.getLong("task_assignment_cost"),
+                                        rs.getLong("task_completion_cost")
+                                ),
+                                new UserEntity(
+                                        rs.getLong("assignee_id"),
+                                        rs.getObject("ext_public_assignee_id", UUID.class),
+                                        rs.getString("assignee_login")
+                                ))
+                )
                 .optional();
     }
 }
