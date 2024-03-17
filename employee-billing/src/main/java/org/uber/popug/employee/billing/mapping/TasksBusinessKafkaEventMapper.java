@@ -8,7 +8,7 @@ import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
 @Mapper
 public interface TasksBusinessKafkaEventMapper {
 
-    @Mapping(source = "taskId", target = "id")
+    @Mapping(source = "taskId", target = "publicId")
     TaskForBillingAssignment toBusiness(TaskCreatedEvent taskCreatedEvent);
 
 }

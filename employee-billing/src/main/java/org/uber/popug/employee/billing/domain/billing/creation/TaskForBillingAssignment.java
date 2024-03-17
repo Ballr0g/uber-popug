@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record TaskForBillingAssignment(
-        @Nonnull UUID id,
+        @Nonnull UUID publicId,
         @Nonnull UUID assigneeId,
         @Nonnull LocalDateTime creationDate
 ) {
