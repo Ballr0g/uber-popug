@@ -1,6 +1,7 @@
 package org.uber.popug.employee.billing.domain.task;
 
 import jakarta.annotation.Nonnull;
+import org.uber.popug.employee.billing.domain.task.replication.TaskReplicationInfo;
 
 import java.util.UUID;
 
@@ -20,12 +21,12 @@ public record Task(
     public static Task replicate(
             @Nonnull TaskIdProvider taskIdProvider,
             @Nonnull TaskCostsProvider taskCostsProvider,
-            @Nonnull TaskInfo taskInfo
+            @Nonnull TaskReplicationInfo taskReplicationInfo
     ) {
         return new Task(
                 taskIdProvider.generateDbTaskId(),
-                taskInfo.id(),
-                taskInfo.description(),
+                taskReplicationInfo.id(),
+                taskReplicationInfo.description(),
                 Status.OPEN,
                 taskCostsProvider.calculateAssignmentCost(),
                 taskCostsProvider.calculateCompletionCost()
