@@ -2,6 +2,7 @@ package org.uber.popug.employee.billing.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,7 @@ public class KafkaConsumerConfig {
     @Value("${kafka.listener.task-workflow-actions.bootstrap-servers}")
     private List<String> taskWorkflowActionsBootstrapServers;
 
-    @Bean
+    @Bean("tasksCUDConsumerFactory")
     public ConsumerFactory<String, Object> tasksCUDConsumerFactory() {
         final var taskCUDStreamConsumerProps = Map.<String, Object>ofEntries(
                 Map.entry(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, taskLifecycleStreamBootstrapServers)
@@ -36,17 +37,17 @@ public class KafkaConsumerConfig {
         );
     }
 
-    @Bean
+    @Bean("tasksCUDListenerContainerFactory")
     public ConcurrentKafkaListenerContainerFactory<String, Object>
     tasksCUDListenerContainerFactory(
-            ConsumerFactory<String, Object> tasksCUDConsumerFactory
+            @Qualifier("tasksCUDConsumerFactory") ConsumerFactory<String, Object> consumerFactory
     ) {
         final var factory = new ConcurrentKafkaListenerContainerFactory<String, Object>();
-        factory.setConsumerFactory(tasksCUDConsumerFactory);
+        factory.setConsumerFactory(consumerFactory);
         return factory;
     }
 
-    @Bean
+    @Bean("tasksBusinessWorkflowConsumerFactory")
     public ConsumerFactory<String, Object> tasksBusinessWorkflowConsumerFactory() {
         final var taskBusinessConsumerProps = Map.<String, Object>ofEntries(
                 Map.entry(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, taskWorkflowActionsBootstrapServers)
@@ -59,13 +60,13 @@ public class KafkaConsumerConfig {
         );
     }
 
-    @Bean
+    @Bean("tasksBusinessWorkflowListenerContainerFactory")
     public ConcurrentKafkaListenerContainerFactory<String, Object>
     tasksBusinessWorkflowListenerContainerFactory(
-            ConsumerFactory<String, Object> tasksBusinessWorkflowConsumerFactory
+            @Qualifier("tasksBusinessWorkflowConsumerFactory") ConsumerFactory<String, Object> consumerFactory
     ) {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, Object>();
-        factory.setConsumerFactory(tasksBusinessWorkflowConsumerFactory);
+        factory.setConsumerFactory(consumerFactory);
         return factory;
     }
 
