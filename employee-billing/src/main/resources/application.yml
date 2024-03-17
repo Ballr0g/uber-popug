@@ -32,3 +32,14 @@ spring:
       leak-detection-threshold: 300000
   liquibase:
     changelog: classpath:/db/changelog/changelog.yaml
+
+kafka:
+  listener:
+    task-lifecycle-stream:
+      bootstrap-servers: localhost:29092
+      group-id: uber-popug.employee-billing.task-lifecycle.stream.1
+      topics: task-lifecycle.stream.1
+    task-workflow-actions:
+      bootstrap-servers: localhost:29092
+      group-id: uber-popug.employee-billing.task-workflow-actions.1
+      topics: task-workflow-actions.1
