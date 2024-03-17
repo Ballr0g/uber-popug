@@ -1,14 +1,15 @@
 package org.uber.popug.employee.billing.domain.task;
 
 import jakarta.annotation.Nonnull;
-import org.uber.popug.employee.billing.kafka.event.cud.TaskCreatedReplicationEvent;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record Task(
         long id,
         @Nonnull UUID extPublicId,
         @Nonnull String description,
+        @Nonnull LocalDateTime creationDate,
         @Nonnull Status status,
         long assignmentCost,
         long completionCost
@@ -21,12 +22,13 @@ public record Task(
     public static Task replicate(
             @Nonnull TaskIdProvider taskIdProvider,
             @Nonnull TaskCostsProvider taskCostsProvider,
-            @Nonnull TaskCreatedReplicationEvent taskCreatedReplicationEvent
+            @Nonnull TaskInfo taskInfo
     ) {
         return new Task(
                 taskIdProvider.generateDbTaskId(),
-                taskCreatedReplicationEvent.taskId(),
-                taskCreatedReplicationEvent.taskDescription(),
+                taskInfo.id(),
+                taskInfo.description(),
+                taskInfo.creationDate(),
                 Status.OPEN,
                 taskCostsProvider.calculateAssignmentCost(),
                 taskCostsProvider.calculateCompletionCost()
@@ -34,4 +36,3 @@ public record Task(
     }
 
 }
-
