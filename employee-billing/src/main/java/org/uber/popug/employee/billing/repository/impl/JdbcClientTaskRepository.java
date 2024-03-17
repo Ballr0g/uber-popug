@@ -5,6 +5,9 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.uber.popug.employee.billing.entity.task.TaskEntity;
 import org.uber.popug.employee.billing.repository.TaskRepository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class JdbcClientTaskRepository implements TaskRepository {
 
@@ -20,6 +23,14 @@ public class JdbcClientTaskRepository implements TaskRepository {
             VALUES
                 (:id, :extPublicId, :assigneeId, :description, :assignmentCost, :completionCost)
             """;
+
+    private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /* language=postgresql */
+            """
+            SELECT id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
+            FROM EMPLOYEE_BILLING.TASKS
+            WHERE ext_public_id = :extPublicId
+            """;
+
 
     private final JdbcClient jdbcClient;
 
@@ -40,5 +51,13 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 .param("assignmentCost", task.assignmentCost())
                 .param("completionCost", task.completionCost())
                 .update();
+    }
+
+    @Override
+    public Optional<TaskEntity> findTaskByPublicId(UUID publicTaskId) {
+        return jdbcClient.sql(FIND_TASK_BY_PUBLIC_ID_SQL)
+                .param("extPublicId", publicTaskId)
+                .query(TaskEntity.class)
+                .optional();
     }
 }
