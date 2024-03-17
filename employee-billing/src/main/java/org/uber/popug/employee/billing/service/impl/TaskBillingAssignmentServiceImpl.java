@@ -37,7 +37,7 @@ public class TaskBillingAssignmentServiceImpl implements TaskBillingAssignmentSe
     private User getAssigneeIfExistsByPublicId(UUID publicUserId) {
         final var taskAssigneeEntityOptional = userRepository.findByPublicId(publicUserId);
         if (taskAssigneeEntityOptional.isEmpty()) {
-            throw UserNotFoundException.forPublicUserId(publicUserId);
+            throw new UserNotFoundException(publicUserId);
         }
 
         return usersPersistenceMapper.toBusiness(taskAssigneeEntityOptional.get());
