@@ -10,6 +10,6 @@ public interface TasksCUDKafkaEventMapper {
 
     @Mapping(source = "taskId", target = "id")
     @Mapping(source = "taskDescription", target = "description")
-    TaskInfo taskCreatedReplicationEventToBusiness(TaskCreatedReplicationEvent taskCreatedReplicationEvent);
+    TaskInfo toBusiness(TaskCreatedReplicationEvent taskCreatedReplicationEvent);
 
 }
