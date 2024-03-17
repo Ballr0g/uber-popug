@@ -11,7 +11,7 @@ import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
 @KafkaListener(
         topics = "${kafka.listener.task-workflow-actions.topics}",
         groupId = "${kafka.listener.task-workflow-actions.group-id}",
-        containerFactory = "smeApplicationKafkaListenerContainerFactory",
+        containerFactory = "tasksBusinessWorkflowListenerContainerFactory",
         autoStartup = "false"
 )
 public class TaskWorkflowActionsBusinessEventListener {
