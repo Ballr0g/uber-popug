@@ -23,7 +23,7 @@ public record BillingOperation(
                 billingOperationIdProvider.generatePublicBillingOperationId(),
                 billingOperationDescriptionBuilder.buildBillingOperationDescription(taskWithAssignee),
                 new PaymentData(
-                        taskWithAssignee.task().assignmentCost(),
+                        taskWithAssignee.task().costs().assignmentCost(),
                         0L
                 )
         );

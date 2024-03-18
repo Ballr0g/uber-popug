@@ -12,8 +12,8 @@ public interface BillingOperationsPersistenceMapper {
     @Mapping(source = "data.publicId", target = "publicId")
     @Mapping(source = "ownerUser.id", target = "ownerUserId")
     @Mapping(source = "data.description", target = "description")
-    @Mapping(source = "data.credit", target = "credit")
-    @Mapping(source = "data.debit", target = "debit")
+    @Mapping(source = "data.paymentData.credit", target = "credit")
+    @Mapping(source = "data.paymentData.debit", target = "debit")
     @Mapping(source = "ownerCycle.id", target = "billingCycleId")
     BillingOperationEntity fromBusiness(BillingOperationFullData billingOperation);
 

@@ -2,7 +2,9 @@ package org.uber.popug.employee.billing.mapping;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
+import org.uber.popug.employee.billing.domain.task.Task;
 import org.uber.popug.employee.billing.entity.composite.TaskToAssigneeEntity;
 import org.uber.popug.employee.billing.entity.task.TaskEntity;
 
@@ -14,13 +16,21 @@ public interface TasksPersistenceMapper {
     @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "task.description", target = "description")
     @Mapping(source = "task.status", target = "status")
-    @Mapping(source = "task.assignmentCost", target = "assignmentCost")
-    @Mapping(source = "task.completionCost", target = "completionCost")
+    @Mapping(source = "task.costs.assignmentCost", target = "assignmentCost")
+    @Mapping(source = "task.costs.completionCost", target = "completionCost")
     TaskEntity fromBusiness(TaskWithAssignee taskWithAssignee);
 
     @Mapping(source = "taskAssignee.id", target = "assignee.id")
     @Mapping(source = "taskAssignee.extPublicId", target = "assignee.extPublicId")
     @Mapping(source = "taskAssignee.login", target = "assignee.login")
+    @Mapping(source = "taskEntity", target = "task.costs", qualifiedByName = "taskToCostsMapping")
     TaskWithAssignee toBusiness(TaskToAssigneeEntity taskEntity);
+
+    @Named("taskToCostsMapping")
+    @Mapping(source = "costs.assignmentCost", target = "assignmentCost")
+    @Mapping(source = "costs.completionCost", target = "completionCost")
+    default Task.Costs taskToCostsMapping(TaskToAssigneeEntity taskEntity) {
+        return new Task.Costs(taskEntity.task().assignmentCost(), taskEntity.task().completionCost());
+    }
 
 }

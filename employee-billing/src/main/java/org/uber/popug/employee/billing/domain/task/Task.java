@@ -10,12 +10,17 @@ public record Task(
         @Nonnull UUID extPublicId,
         @Nonnull String description,
         @Nonnull Status status,
-        long assignmentCost,
-        long completionCost
-) {
+        @Nonnull Costs costs
+        ) {
     public enum Status {
         OPEN,
         COMPLETED
+    }
+
+    public record Costs(
+            long assignmentCost,
+            long completionCost
+    ) {
     }
 
     public static Task replicate(
@@ -28,8 +33,10 @@ public record Task(
                 taskReplicationInfo.id(),
                 taskReplicationInfo.description(),
                 Status.OPEN,
-                taskCostsProvider.calculateAssignmentCost(),
-                taskCostsProvider.calculateCompletionCost()
+                new Costs(
+                        taskCostsProvider.calculateAssignmentCost(),
+                        taskCostsProvider.calculateCompletionCost()
+                )
         );
     }
 
