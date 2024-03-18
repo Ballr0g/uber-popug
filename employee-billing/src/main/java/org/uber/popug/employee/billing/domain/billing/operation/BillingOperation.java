@@ -2,6 +2,7 @@ package org.uber.popug.employee.billing.domain.billing.operation;
 
 import jakarta.annotation.Nonnull;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
+import org.uber.popug.employee.billing.domain.billing.PaymentData;
 
 import java.util.UUID;
 
@@ -9,8 +10,7 @@ public record BillingOperation(
         long id,
         @Nonnull UUID publicId,
         @Nonnull String description,
-        long credit,
-        long debit
+        @Nonnull PaymentData paymentData
 ) {
 
     public static BillingOperation forTaskWithAssignee(
@@ -22,8 +22,10 @@ public record BillingOperation(
                 billingOperationIdProvider.generateDbBillingOperationId(),
                 billingOperationIdProvider.generatePublicBillingOperationId(),
                 billingOperationDescriptionBuilder.buildBillingOperationDescription(taskWithAssignee),
-                taskWithAssignee.task().assignmentCost(),
-                0L
+                new PaymentData(
+                        taskWithAssignee.task().assignmentCost(),
+                        0L
+                )
         );
     }
 
