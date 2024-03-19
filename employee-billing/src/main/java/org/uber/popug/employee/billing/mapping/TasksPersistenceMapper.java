@@ -23,14 +23,22 @@ public interface TasksPersistenceMapper {
     @Mapping(source = "taskAssignee.id", target = "assignee.id")
     @Mapping(source = "taskAssignee.extPublicId", target = "assignee.extPublicId")
     @Mapping(source = "taskAssignee.login", target = "assignee.login")
-    @Mapping(source = "taskEntity", target = "task.costs", qualifiedByName = "taskToCostsMapping")
+    @Mapping(source = "taskEntity", target = "task", qualifiedByName = "taskToAssigneeEntityToBusiness")
     TaskWithAssignee toBusiness(TaskToAssigneeEntity taskEntity);
 
-    @Named("taskToCostsMapping")
+    Task.Status toBusiness(TaskEntity.Status status);
+
+    @Named("taskToAssigneeEntityToBusiness")
     @Mapping(source = "costs.assignmentCost", target = "assignmentCost")
     @Mapping(source = "costs.completionCost", target = "completionCost")
-    default Task.Costs taskToCostsMapping(TaskToAssigneeEntity taskEntity) {
-        return new Task.Costs(taskEntity.task().assignmentCost(), taskEntity.task().completionCost());
+    default Task taskToAssigneeEntityToBusiness(TaskToAssigneeEntity taskEntity) {
+        return new Task(
+                taskEntity.task().id(),
+                taskEntity.task().extPublicId(),
+                taskEntity.task().description(),
+                toBusiness(taskEntity.task().status()),
+                new Task.Costs(taskEntity.task().assignmentCost(), taskEntity.task().completionCost())
+        );
     }
 
 }
