@@ -5,7 +5,7 @@ import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
 import org.uber.popug.employee.billing.domain.task.Task;
 import org.uber.popug.employee.billing.domain.task.TaskCostsProvider;
 import org.uber.popug.employee.billing.domain.task.TaskIdProvider;
-import org.uber.popug.employee.billing.domain.task.TaskInfo;
+import org.uber.popug.employee.billing.domain.task.replication.TaskReplicationInfo;
 import org.uber.popug.employee.billing.domain.user.User;
 import org.uber.popug.employee.billing.exception.UserNotFoundException;
 import org.uber.popug.employee.billing.mapping.UsersPersistenceMapper;
@@ -23,12 +23,12 @@ public class TaskBillingAssignmentServiceImpl implements TaskBillingAssignmentSe
     private final TaskCostsProvider taskCostsProvider;
 
     @Override
-    public TaskWithAssignee assembleTaskWithAssignee(TaskInfo taskInfo) {
-        final var taskAssignee = getAssigneeIfExistsByPublicId(taskInfo.assigneeId());
+    public TaskWithAssignee assembleTaskWithAssignee(TaskReplicationInfo taskReplicationInfo) {
+        final var taskAssignee = getAssigneeIfExistsByPublicId(taskReplicationInfo.assigneeId());
         final var replicatedTask = Task.replicate(
                 taskIdProvider,
                 taskCostsProvider,
-                taskInfo
+                taskReplicationInfo
         );
 
         return new TaskWithAssignee(replicatedTask, taskAssignee);
@@ -37,7 +37,7 @@ public class TaskBillingAssignmentServiceImpl implements TaskBillingAssignmentSe
     private User getAssigneeIfExistsByPublicId(UUID publicUserId) {
         final var taskAssigneeEntityOptional = userRepository.findByPublicId(publicUserId);
         if (taskAssigneeEntityOptional.isEmpty()) {
-            throw UserNotFoundException.forPublicUserId(publicUserId);
+            throw new UserNotFoundException(publicUserId);
         }
 
         return usersPersistenceMapper.toBusiness(taskAssigneeEntityOptional.get());

@@ -6,16 +6,15 @@ import java.util.UUID;
 
 @Getter
 public class UserNotFoundException extends RuntimeException {
+
+    private static final String USER_NOT_FOUND_FOR_PUBLIC_ID_MESSAGE_TEMPLATE
+            = "The user with public ID %s does not exist.";
+
     private final UUID publicUserId;
-    private UserNotFoundException(String message, UUID publicUserId) {
-        super(message);
+
+    public UserNotFoundException(UUID publicUserId) {
+        super(USER_NOT_FOUND_FOR_PUBLIC_ID_MESSAGE_TEMPLATE.formatted(publicUserId));
         this.publicUserId = publicUserId;
     }
 
-    public static UserNotFoundException forPublicUserId(UUID publicUserId) {
-        return new UserNotFoundException(
-                "The user with public ID %s does not exist.".formatted(publicUserId),
-                publicUserId
-        );
-    }
 }
