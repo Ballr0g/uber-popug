@@ -1,26 +1,28 @@
 package org.uber.popug.employee.billing.kafka;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCompletedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
+import org.uber.popug.employee.billing.service.UserAccountBillingService;
 
 @Service
+@RequiredArgsConstructor
 @KafkaListener(
         topics = "${kafka.listener.task-workflow-actions.topics}",
         groupId = "${kafka.listener.task-workflow-actions.group-id}",
-        containerFactory = "tasksBusinessWorkflowListenerContainerFactory",
-        autoStartup = "false"
+        containerFactory = "tasksBusinessWorkflowListenerContainerFactory"
 )
 public class TaskWorkflowActionsBusinessEventListener {
 
+    private final UserAccountBillingService userAccountBillingService;
+
     @KafkaHandler
     public void handleTaskCreatedBusinessEvent(TaskCreatedEvent taskCreatedEvent) {
-        throw new UnsupportedOperationException(
-                "TaskWorkflowActionsBusinessEventListener.handleTaskCreatedBusinessEvent is not implemented."
-        );
+        userAccountBillingService.billUserForTaskAssignment(taskCreatedEvent);
     }
 
     @KafkaHandler
