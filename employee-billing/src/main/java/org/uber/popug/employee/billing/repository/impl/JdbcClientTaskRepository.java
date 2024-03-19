@@ -71,7 +71,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
                                         rs.getObject("ext_public_task_id", UUID.class),
                                         rs.getLong("assignee_id"),
                                         rs.getString("task_description"),
-                                        rs.getObject("task_status", TaskEntity.Status.class),
+                                        TaskEntity.Status.valueOf(rs.getString("task_status")),
                                         rs.getLong("task_assignment_cost"),
                                         rs.getLong("task_completion_cost")
                                 ),
