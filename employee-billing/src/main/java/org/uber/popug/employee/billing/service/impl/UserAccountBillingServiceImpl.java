@@ -1,8 +1,7 @@
 package org.uber.popug.employee.billing.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
-import org.uber.popug.employee.billing.mapping.TasksBusinessKafkaEventMapper;
+import org.uber.popug.employee.billing.domain.billing.creation.TaskForBillingAssignment;
 import org.uber.popug.employee.billing.service.TransactionalAccountingService;
 import org.uber.popug.employee.billing.service.UserAccountBillingService;
 import org.uber.popug.employee.billing.service.UserAccountMembershipCheckingService;
@@ -10,12 +9,11 @@ import org.uber.popug.employee.billing.service.UserAccountMembershipCheckingServ
 @RequiredArgsConstructor
 public class UserAccountBillingServiceImpl implements UserAccountBillingService {
 
-    private final TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper;
     private final UserAccountMembershipCheckingService accountMembershipCheckingService;
     private final TransactionalAccountingService transactionalAccountingService;
 
     @Override
-    public void billUserForTaskAssignment(TaskCreatedEvent taskCreatedEvent) {
+    public void billUserForTaskAssignment(TaskForBillingAssignment taskForBillingAssignment) {
         /*
          * Algorithm:
          * 1) Map Kafka TaskCreatedEvent into a task + assignee business type.
@@ -27,10 +25,8 @@ public class UserAccountBillingServiceImpl implements UserAccountBillingService 
          *      1) Add task action to the immutable transactions log.
          *      2) Update user balance.
          */
-        final var taskForBillingCandidate = tasksBusinessKafkaEventMapper.toBusiness(taskCreatedEvent);
         final var taskForBilling = accountMembershipCheckingService
-                .retrieveTaskWithAssigneeIfRequestValid(taskForBillingCandidate);
-
+                .retrieveTaskWithAssigneeIfRequestValid(taskForBillingAssignment);
         transactionalAccountingService.billForNewlyAssignedTask(taskForBilling);
     }
 

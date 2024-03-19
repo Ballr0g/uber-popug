@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCompletedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
-import org.uber.popug.employee.billing.service.UserAccountBillingService;
+import org.uber.popug.employee.billing.service.TaskAssignmentService;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +18,11 @@ import org.uber.popug.employee.billing.service.UserAccountBillingService;
 )
 public class TaskWorkflowActionsBusinessEventListener {
 
-    private final UserAccountBillingService userAccountBillingService;
+    private final TaskAssignmentService taskAssignmentService;
 
     @KafkaHandler
     public void handleTaskCreatedBusinessEvent(TaskCreatedEvent taskCreatedEvent) {
-        userAccountBillingService.billUserForTaskAssignment(taskCreatedEvent);
+        taskAssignmentService.handleTaskAssignment(taskCreatedEvent);
     }
 
     @KafkaHandler

@@ -22,12 +22,14 @@ import org.uber.popug.employee.billing.repository.TaskRepository;
 import org.uber.popug.employee.billing.repository.UserRepository;
 import org.uber.popug.employee.billing.service.BillingAccountManagementService;
 import org.uber.popug.employee.billing.service.BillingOperationLogService;
+import org.uber.popug.employee.billing.service.TaskAssignmentService;
 import org.uber.popug.employee.billing.service.TaskBillingOperationAssemblingService;
 import org.uber.popug.employee.billing.service.TransactionalAccountingService;
 import org.uber.popug.employee.billing.service.UserAccountBillingService;
 import org.uber.popug.employee.billing.service.UserAccountMembershipCheckingService;
 import org.uber.popug.employee.billing.service.impl.BillingAccountManagementServiceImpl;
 import org.uber.popug.employee.billing.service.impl.BillingOperationLogServiceImpl;
+import org.uber.popug.employee.billing.service.impl.TaskAssignmentServiceImpl;
 import org.uber.popug.employee.billing.service.impl.TaskBillingOperationAssemblingServiceImpl;
 import org.uber.popug.employee.billing.service.impl.TransactionalAccountingServiceImpl;
 import org.uber.popug.employee.billing.service.impl.UserAccountBillingServiceImpl;
@@ -118,15 +120,21 @@ public class BillingServicesConfig {
 
     @Bean
     public UserAccountBillingService userAccountBillingService(
-            TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper,
             UserAccountMembershipCheckingService accountMembershipCheckingService,
             TransactionalAccountingService transactionalAccountingService
     ) {
         return new UserAccountBillingServiceImpl(
-                tasksBusinessKafkaEventMapper,
                 accountMembershipCheckingService,
                 transactionalAccountingService
         );
+    }
+
+    @Bean
+    public TaskAssignmentService taskAssignmentService(
+            TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper,
+            UserAccountBillingService userAccountBillingService
+    ) {
+        return new TaskAssignmentServiceImpl(tasksBusinessKafkaEventMapper, userAccountBillingService);
     }
 
 }
