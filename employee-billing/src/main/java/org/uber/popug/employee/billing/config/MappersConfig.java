@@ -4,6 +4,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.uber.popug.employee.billing.mapping.BillingAccountsPersistenceMapper;
+import org.uber.popug.employee.billing.mapping.BillingCyclesPersistenceMapper;
 import org.uber.popug.employee.billing.mapping.BillingOperationsPersistenceMapper;
 import org.uber.popug.employee.billing.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.employee.billing.mapping.TasksCUDKafkaEventMapper;
@@ -31,6 +32,11 @@ public class MappersConfig {
     @Bean
     public BillingAccountsPersistenceMapper billingAccountsPersistenceMapper() {
         return Mappers.getMapper(BillingAccountsPersistenceMapper.class);
+    }
+
+    @Bean
+    public BillingCyclesPersistenceMapper billingCyclesPersistenceMapper() {
+        return Mappers.getMapper(BillingCyclesPersistenceMapper.class);
     }
 
     @Bean
