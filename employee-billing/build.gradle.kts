@@ -16,6 +16,7 @@ val mapstructVersion: String by project
 val lombokVersion: String by project
 val liquibaseVersion: String by project
 val postgresVersion: String by project
+val uuidCreatorVersion: String by project
 
 repositories {
     mavenCentral()
@@ -45,6 +46,8 @@ dependencies {
     implementation("org.liquibase:liquibase-core:${liquibaseVersion}")
     // PostgreSQL.
     implementation("org.postgresql:postgresql:${postgresVersion}")
+    // UUID creator library.
+    implementation("com.github.f4b6a3:uuid-creator:${uuidCreatorVersion}")
 
 
     // --> Compile-Only Dependencies <--

@@ -20,6 +20,7 @@ public class TaskLifecycleCUDEventListener {
 
     @KafkaHandler
     public void handleTaskCreatedCUDEvent(TaskCreatedReplicationEvent taskCreatedReplicationEvent) {
+        // Todo: guarantee exactly-once semantics!
         taskBillingReplicationService.replicateTaskToBilling(taskCreatedReplicationEvent);
     }
 
