@@ -40,6 +40,9 @@ public class UserAccountMembershipCheckingServiceImpl implements UserAccountMemb
         final var requestedTaskWithActualAssignee = retrieveTaskWithAssigneeIfPossible(task.publicId());
         final var requestedTaskAssignee = retrieveAssigneeIfPossibleForPublicId(task.assigneeId());
 
+        // Todo: ensure these 2 cases are impossible to co-exist:
+        // 1) Assignee info arrived with a delay (actually the task has been reassigned, potentially multiple times).
+        // 2) The task has never been assigned to that specific user.
         if (requestedAssigneeMismatchesActualAssignee(requestedTaskWithActualAssignee, requestedTaskAssignee)) {
             throw new TaskAssignmentMismatchException(task.publicId(), task.assigneeId());
         }
