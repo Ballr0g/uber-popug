@@ -9,4 +9,6 @@ public interface BillingCyclesPersistenceMapper {
 
     BillingCycle toBusiness(BillingCycleEntity billingCycleEntity);
 
+    BillingCycleEntity fromBusiness(BillingCycle billingCycle);
+
 }
