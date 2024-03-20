@@ -37,12 +37,31 @@ public class TransactionalAccountingServiceImpl implements TransactionalAccounti
         );
     }
 
+
+    @Override
+    @Transactional
+    public void billForCompletedTask(TaskWithAssignee completedTaskWithAssignee) {
+        billingOperationLogService.createCompletedTaskBillingOperationLogEntry(completedTaskWithAssignee);
+        payToUser(
+                completedTaskWithAssignee.assignee(),
+                PaymentData.newDebitData(completedTaskWithAssignee.task().costs().completionCost())
+        );
+    }
+
     private BillingAccountWithOwner debitUser(User user, PaymentData paymentData) {
         final var userToPayment = new PaymentDataWithUser(
                 paymentData,
                 user
         );
         return billingAccountManagementService.debitFromUser(userToPayment);
+    }
+
+    private BillingAccountWithOwner payToUser(User user, PaymentData paymentData) {
+        final var userToPayment = new PaymentDataWithUser(
+                paymentData,
+                user
+        );
+        return billingAccountManagementService.payToUser(userToPayment);
     }
 
 }
