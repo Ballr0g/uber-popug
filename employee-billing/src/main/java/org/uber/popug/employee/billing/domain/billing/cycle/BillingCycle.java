@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public record BillingCycle(
@@ -27,7 +28,9 @@ public record BillingCycle(
     public static BillingCycle createNewForNowUTC(BillingCycleIdProvider billingCycleIdProvider) {
         final var currentUTCDate = LocalDate.now(ZoneOffset.UTC);
         final var currentDateStart = currentUTCDate.atStartOfDay();
-        final var currentDateEnd = currentUTCDate.atTime(LocalTime.MAX);
+        final var currentDateEnd = currentUTCDate.atTime(LocalTime.MAX)
+                .truncatedTo(ChronoUnit.MILLIS)
+                .plusNanos(999000L);
 
         return new BillingCycle(
                 billingCycleIdProvider.generateDbBillingCycleId(),
