@@ -6,6 +6,10 @@ import java.util.Optional;
 
 public interface BillingCycleRepository {
 
+    long generateNextDbBillingCycleId();
+
+    int insertActiveBillingCycle(BillingCycleEntity billingCycleEntity);
+
     Optional<BillingCycleEntity> findActiveBillingCycle();
 
 }
