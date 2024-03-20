@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record TaskCompletionInfo(
-        @Nonnull UUID extPublicTaskId,
+        @Nonnull UUID taskExtPublicId,
         @Nonnull UUID assigneeExtPublicId,
         @Nonnull String taskDescription,
         @Nonnull LocalDateTime completionDate

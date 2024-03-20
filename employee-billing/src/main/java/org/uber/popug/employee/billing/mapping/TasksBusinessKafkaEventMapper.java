@@ -20,7 +20,7 @@ public interface TasksBusinessKafkaEventMapper {
     @Mapping(source = "newAssigneeId", target = "newAssigneeExtPublicId")
     TaskReassignmentInfo toBusiness(TaskReassignedEvent taskReassignedEvent);
 
-    @Mapping(source = "taskId", target = "extPublicTaskId")
+    @Mapping(source = "taskId", target = "taskExtPublicId")
     @Mapping(source = "assigneeId", target = "assigneeExtPublicId")
     TaskCompletionInfo toBusiness(TaskCompletedEvent taskCompletedEvent);
 
