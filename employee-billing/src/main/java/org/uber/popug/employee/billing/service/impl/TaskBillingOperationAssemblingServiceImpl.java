@@ -13,6 +13,7 @@ public class TaskBillingOperationAssemblingServiceImpl implements TaskBillingOpe
     private final BillingOperationIdProvider billingOperationIdProvider;
     private final BillingOperationDescriptionBuilder<TaskWithAssignee> newlyAssignedTaskDescriptionBuilder;
     private final BillingOperationDescriptionBuilder<TaskWithAssignee> reassignedTaskDescriptionBuilder;
+    private final BillingOperationDescriptionBuilder<TaskWithAssignee> completedTaskDescriptionBuilder;
 
     @Override
     public BillingOperation assembleForNewlyAssignedTask(TaskWithAssignee newlyAssignedTask) {
@@ -29,6 +30,15 @@ public class TaskBillingOperationAssemblingServiceImpl implements TaskBillingOpe
                 billingOperationIdProvider,
                 reassignedTaskDescriptionBuilder,
                 taskWithUpdatedAssignee
+        );
+    }
+
+    @Override
+    public BillingOperation assembleForCompletedTask(TaskWithAssignee completedTaskWithAssignee) {
+        return BillingOperation.forAssignment(
+                billingOperationIdProvider,
+                completedTaskDescriptionBuilder,
+                completedTaskWithAssignee
         );
     }
 
