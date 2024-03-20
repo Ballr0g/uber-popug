@@ -8,4 +8,6 @@ public interface BillingAccountRepository {
 
     Optional<BillingAccountEntity> subtractAccountBalanceByOwnerUser(long ownerUserId, long toSubtract);
 
+    Optional<BillingAccountEntity> increaseAccountBalanceByOwnerUserId(long ownerUserId, long toAdd);
+
 }

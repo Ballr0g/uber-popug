@@ -30,4 +30,14 @@ public class JdbcClientBillingAccountRepository implements BillingAccountReposit
                 .optional();
     }
 
+    @Override
+    public Optional<BillingAccountEntity> increaseAccountBalanceByOwnerUserId(long ownerUserId, long toAdd) {
+        return jdbcClient.sql(UPDATE_BILLING_ACCOUNT_BALANCE_BY_USER_ID_SQL)
+                .param("ownerUserId", ownerUserId)
+                .param("toSubtract", 0L)
+                .param("toAdd", toAdd)
+                .query(BillingAccountEntity.class)
+                .optional();
+    }
+
 }
