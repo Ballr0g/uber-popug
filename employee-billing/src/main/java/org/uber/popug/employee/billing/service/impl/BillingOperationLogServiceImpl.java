@@ -35,6 +35,15 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
         return billingOperationAggregate;
     }
 
+    @Override
+    public BillingOperationFullData createCompletedTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee) {
+        final var billingOperationAggregate = retrieveCompletedTaskBillingOperationAggregate(taskWithAssignee);
+        final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
+        billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
+
+        return billingOperationAggregate;
+    }
+
     private BillingOperationFullData retrieveNewTaskBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
         final var billingOperation = billingOperationAssemblingService.assembleForNewlyAssignedTask(taskWithAssignee);
         return BillingOperationFullData.assembleBillingOperationLogEntry(
@@ -46,6 +55,15 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
 
     private BillingOperationFullData retrieveReassignedTaskBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
         final var billingOperation = billingOperationAssemblingService.assembleForReassignedTask(taskWithAssignee);
+        return BillingOperationFullData.assembleBillingOperationLogEntry(
+                billingOperation,
+                taskWithAssignee.assignee(),
+                billingCycleProvider
+        );
+    }
+
+    private BillingOperationFullData retrieveCompletedTaskBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
+        final var billingOperation = billingOperationAssemblingService.assembleForCompletedTask(taskWithAssignee);
         return BillingOperationFullData.assembleBillingOperationLogEntry(
                 billingOperation,
                 taskWithAssignee.assignee(),

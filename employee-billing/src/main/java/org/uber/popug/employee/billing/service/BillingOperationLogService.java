@@ -10,4 +10,6 @@ public interface BillingOperationLogService {
 
     BillingOperationFullData createReassignedTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee);
 
+    BillingOperationFullData createCompletedTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee);
+
 }
