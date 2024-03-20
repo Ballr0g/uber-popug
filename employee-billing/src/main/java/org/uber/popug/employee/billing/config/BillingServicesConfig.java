@@ -9,6 +9,7 @@ import org.uber.popug.employee.billing.domain.billing.operation.BillingOperation
 import org.uber.popug.employee.billing.domain.billing.operation.BillingOperationIdProvider;
 import org.uber.popug.employee.billing.domain.billing.operation.impl.BillingOperationIdProviderImpl;
 import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskAssignmentBillingOperationDescriptionBuilder;
+import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskCompletionBillingOperationDescriptionBuilder;
 import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskReassignmentBillingOperationDescriptionBuilder;
 import org.uber.popug.employee.billing.mapping.BillingAccountsPersistenceMapper;
 import org.uber.popug.employee.billing.mapping.BillingCyclesPersistenceMapper;
@@ -57,15 +58,22 @@ public class BillingServicesConfig {
     }
 
     @Bean
+    public BillingOperationDescriptionBuilder<TaskWithAssignee> completedTaskDescriptionBuilder() {
+        return new TaskCompletionBillingOperationDescriptionBuilder();
+    }
+
+    @Bean
     public TaskBillingOperationAssemblingService taskBillingOperationAssemblingService(
             BillingOperationIdProvider billingOperationIdProvider,
             BillingOperationDescriptionBuilder<TaskWithAssignee> newlyAssignedTaskDescriptionBuilder,
-            BillingOperationDescriptionBuilder<TaskWithAssignee> reassignedTaskDescriptionBuilder
+            BillingOperationDescriptionBuilder<TaskWithAssignee> reassignedTaskDescriptionBuilder,
+            BillingOperationDescriptionBuilder<TaskWithAssignee> completedTaskDescriptionBuilder
     ) {
         return new TaskBillingOperationAssemblingServiceImpl(
                 billingOperationIdProvider,
                 newlyAssignedTaskDescriptionBuilder,
-                reassignedTaskDescriptionBuilder
+                reassignedTaskDescriptionBuilder,
+                completedTaskDescriptionBuilder
         );
     }
 

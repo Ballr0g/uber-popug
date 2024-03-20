@@ -9,4 +9,6 @@ public interface TransactionalAccountingService {
 
     void billForReassignedTask(TaskWithAssignee taskWithNewAssignee);
 
+    void billForCompletedTask(TaskWithAssignee completedTaskWithAssignee);
+
 }

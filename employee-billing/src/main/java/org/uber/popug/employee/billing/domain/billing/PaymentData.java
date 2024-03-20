@@ -9,4 +9,8 @@ public record PaymentData(
         return new PaymentData(credit, 0L);
     }
 
+    public static PaymentData newDebitData(long debit) {
+        return new PaymentData(0L, debit);
+    }
+
 }

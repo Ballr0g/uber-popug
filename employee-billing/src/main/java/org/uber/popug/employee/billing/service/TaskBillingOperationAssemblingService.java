@@ -9,4 +9,6 @@ public interface TaskBillingOperationAssemblingService {
 
     BillingOperation assembleForReassignedTask(TaskWithAssignee taskWithUpdatedAssignee);
 
+    BillingOperation assembleForCompletedTask(TaskWithAssignee completedTaskWithAssignee);
+
 }
