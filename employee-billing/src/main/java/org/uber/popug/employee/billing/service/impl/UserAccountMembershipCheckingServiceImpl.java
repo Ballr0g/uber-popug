@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.uber.popug.employee.billing.domain.aggregates.TaskForReassignment;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
 import org.uber.popug.employee.billing.domain.billing.creation.TaskForBillingAssignment;
+import org.uber.popug.employee.billing.domain.task.completion.TaskCompletionInfo;
 import org.uber.popug.employee.billing.domain.task.reassignment.TaskReassignmentInfo;
 import org.uber.popug.employee.billing.domain.user.User;
 import org.uber.popug.employee.billing.exception.TaskAssignmentMismatchException;
@@ -39,30 +40,43 @@ public class UserAccountMembershipCheckingServiceImpl implements UserAccountMemb
      */
     @Override
     public TaskWithAssignee retrieveTaskWithAssigneeIfRequestValid(TaskForBillingAssignment task) {
-        final var requestedTaskWithActualAssignee = retrieveTaskWithAssigneeIfPossible(task.publicId());
-        final var requestedTaskAssignee = retrieveAssigneeIfPossibleForPublicId(task.assigneeId());
+        return retrieveTaskWithAssigneeByIdsIfPossible(
+                task.publicId(),
+                task.assigneeId()
+        );
+    }
+
+    @Override
+    public TaskForReassignment retrieveTaskForReassignmentIfRequestValid(TaskReassignmentInfo taskReassignmentInfo) {
+        final var requestedTaskWithPreviousAssignee = retrieveTaskWithAssigneeByIdsIfPossible(
+                taskReassignmentInfo.taskExtPublicId(),
+                taskReassignmentInfo.previousAssigneeExtPublicId()
+        );
+        final var requestedNewTaskAssignee = retrieveAssigneeIfPossibleForPublicId(taskReassignmentInfo.newAssigneeExtPublicId());
+
+        return new TaskForReassignment(requestedTaskWithPreviousAssignee, requestedNewTaskAssignee);
+    }
+
+    @Override
+    public TaskWithAssignee retrieveTaskForCompletionIfRequestValid(TaskCompletionInfo taskCompletionInfo) {
+       return retrieveTaskWithAssigneeByIdsIfPossible(
+               taskCompletionInfo.taskExtPublicId(),
+               taskCompletionInfo.assigneeExtPublicId()
+       );
+    }
+
+    private TaskWithAssignee retrieveTaskWithAssigneeByIdsIfPossible(UUID publicTaskId, UUID publicAssigneeId) {
+        final var requestedTaskWithActualAssignee = retrieveTaskWithAssigneeIfPossible(publicTaskId);
+        final var requestedTaskAssignee = retrieveAssigneeIfPossibleForPublicId(publicAssigneeId);
 
         // Todo: ensure these 2 cases are impossible to co-exist:
         // 1) Assignee info arrived with a delay (actually the task has been reassigned, potentially multiple times).
         // 2) The task has never been assigned to that specific user.
         if (requestedAssigneeMismatchesActualAssignee(requestedTaskWithActualAssignee, requestedTaskAssignee)) {
-            throw new TaskAssignmentMismatchException(task.publicId(), task.assigneeId());
+            throw new TaskAssignmentMismatchException(publicTaskId, publicAssigneeId);
         }
 
         return requestedTaskWithActualAssignee;
-    }
-
-    @Override
-    public TaskForReassignment retrieveTaskForReassignmentIfRequestValid(TaskReassignmentInfo taskReassignmentInfo) {
-        final var requestedTaskWithPreviousAssignee = retrieveTaskWithAssigneeIfPossible(taskReassignmentInfo.taskExtPublicId());
-        final var requestedPreviousTaskAssignee = retrieveAssigneeIfPossibleForPublicId(taskReassignmentInfo.previousAssigneeExtPublicId());
-        final var requestedNewTaskAssignee = retrieveAssigneeIfPossibleForPublicId(taskReassignmentInfo.newAssigneeExtPublicId());
-
-        if (requestedAssigneeMismatchesActualAssignee(requestedTaskWithPreviousAssignee, requestedPreviousTaskAssignee)) {
-            throw new TaskAssignmentMismatchException(taskReassignmentInfo.taskExtPublicId(), taskReassignmentInfo.previousAssigneeExtPublicId());
-        }
-
-        return new TaskForReassignment(requestedTaskWithPreviousAssignee, requestedNewTaskAssignee);
     }
 
     private TaskWithAssignee retrieveTaskWithAssigneeIfPossible(UUID publicTaskId) {
