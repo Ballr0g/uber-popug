@@ -28,6 +28,7 @@ public class TransactionalAccountingServiceImpl implements TransactionalAccounti
     }
 
     @Override
+    @Transactional
     public void billForReassignedTask(TaskWithAssignee taskWithNewAssignee) {
         billingOperationLogService.createReassignedTaskBillingOperationLogEntry(taskWithNewAssignee);
         debitUser(
