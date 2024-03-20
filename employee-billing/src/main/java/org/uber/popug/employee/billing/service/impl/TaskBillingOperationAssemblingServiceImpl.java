@@ -11,14 +11,24 @@ import org.uber.popug.employee.billing.service.TaskBillingOperationAssemblingSer
 public class TaskBillingOperationAssemblingServiceImpl implements TaskBillingOperationAssemblingService {
 
     private final BillingOperationIdProvider billingOperationIdProvider;
-    private final BillingOperationDescriptionBuilder<TaskWithAssignee> taskWithAssigneeDescriptionBuilder;
+    private final BillingOperationDescriptionBuilder<TaskWithAssignee> newlyAssignedTaskDescriptionBuilder;
+    private final BillingOperationDescriptionBuilder<TaskWithAssignee> reassignedTaskDescriptionBuilder;
 
     @Override
-    public BillingOperation assembleForNewlyAssignedTask(TaskWithAssignee task) {
-        return BillingOperation.forTaskWithAssignee(
+    public BillingOperation assembleForNewlyAssignedTask(TaskWithAssignee newlyAssignedTask) {
+        return BillingOperation.forAssignment(
                 billingOperationIdProvider,
-                taskWithAssigneeDescriptionBuilder,
-                task
+                newlyAssignedTaskDescriptionBuilder,
+                newlyAssignedTask
+        );
+    }
+
+    @Override
+    public BillingOperation assembleForReassignedTask(TaskWithAssignee taskWithUpdatedAssignee) {
+        return BillingOperation.forAssignment(
+                billingOperationIdProvider,
+                reassignedTaskDescriptionBuilder,
+                taskWithUpdatedAssignee
         );
     }
 

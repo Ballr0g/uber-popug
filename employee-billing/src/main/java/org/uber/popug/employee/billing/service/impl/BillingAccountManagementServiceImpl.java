@@ -16,7 +16,7 @@ public class BillingAccountManagementServiceImpl implements BillingAccountManage
     private final BillingAccountsPersistenceMapper billingAccountsPersistenceMapper;
 
     @Override
-    public BillingAccountWithOwner payUserForInitialAssignment(PaymentDataWithUser paymentDataWithUser) {
+    public BillingAccountWithOwner debitFromUser(PaymentDataWithUser paymentDataWithUser) {
         final var updatedBillingAccount = subtractInitialAssignmentIfPossible(paymentDataWithUser);
         return new BillingAccountWithOwner(updatedBillingAccount, paymentDataWithUser.relatedUser());
     }

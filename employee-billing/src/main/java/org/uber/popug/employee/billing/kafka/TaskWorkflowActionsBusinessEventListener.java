@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCompletedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
-import org.uber.popug.employee.billing.service.UserAccountBillingService;
+import org.uber.popug.employee.billing.service.TaskAssignmentService;
+import org.uber.popug.employee.billing.service.TaskReassignmentService;
 
 @Service
 @RequiredArgsConstructor
@@ -18,18 +19,17 @@ import org.uber.popug.employee.billing.service.UserAccountBillingService;
 )
 public class TaskWorkflowActionsBusinessEventListener {
 
-    private final UserAccountBillingService userAccountBillingService;
+    private final TaskAssignmentService taskAssignmentService;
+    private final TaskReassignmentService taskReassignmentService;
 
     @KafkaHandler
     public void handleTaskCreatedBusinessEvent(TaskCreatedEvent taskCreatedEvent) {
-        userAccountBillingService.billUserForTaskAssignment(taskCreatedEvent);
+        taskAssignmentService.handleTaskAssignment(taskCreatedEvent);
     }
 
     @KafkaHandler
     public void handleTaskReassignedBusinessEvent(TaskReassignedEvent taskReassignedEvent) {
-        throw new UnsupportedOperationException(
-                "TaskWorkflowActionsBusinessEventListener.handleTaskReassignedBusinessEvent is not implemented."
-        );
+        taskReassignmentService.handleTaskReassignment(taskReassignedEvent);
     }
 
     @KafkaHandler
