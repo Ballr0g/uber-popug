@@ -14,4 +14,6 @@ public interface TaskRepository {
 
     Optional<TaskToAssigneeEntity> findTaskToAssigneeByPublicTaskId(UUID publicTaskId);
 
+    Optional<TaskEntity> updateTaskAssigneeById(long taskId, long newAssigneeId);
+
 }

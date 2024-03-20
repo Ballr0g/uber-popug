@@ -38,6 +38,14 @@ public class JdbcClientTaskRepository implements TaskRepository {
             WHERE t.ext_public_id = :extPublicTaskId
             """;
 
+    private static final String UPDATE_TASK_ASSIGNEE_BY_ID_SQL = /* language=postgresql */
+            """
+            UPDATE EMPLOYEE_BILLING.TASKS
+            SET assignee_id = :newAssigneeId
+            WHERE id = :taskId
+            RETURNING id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
+            """;
+
 
     private final JdbcClient jdbcClient;
 
@@ -80,6 +88,25 @@ public class JdbcClientTaskRepository implements TaskRepository {
                                         rs.getObject("ext_public_assignee_id", UUID.class),
                                         rs.getString("assignee_login")
                                 ))
+                )
+                .optional();
+    }
+
+    @Override
+    public Optional<TaskEntity> updateTaskAssigneeById(long taskId, long newAssigneeId) {
+        return jdbcClient.sql(UPDATE_TASK_ASSIGNEE_BY_ID_SQL)
+                .param("taskId", taskId)
+                .param("newAssigneeId", newAssigneeId)
+                .query((ResultSet rs, int rowNum) ->
+                        new TaskEntity(
+                                rs.getLong("id"),
+                                rs.getObject("ext_public_id", UUID.class),
+                                rs.getLong("assignee_id"),
+                                rs.getString("description"),
+                                TaskEntity.Status.valueOf(rs.getString("status")),
+                                rs.getLong("assignment_cost"),
+                                rs.getLong("completion_cost")
+                        )
                 )
                 .optional();
     }

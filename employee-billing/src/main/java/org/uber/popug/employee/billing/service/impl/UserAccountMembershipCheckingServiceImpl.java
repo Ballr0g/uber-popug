@@ -1,8 +1,10 @@
 package org.uber.popug.employee.billing.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.uber.popug.employee.billing.domain.aggregates.TaskForReassignment;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
 import org.uber.popug.employee.billing.domain.billing.creation.TaskForBillingAssignment;
+import org.uber.popug.employee.billing.domain.task.reassignment.TaskReassignmentInfo;
 import org.uber.popug.employee.billing.domain.user.User;
 import org.uber.popug.employee.billing.exception.TaskAssignmentMismatchException;
 import org.uber.popug.employee.billing.exception.TaskNotFoundException;
@@ -48,6 +50,19 @@ public class UserAccountMembershipCheckingServiceImpl implements UserAccountMemb
         }
 
         return requestedTaskWithActualAssignee;
+    }
+
+    @Override
+    public TaskForReassignment retrieveTaskForReassignmentIfRequestValid(TaskReassignmentInfo taskReassignmentInfo) {
+        final var requestedTaskWithPreviousAssignee = retrieveTaskWithAssigneeIfPossible(taskReassignmentInfo.taskExtPublicId());
+        final var requestedPreviousTaskAssignee = retrieveAssigneeIfPossibleForPublicId(taskReassignmentInfo.previousAssigneeExtPublicId());
+        final var requestedNewTaskAssignee = retrieveAssigneeIfPossibleForPublicId(taskReassignmentInfo.newAssigneeExtPublicId());
+
+        if (requestedAssigneeMismatchesActualAssignee(requestedTaskWithPreviousAssignee, requestedPreviousTaskAssignee)) {
+            throw new TaskAssignmentMismatchException(taskReassignmentInfo.taskExtPublicId(), taskReassignmentInfo.previousAssigneeExtPublicId());
+        }
+
+        return new TaskForReassignment(requestedTaskWithPreviousAssignee, requestedNewTaskAssignee);
     }
 
     private TaskWithAssignee retrieveTaskWithAssigneeIfPossible(UUID publicTaskId) {

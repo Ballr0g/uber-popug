@@ -5,6 +5,6 @@ import org.uber.popug.employee.billing.domain.aggregates.PaymentDataWithUser;
 
 public interface BillingAccountManagementService {
 
-    BillingAccountWithOwner payUserForInitialAssignment(PaymentDataWithUser paymentDataWithUser);
+    BillingAccountWithOwner debitFromUser(PaymentDataWithUser paymentDataWithUser);
 
 }

@@ -13,7 +13,7 @@ public record BillingOperation(
         @Nonnull PaymentData paymentData
 ) {
 
-    public static BillingOperation forTaskWithAssignee(
+    public static BillingOperation forAssignment(
             BillingOperationIdProvider billingOperationIdProvider,
             BillingOperationDescriptionBuilder<TaskWithAssignee> billingOperationDescriptionBuilder,
             TaskWithAssignee taskWithAssignee

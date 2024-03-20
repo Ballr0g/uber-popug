@@ -26,6 +26,10 @@ public interface TasksPersistenceMapper {
     @Mapping(source = "taskEntity", target = "task", qualifiedByName = "taskToAssigneeEntityToBusiness")
     TaskWithAssignee toBusiness(TaskToAssigneeEntity taskEntity);
 
+    @Mapping(source = "assignmentCost", target = "costs.assignmentCost")
+    @Mapping(source = "completionCost", target = "costs.completionCost")
+    Task toBusiness(TaskEntity taskEntity);
+
     Task.Status toBusiness(TaskEntity.Status status);
 
     @Named("taskToAssigneeEntityToBusiness")
