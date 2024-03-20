@@ -35,7 +35,7 @@ public class TaskBillingOperationAssemblingServiceImpl implements TaskBillingOpe
 
     @Override
     public BillingOperation assembleForCompletedTask(TaskWithAssignee completedTaskWithAssignee) {
-        return BillingOperation.forAssignment(
+        return BillingOperation.forCompletion(
                 billingOperationIdProvider,
                 completedTaskDescriptionBuilder,
                 completedTaskWithAssignee

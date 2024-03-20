@@ -29,4 +29,20 @@ public record BillingOperation(
         );
     }
 
+    public static BillingOperation forCompletion(
+            BillingOperationIdProvider billingOperationIdProvider,
+            BillingOperationDescriptionBuilder<TaskWithAssignee> billingOperationDescriptionBuilder,
+            TaskWithAssignee taskWithAssignee
+    ) {
+        return new BillingOperation(
+                billingOperationIdProvider.generateDbBillingOperationId(),
+                billingOperationIdProvider.generatePublicBillingOperationId(),
+                billingOperationDescriptionBuilder.buildBillingOperationDescription(taskWithAssignee),
+                new PaymentData(
+                        0L,
+                        taskWithAssignee.task().costs().completionCost()
+                )
+        );
+    }
+
 }
