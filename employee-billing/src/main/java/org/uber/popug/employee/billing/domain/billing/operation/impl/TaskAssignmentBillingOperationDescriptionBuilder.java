@@ -3,7 +3,7 @@ package org.uber.popug.employee.billing.domain.billing.operation.impl;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
 import org.uber.popug.employee.billing.domain.billing.operation.BillingOperationDescriptionBuilder;
 
-public class TaskWithAssigneeBillingOperationDescriptionBuilder
+public class TaskAssignmentBillingOperationDescriptionBuilder
         implements BillingOperationDescriptionBuilder<TaskWithAssignee> {
 
     private static final String TASK_ASSIGNED_LOG_OPERATION_DESCRIPTION_MESSAGE_TEMPLATE

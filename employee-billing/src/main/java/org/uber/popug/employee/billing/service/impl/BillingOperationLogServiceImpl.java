@@ -18,17 +18,34 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
     private final ImmutableBillingOperationsRepository billingOperationsRepository;
 
     @Override
-    public BillingOperationFullData createBillingOperationLogEntry(TaskWithAssignee taskWithAssignee) {
-
-        final var billingOperationAggregate = retrieveBillingOperationAggregate(taskWithAssignee);
+    public BillingOperationFullData createNewTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee) {
+        final var billingOperationAggregate = retrieveNewTaskBillingOperationAggregate(taskWithAssignee);
         final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
         billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
 
         return billingOperationAggregate;
     }
 
-    private BillingOperationFullData retrieveBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
+    @Override
+    public BillingOperationFullData createReassignedTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee) {
+        final var billingOperationAggregate = retrieveReassignedTaskBillingOperationAggregate(taskWithAssignee);
+        final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
+        billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
+
+        return billingOperationAggregate;
+    }
+
+    private BillingOperationFullData retrieveNewTaskBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
         final var billingOperation = billingOperationAssemblingService.assembleForNewlyAssignedTask(taskWithAssignee);
+        return BillingOperationFullData.assembleBillingOperationLogEntry(
+                billingOperation,
+                taskWithAssignee.assignee(),
+                billingCycleProvider
+        );
+    }
+
+    private BillingOperationFullData retrieveReassignedTaskBillingOperationAggregate(TaskWithAssignee taskWithAssignee) {
+        final var billingOperation = billingOperationAssemblingService.assembleForReassignedTask(taskWithAssignee);
         return BillingOperationFullData.assembleBillingOperationLogEntry(
                 billingOperation,
                 taskWithAssignee.assignee(),

@@ -1,9 +1,11 @@
 package org.uber.popug.employee.billing.service;
 
-import org.uber.popug.employee.billing.domain.billing.creation.TaskForBillingAssignment;
+import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
 
 public interface UserAccountBillingService {
 
-    void billUserForTaskAssignment(TaskForBillingAssignment taskForBillingAssignment);
+    void billUserForTaskAssignment(TaskWithAssignee taskForBilling);
+
+    void billUserForTaskReassignment(TaskWithAssignee reassignedTaskForBilling);
 
 }
