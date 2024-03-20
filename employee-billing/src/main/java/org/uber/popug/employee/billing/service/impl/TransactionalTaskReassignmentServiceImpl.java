@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.uber.popug.employee.billing.domain.aggregates.TaskForReassignment;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
-import org.uber.popug.employee.billing.exception.technical.TaskUpdateFailedException;
+import org.uber.popug.employee.billing.exception.technical.TaskReassignmentFailedException;
 import org.uber.popug.employee.billing.mapping.TasksPersistenceMapper;
 import org.uber.popug.employee.billing.repository.TaskRepository;
 import org.uber.popug.employee.billing.service.TransactionalTaskReassignmentService;
@@ -32,7 +32,7 @@ public class TransactionalTaskReassignmentServiceImpl implements TransactionalTa
 
         final var updatedTaskEntityOpt = taskRepository.updateTaskAssigneeById(taskReassigned.id(), newAssignee.id());
         final var updatedTaskEntity = updatedTaskEntityOpt.orElseThrow(
-                () -> new TaskUpdateFailedException(taskForReassignment)
+                () -> new TaskReassignmentFailedException(taskForReassignment)
         );
 
         final var updatedTask = tasksPersistenceMapper.toBusiness(updatedTaskEntity);

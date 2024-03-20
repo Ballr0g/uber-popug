@@ -16,4 +16,6 @@ public interface TaskRepository {
 
     Optional<TaskEntity> updateTaskAssigneeById(long taskId, long newAssigneeId);
 
+    Optional<TaskEntity> completeTaskById(long taskId);
+
 }

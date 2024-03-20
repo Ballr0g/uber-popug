@@ -1,6 +1,7 @@
 package org.uber.popug.employee.billing.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.uber.popug.employee.billing.entity.composite.TaskToAssigneeEntity;
 import org.uber.popug.employee.billing.entity.task.TaskEntity;
@@ -13,6 +14,17 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class JdbcClientTaskRepository implements TaskRepository {
+
+    private static final RowMapper<TaskEntity> TASK_ENTITY_ROW_MAPPER = (ResultSet rs, int rowNum) ->
+            new TaskEntity(
+                    rs.getLong("id"),
+                    rs.getObject("ext_public_id", UUID.class),
+                    rs.getLong("assignee_id"),
+                    rs.getString("description"),
+                    TaskEntity.Status.valueOf(rs.getString("status")),
+                    rs.getLong("assignment_cost"),
+                    rs.getLong("completion_cost")
+            );
 
     private static final String GENERATE_NEXT_TASK_ID_SQL = /* language=postgresql */
             """
@@ -42,6 +54,14 @@ public class JdbcClientTaskRepository implements TaskRepository {
             """
             UPDATE EMPLOYEE_BILLING.TASKS
             SET assignee_id = :newAssigneeId
+            WHERE id = :taskId
+            RETURNING id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
+            """;
+
+    private static final String UPDATE_TASK_STATUS_TO_COMPLETED_BY_ID_SQL = /* language=postgresql */
+            """
+            UPDATE EMPLOYEE_BILLING.TASKS
+            SET status = 'COMPLETED'
             WHERE id = :taskId
             RETURNING id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
             """;
@@ -97,17 +117,16 @@ public class JdbcClientTaskRepository implements TaskRepository {
         return jdbcClient.sql(UPDATE_TASK_ASSIGNEE_BY_ID_SQL)
                 .param("taskId", taskId)
                 .param("newAssigneeId", newAssigneeId)
-                .query((ResultSet rs, int rowNum) ->
-                        new TaskEntity(
-                                rs.getLong("id"),
-                                rs.getObject("ext_public_id", UUID.class),
-                                rs.getLong("assignee_id"),
-                                rs.getString("description"),
-                                TaskEntity.Status.valueOf(rs.getString("status")),
-                                rs.getLong("assignment_cost"),
-                                rs.getLong("completion_cost")
-                        )
-                )
+                .query(TASK_ENTITY_ROW_MAPPER)
                 .optional();
     }
+
+    @Override
+    public Optional<TaskEntity> completeTaskById(long taskId) {
+        return jdbcClient.sql(UPDATE_TASK_STATUS_TO_COMPLETED_BY_ID_SQL)
+                .param("taskId", taskId)
+                .query(TASK_ENTITY_ROW_MAPPER)
+                .optional();
+    }
+
 }

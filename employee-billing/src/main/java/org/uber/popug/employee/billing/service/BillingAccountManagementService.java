@@ -7,4 +7,6 @@ public interface BillingAccountManagementService {
 
     BillingAccountWithOwner debitFromUser(PaymentDataWithUser paymentDataWithUser);
 
+    BillingAccountWithOwner payToUser(PaymentDataWithUser paymentDataWithUser);
+
 }

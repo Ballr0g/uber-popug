@@ -8,4 +8,6 @@ public interface UserAccountBillingService {
 
     void billUserForTaskReassignment(TaskWithAssignee reassignedTaskForBilling);
 
+    void payUserForTaskCompletion(TaskWithAssignee completedTaskForBilling);
+
 }
