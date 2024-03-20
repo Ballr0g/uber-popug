@@ -8,6 +8,7 @@ import org.uber.popug.employee.billing.kafka.event.business.TaskCompletedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskCreatedEvent;
 import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
 import org.uber.popug.employee.billing.service.TaskAssignmentService;
+import org.uber.popug.employee.billing.service.TaskCompletionService;
 import org.uber.popug.employee.billing.service.TaskReassignmentService;
 
 @Service
@@ -21,6 +22,7 @@ public class TaskWorkflowActionsBusinessEventListener {
 
     private final TaskAssignmentService taskAssignmentService;
     private final TaskReassignmentService taskReassignmentService;
+    private final TaskCompletionService taskCompletionService;
 
     @KafkaHandler
     public void handleTaskCreatedBusinessEvent(TaskCreatedEvent taskCreatedEvent) {
@@ -34,9 +36,7 @@ public class TaskWorkflowActionsBusinessEventListener {
 
     @KafkaHandler
     public void handleTaskCompletedBusinessEvent(TaskCompletedEvent taskCompletedEvent) {
-        throw new UnsupportedOperationException(
-                "TaskWorkflowActionsBusinessEventListener.handleTaskCompletedBusinessEvent is not implemented."
-        );
+        taskCompletionService.handleTaskCompletion(taskCompletedEvent);
     }
 
 }
