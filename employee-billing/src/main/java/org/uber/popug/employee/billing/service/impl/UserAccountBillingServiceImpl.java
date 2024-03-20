@@ -20,4 +20,9 @@ public class UserAccountBillingServiceImpl implements UserAccountBillingService 
         transactionalAccountingService.billForReassignedTask(reassignedTaskForBilling);
     }
 
+    @Override
+    public void payUserForTaskCompletion(TaskWithAssignee completedTaskForBilling) {
+        transactionalAccountingService.billForCompletedTask(completedTaskForBilling);
+    }
+
 }
