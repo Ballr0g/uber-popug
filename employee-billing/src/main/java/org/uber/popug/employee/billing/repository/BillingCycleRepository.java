@@ -12,4 +12,6 @@ public interface BillingCycleRepository {
 
     Optional<BillingCycleEntity> findActiveBillingCycle();
 
+    Optional<BillingCycleEntity> closeActiveBillingCycle();
+
 }

@@ -31,6 +31,13 @@ public class JdbcClientBillingCycleRepository implements BillingCycleRepository 
             WHERE state = 'ACTIVE'
             """;
 
+    private static final String CLOSE_ACTIVE_BILLING_CYCLE_SQL = /* language=postgresql */
+            """
+            UPDATE EMPLOYEE_BILLING.billing_cycles
+            SET state = 'CLOSED'
+            WHERE state = 'ACTIVE'
+            RETURNING id, public_id, start_date, end_date, state
+            """;
 
     private final JdbcClient jdbcClient;
 
@@ -56,6 +63,13 @@ public class JdbcClientBillingCycleRepository implements BillingCycleRepository 
     @Override
     public Optional<BillingCycleEntity> findActiveBillingCycle() {
         return jdbcClient.sql(SELECT_ACTIVE_BILLING_CYCLE_SQL)
+                .query(BillingCycleEntity.class)
+                .optional();
+    }
+
+    @Override
+    public Optional<BillingCycleEntity> closeActiveBillingCycle() {
+        return jdbcClient.sql(CLOSE_ACTIVE_BILLING_CYCLE_SQL)
                 .query(BillingCycleEntity.class)
                 .optional();
     }

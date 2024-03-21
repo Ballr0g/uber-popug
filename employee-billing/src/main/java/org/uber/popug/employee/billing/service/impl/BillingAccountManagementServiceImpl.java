@@ -19,6 +19,7 @@ public class BillingAccountManagementServiceImpl implements BillingAccountManage
     private final BillingAccountRepository billingAccountRepository;
     private final BillingAccountsPersistenceMapper billingAccountsPersistenceMapper;
 
+    // Todo: rename, remove misleading debit
     @Override
     public BillingAccountWithOwner debitFromUser(PaymentDataWithUser paymentDataWithUser) {
         final var updatedBillingAccount = subtractInitialAssignmentIfPossible(paymentDataWithUser);

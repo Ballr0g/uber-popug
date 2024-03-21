@@ -28,6 +28,7 @@ public class TaskAddingServiceImpl implements TaskAddingService {
         final var taskForCreation = tasksDtoMapper.postTaskRequestsDtoToBusiness(postTasksRequestDto);
         final var assignedTask = taskAssignmentService.assignNewTask(taskForCreation);
         taskRepository.add(assignedTask);
+        // Todo: transactional event producing.
         tasksCUDEventProducer.sendTaskCreatedReplicationEvent(assignedTask);
         // Todo: get rid of this monstrosity, currently solves receiving CUD before business in the worst possible way.
         Thread.sleep(SIMULATION_TIMEOUT_MILLIS_TO_TEMPORARILY_SLOW_DOWN_BUSINESS_EVENT);
