@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.uber.popug.employee.billing.entity.billing.account.BillingAccountEntity;
 import org.uber.popug.employee.billing.repository.BillingAccountRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,6 +18,14 @@ public class JdbcClientBillingAccountRepository implements BillingAccountReposit
         WHERE owner_user_id = :ownerUserId
         RETURNING id, public_id, owner_user_id, current_total
         """;
+
+    private static final String UPDATE_BILLING_ACCOUNT_BALANCE_RESET_POSITIVE = /* language=postgresql */
+            """
+            UPDATE EMPLOYEE_BILLING.billing_accounts
+            SET current_total = 0
+            WHERE current_total > 0
+            RETURNING id, public_id, owner_user_id, current_total
+            """;
 
     private final JdbcClient jdbcClient;
 
@@ -38,6 +47,13 @@ public class JdbcClientBillingAccountRepository implements BillingAccountReposit
                 .param("toAdd", toAdd)
                 .query(BillingAccountEntity.class)
                 .optional();
+    }
+
+    @Override
+    public List<BillingAccountEntity> resetPositiveBalance() {
+        return jdbcClient.sql(UPDATE_BILLING_ACCOUNT_BALANCE_RESET_POSITIVE)
+                .query(BillingAccountEntity.class)
+                .list();
     }
 
 }
