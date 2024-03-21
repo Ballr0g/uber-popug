@@ -11,6 +11,7 @@ import org.uber.popug.employee.billing.service.TaskBillingOperationAssemblingSer
 public class TaskBillingOperationAssemblingServiceImpl implements TaskBillingOperationAssemblingService {
 
     private final BillingOperationIdProvider billingOperationIdProvider;
+    // Todo: HashMap-based registry.
     private final BillingOperationDescriptionBuilder<TaskWithAssignee> newlyAssignedTaskDescriptionBuilder;
     private final BillingOperationDescriptionBuilder<TaskWithAssignee> reassignedTaskDescriptionBuilder;
     private final BillingOperationDescriptionBuilder<TaskWithAssignee> completedTaskDescriptionBuilder;
