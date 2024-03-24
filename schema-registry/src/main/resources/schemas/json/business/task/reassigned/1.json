@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "TaskReassignedEvent.v1",
+  "description": "JSON schema for task reassignment business event (version 1).",
+
+  "definitions": {
+    "eventData": {
+      "type": "object",
+      "title": "TaskReassignedEventData.v1",
+      "properties": {
+        "taskId": {
+          "description": "A globally unique ID of a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "previousAssigneeId": {
+          "description": "A globally unique ID of the previous assignee of a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "newAssigneeId": {
+          "description": "A globally unique ID of the new assignee of a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "taskDescription": {
+          "description": "Description of a task.",
+          "type": "string"
+        },
+        "reassignmentDate": {
+          "description": "Date-time of task reassignment.",
+          "format": "date-time"
+        }
+      },
+
+      "required": [
+        "taskId",
+        "previousAssigneeId",
+        "newAssigneeId",
+        "taskDescription",
+        "reassignmentDate"
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventName":    { "type": "string", "const": "task.reassigned" },
+    "eventVersion": { "enum": [1] },
+    "eventId":      { "type": "string", "format": "uuid" },
+    "eventTime":    { "type": "string" },
+    "producer":     { "type": "string" },
+
+    "data": { "$ref": "#/definitions/eventData" }
+  },
+
+  "required": [
+    "eventName",
+    "eventVersion",
+    "eventId",
+    "eventTime",
+    "producer",
+    "data"
+  ]
+}
