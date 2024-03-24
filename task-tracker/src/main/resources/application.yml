@@ -43,8 +43,8 @@ spring:
       client-id: uber-popug-task-tracker-1
 
 kafka:
-  tasks-business: task-workflow-actions.1
-  tasks-cud: task-lifecycle.stream.1
+  tasks-business: tasks-workflow.1
+  tasks-cud: tasks.stream.1
 
 jwt:
   auth:
