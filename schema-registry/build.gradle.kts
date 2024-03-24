@@ -2,7 +2,6 @@ plugins {
     java
     id("io.spring.dependency-management") version "1.1.4"
     id("org.springframework.boot") version "3.2.3"
-    id("org.jsonschema2pojo") version "1.2.1"
     id("org.openapi.generator") version "7.0.1"
 }
 
@@ -13,7 +12,6 @@ val junitVersion: String by project
 val springBootVersion: String by project
 val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
-val mapstructVersion: String by project
 val lombokVersion: String by project
 val jacksonDatabindVersion: String by project
 
@@ -26,7 +24,6 @@ java {
     sourceSets {
         getByName("main").java {
             srcDir("${openApiGeneratedPath}/src/main/java")
-            srcDir("${buildDir}/generated/jsonSchema2Pojo/src/main/java")
         }
     }
 }
@@ -39,20 +36,10 @@ dependencies {
     // --> Annotation Processors <--
     // Lombok - annotation processing.
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-    // MapStruct - annotation processing.
-    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 
     // --> Implementation Dependencies <--
-    // MapStruct - implementation.
-    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
     // Spring Boot starter web.
     implementation("org.springframework.boot:spring-boot-starter-web")
-    // Spring Boot starter JDBC.
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    // Spring Boot starter security.
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    // Spring Boot starter OAuth2 resource server.
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     // Swagger V3 annotations.
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
@@ -63,9 +50,6 @@ dependencies {
     // --> Compile-Only Dependencies <--
     // Lombok.
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
-
-    // --> Development-Only Dependencies <--
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
     // --> Test Implementation Dependencies <--
     // JUnit API.
@@ -107,15 +91,7 @@ tasks {
     named<JavaCompile>("compileJava") {
         inputs.files(named("processResources"))
         dependsOn(
-            named("openApiGenerate"),
-            jsonSchema2Pojo
+            named("openApiGenerate")
         )
     }
-}
-
-jsonSchema2Pojo {
-    targetPackage = "${group}.generated"
-    targetDirectory = file("${buildDir}/generated/jsonSchema2Pojo/src/main/java")
-    sourceFiles = files("${projectDir}/src/main/resources/schemas/json")
-    useTitleAsClassname = true
 }
