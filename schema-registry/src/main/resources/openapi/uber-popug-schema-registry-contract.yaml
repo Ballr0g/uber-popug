@@ -17,7 +17,7 @@ paths:
           description: 'Type of the schema requested.'
           required: true
           schema:
-            $ref: '#/components/schemas/SchemaEventTypeDto'
+            type: string
         - name: schemaName
           in: path
           description: 'Name of the requested schema.'
@@ -38,15 +38,3 @@ paths:
             application/json+schema:
               schema:
                 type: string
-
-components:
-  schemas:
-    SchemaEventTypeDto:
-      type: string
-      description: >
-        One of the two supported event schema types:<br>
-        - <b>cud</b>: Replication events.<br>
-        - <b>business</b>: Events representing results of a specific business command.<br>
-      enum:
-        - cud
-        - business

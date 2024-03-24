@@ -7,7 +7,7 @@
   "definitions": {
     "eventData": {
       "type": "object",
-      "title": "TaskReassignedEventData.v1",
+      "title": "TaskCompletedEventData.v1",
       "properties": {
         "taskId": {
           "description": "A globally unique ID of a task.",
