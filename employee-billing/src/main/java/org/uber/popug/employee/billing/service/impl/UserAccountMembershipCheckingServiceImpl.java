@@ -3,7 +3,7 @@ package org.uber.popug.employee.billing.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.uber.popug.employee.billing.domain.aggregates.TaskForReassignment;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
-import org.uber.popug.employee.billing.domain.billing.creation.TaskForBillingAssignment;
+import org.uber.popug.employee.billing.domain.task.creation.TaskAssignmentInfo;
 import org.uber.popug.employee.billing.domain.task.completion.TaskCompletionInfo;
 import org.uber.popug.employee.billing.domain.task.reassignment.TaskReassignmentInfo;
 import org.uber.popug.employee.billing.domain.user.User;
@@ -39,10 +39,10 @@ public class UserAccountMembershipCheckingServiceImpl implements UserAccountMemb
      * the system.
      */
     @Override
-    public TaskWithAssignee retrieveTaskWithAssigneeIfRequestValid(TaskForBillingAssignment task) {
+    public TaskWithAssignee retrieveTaskWithAssigneeIfRequestValid(TaskAssignmentInfo taskAssignmentInfo) {
         return retrieveTaskWithAssigneeByIdsIfPossible(
-                task.publicId(),
-                task.assigneeId()
+                taskAssignmentInfo.taskExtPublicId(),
+                taskAssignmentInfo.assigneeExtPublicId()
         );
     }
 
