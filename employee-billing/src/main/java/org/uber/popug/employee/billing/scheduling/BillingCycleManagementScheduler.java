@@ -14,7 +14,7 @@ public class BillingCycleManagementScheduler {
     private final BillingCycleClosingService billingCycleClosingService;
     private final PaymentService paymentService;
 
-    // Todo: Add balance resetting logic and email notification.
+    // Todo: Add email notification.
     @Transactional
     @Scheduled(cron = "${billing-cycles.closing-interval}", zone = "UTC")
     public void closeCurrentBillingCycle() {
