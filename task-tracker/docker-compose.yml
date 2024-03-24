@@ -49,11 +49,9 @@ services:
       kafka-topics --bootstrap-server kafka:9092 --list
 
       echo -e 'Creating kafka topics...'
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists \
-      --topic task-workflow-actions.1 --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists \
-      --topic task-lifecycle.stream.1 --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic tasks-workflow.1 --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic tasks.stream.1 --replication-factor 1 --partitions 1
 
-      echo -e 'Successfully created the following topics:'
+      echo -e 'Available topics after setup:'
       kafka-topics --bootstrap-server kafka:9092 --list
       "

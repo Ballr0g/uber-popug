@@ -40,9 +40,9 @@ kafka:
   listener:
     task-lifecycle-stream:
       bootstrap-servers: localhost:29092
-      group-id: uber-popug.employee-billing.task-lifecycle.stream.1
-      topics: task-lifecycle.stream.1
+      group-id: uber-popug.employee-billing.tasks.stream.1
+      topics: tasks.stream.1
     task-workflow-actions:
       bootstrap-servers: localhost:29092
-      group-id: uber-popug.employee-billing.task-workflow-actions.1
-      topics: task-workflow-actions.1
+      group-id: uber-popug.employee-billing.tasks-workflow.1
+      topics: tasks-workflow.1
