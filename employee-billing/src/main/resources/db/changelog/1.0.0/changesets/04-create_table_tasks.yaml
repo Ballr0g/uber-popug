@@ -1,0 +1,61 @@
+databaseChangeLog:
+  -   changeSet:
+        id: '1.0.0-04-0'
+        author: 'd.sagalov'
+        comment: 'Create table tasks'
+        changes:
+          - createTable:
+              tableName: tasks
+              schemaName: employee_billing
+              remarks: 'Tasks table of the employee billing service.'
+              columns:
+                - column:
+                    name: id
+                    type: bigint
+                    remarks: 'Unique technical id of the task specific to the employee billing service.'
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                - column:
+                    name: ext_public_id
+                    type: uuid
+                    remarks: 'Globally unique id of a task, provided by an external system.'
+                    constraints:
+                      nullable: false
+                      unique: true
+                - column:
+                    name: assignee_id
+                    type: bigint
+                    remarks: 'Id of a user responsible for a task.'
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_user_entries_on_tasks
+                      referencedTableName: users
+                      referencedTableSchemaName: employee_billing
+                      referencedColumnNames: id
+                - column:
+                    name: description
+                    type: varchar(511)
+                    remarks: 'Description of a task.'
+                    constraints:
+                      nullable: false
+                - column:
+                    name: status
+                    type: varchar(31)
+                    defaultValue: 'OPEN'
+                    remarks: 'Current status of a task.'
+                    constraints:
+                      nullable: false
+                      checkConstraint: "status IN ('OPEN', 'COMPLETED')"
+                - column:
+                    name: assignment_cost
+                    type: bigint
+                    remarks: 'The amount of money taken when a task is assigned.'
+                    constraints:
+                      nullable: false
+                - column:
+                    name: completion_cost
+                    type: bigint
+                    remarks: 'The amount of money added when a task is completed.'
+                    constraints:
+                      nullable: false

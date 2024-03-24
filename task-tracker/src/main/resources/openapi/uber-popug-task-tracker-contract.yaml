@@ -1,0 +1,180 @@
+openapi: 3.1.0
+info:
+  title: 'uber-popug-task-tracker OpenAPI 3.1 contract.'
+  description: 'uber-popug-task-tracker - service for task management of Uber Popug Co. employees.'
+  version: 0.0.1
+paths:
+  /tasks:
+    post:
+      operationId: addTask
+      tags:
+        - TasksCreation
+      description: 'Creates and adds a new task and assigns it to a random employee.'
+      requestBody:
+        required: true
+        description: 'Data for the new task created.'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAddTaskRequestDto'
+      responses:
+        '201':
+          description: '[201] Successful response with task ID and task assignee ID.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostAddTaskResponseDto'
+
+  /tasks/reassign-all:
+    post:
+      operationId: reassignAllTasks
+      tags:
+        - TasksAdmin
+      description: 'Reassigns all the tasks between available users.'
+      responses:
+        '200':
+          description: '[200] Successfully shuffled all the tasks.'
+
+  /users/{userId}/tasks:
+    get:
+      operationId: getTasksByUser
+      tags:
+        - UserActions
+      description: 'Retrieves all tasks of a specific user by their id.'
+      parameters:
+        - name: userId
+          in: path
+          description: 'Id of the user the tasks are requested for.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: '[200] Successfully retrieved all tasks assigned to this user.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTasksByUserResponseDto'
+
+
+  /users/{userId}/tasks/{taskId}/complete:
+    patch:
+      operationId: completeTask
+      tags:
+        - UserActions
+      description: 'Completes a task with given id for specific user.'
+      parameters:
+        - name: userId
+          in: path
+          description: 'Id of the user completing the task.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: taskId
+          in: path
+          description: 'Id of the task completed by the user.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: '[200] Successfully changed the status of the task to completed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchTasksCompleteResponseDto'
+
+components:
+  schemas:
+    PostAddTaskRequestDto:
+      type: object
+      description: '[Request] Info required to create a task: description'
+      required:
+        - taskDescription
+      properties:
+        taskDescription:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: 'Description of the new task, length - [1; 255].'
+
+    PostAddTaskResponseDto:
+      type: object
+      description: '[Response] Task successfully created and assigned to the user specified.'
+      required:
+        - taskId
+        - taskAssigneeId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task created.'
+        taskAssigneeId:
+          type: string
+          format: uuid
+          description: 'ID of the task assignee.'
+
+    PatchTasksCompleteResponseDto:
+      type: object
+      description: '[Response] Task specified successfully completed by the given user.'
+      required:
+        - taskId
+        - taskAssigneeId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task completed.'
+        taskAssigneeId:
+          type: string
+          format: uuid
+          description: 'ID of the assignee who completed the task.'
+
+    GetTasksByUserResponseDto:
+      type: object
+      description: '[Response] All tasks currently assigned to a specific user.'
+      required:
+        - userId
+        - userTasks
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: 'ID of the user the tasks are assigned to.'
+        userTasks:
+          type: array
+          uniqueItems: true
+          description: '[Unique] Set of tasks assigned to the requested user.'
+          items:
+            $ref: '#/components/schemas/GetTasksByUserTaskDto'
+
+    GetTasksByUserTaskDto:
+      type: object
+      description: '[Response] A single task assigned to a specific user.'
+      required:
+        - taskId
+        - taskDescription
+        - status
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task.'
+        taskDescription:
+          type: string
+          description: 'Description of the task'
+        status:
+          $ref: '#/components/schemas/TaskStatusDto'
+
+    TaskStatusDto:
+      type: string
+      description: >
+        Current status of the task:<br>
+        - <b>open</b>: The task is currently open.<br>
+        - <b>group_environment</b>: The task is already completed.<br>
+      enum:
+        - open
+        - completed
