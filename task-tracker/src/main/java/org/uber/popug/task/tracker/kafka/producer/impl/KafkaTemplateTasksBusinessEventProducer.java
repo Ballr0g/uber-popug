@@ -18,7 +18,7 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper;
 
-    @Value("${kafka.tasks-business}")
+    @Value("${kafka.topics.tasks-business}")
     private String tasksBusinessKafkaTopicName;
 
     @Override
