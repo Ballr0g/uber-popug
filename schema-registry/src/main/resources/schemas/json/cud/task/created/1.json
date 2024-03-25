@@ -25,6 +25,7 @@
         },
         "creationDate": {
           "description": "Date-time of task creation.",
+          "type": "string",
           "format": "date-time"
         }
       },
@@ -41,10 +42,10 @@
   "type": "object",
 
   "properties": {
-    "eventName":    { "type": "string", "const": "task.entity.created" },
-    "eventVersion": { "enum": [1] },
+    "eventName":    { "type": "string", "enum": ["task.entity.created"] },
+    "eventVersion": { "type": "integer", "enum": [1] },
     "eventId":      { "type": "string", "format": "uuid" },
-    "eventTime":    { "type": "string" },
+    "eventTime":    { "type": "string", "format": "date-time" },
     "producer":     { "type": "string" },
 
     "data": {

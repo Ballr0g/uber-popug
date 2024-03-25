@@ -30,6 +30,7 @@
         },
         "reassignmentDate": {
           "description": "Date-time of task reassignment.",
+          "type": "string",
           "format": "date-time"
         }
       },
@@ -47,10 +48,10 @@
   "type": "object",
 
   "properties": {
-    "eventName":    { "type": "string", "const": "task.reassigned" },
-    "eventVersion": { "enum": [1] },
+    "eventName":    { "type": "string", "enum": ["task.reassigned"] },
+    "eventVersion": { "type": "integer", "enum": [1] },
     "eventId":      { "type": "string", "format": "uuid" },
-    "eventTime":    { "type": "string" },
+    "eventTime":    { "type": "string", "format": "date-time" },
     "producer":     { "type": "string" },
 
     "data": { "$ref": "#/definitions/eventData" }
