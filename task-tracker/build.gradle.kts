@@ -15,6 +15,7 @@ val springBootVersion: String by project
 val springKafkaVersion: String by project
 val swaggerV3AnnotationsVersion: String by project
 val jakartaValidationApiVersion: String by project
+val jsonSchemaValidatorVersion: String by project
 val mapstructVersion: String by project
 val lombokVersion: String by project
 val liquibaseVersion: String by project
@@ -22,7 +23,7 @@ val postgresVersion: String by project
 val uuidCreatorVersion: String by project
 
 val openApiGeneratedPath: String = "${buildDir}/generated/openapi"
-val jsonSchemaDownloadPath: String = "${buildDir}/downloads/json/schema"
+val jsonSchemaDownloadPath: String = "${projectDir}/src/main/resources/downloads/json/schema"
 val jsonSchemaGeneratedPath: String = "${buildDir}/generated/jsonSchema2Pojo/src/main/java"
 
 val schemaRegistryHost: String by project
@@ -74,6 +75,8 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations:${swaggerV3AnnotationsVersion}")
     // Jakarta.
     implementation("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
+    // Json Schema Validator.
+    implementation("com.networknt:json-schema-validator:${jsonSchemaValidatorVersion}")
     // Liquibase.
     implementation("org.liquibase:liquibase-core:${liquibaseVersion}")
     // PostgreSQL.
@@ -171,7 +174,9 @@ tasks {
         targetPackage = "${group}.kafka.generated.dto"
         targetDirectory = file(jsonSchemaGeneratedPath)
         sourceFiles = files(jsonSchemaDownloadPath)
+        generateBuilders = true
         includeAdditionalProperties = false
+        dateTimeType = "java.time.LocalDateTime"
         usePrimitives = true
         useTitleAsClassname = true
     }
