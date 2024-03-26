@@ -35,12 +35,26 @@ public class KafkaProducerConfig {
     private Resource taskCreatedReplicationEventV1Schema;
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public StringSerializer stringSerializer() {
+        return new StringSerializer();
+    }
+
+    @Bean
+    public JsonSerializer<Object> jsonSerializer(
+            ObjectMapper objectMapper
+    ) {
+        return new JsonSerializer<>(objectMapper);
+    }
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory(
+            StringSerializer stringSerializer,
+            JsonSerializer<Object> jsonSerializer
+    ) {
         final var configProps = new HashMap<String, Object>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+
+        return new DefaultKafkaProducerFactory<>(configProps, stringSerializer, jsonSerializer);
     }
 
     @Bean
