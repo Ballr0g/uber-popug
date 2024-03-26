@@ -1,9 +1,9 @@
 package org.uber.popug.employee.billing.service;
 
-import org.uber.popug.employee.billing.kafka.event.cud.TaskCreatedReplicationEvent;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV1;
 
 public interface TaskBillingReplicationService {
 
-    void replicateTaskToBilling(TaskCreatedReplicationEvent taskCreatedReplicationEvent);
+    void replicateTaskToBilling(TaskCreatedReplicationEventV1 taskCreatedReplicationEventV1);
 
 }

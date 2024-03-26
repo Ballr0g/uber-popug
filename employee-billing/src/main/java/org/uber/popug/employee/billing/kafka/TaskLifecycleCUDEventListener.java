@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import org.uber.popug.employee.billing.kafka.event.cud.TaskCreatedReplicationEvent;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV1;
 import org.uber.popug.employee.billing.service.TaskBillingReplicationService;
 
 @Service
@@ -19,9 +19,9 @@ public class TaskLifecycleCUDEventListener {
     private final TaskBillingReplicationService taskBillingReplicationService;
 
     @KafkaHandler
-    public void handleTaskCreatedCUDEvent(TaskCreatedReplicationEvent taskCreatedReplicationEvent) {
+    public void handleTaskCreatedCUDEvent(TaskCreatedReplicationEventV1 taskCreatedReplicationEventV1) {
         // Todo: guarantee exactly-once semantics!
-        taskBillingReplicationService.replicateTaskToBilling(taskCreatedReplicationEvent);
+        taskBillingReplicationService.replicateTaskToBilling(taskCreatedReplicationEventV1);
     }
 
 }

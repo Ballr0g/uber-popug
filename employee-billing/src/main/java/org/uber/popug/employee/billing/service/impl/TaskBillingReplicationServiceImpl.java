@@ -1,7 +1,7 @@
 package org.uber.popug.employee.billing.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.uber.popug.employee.billing.kafka.event.cud.TaskCreatedReplicationEvent;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV1;
 import org.uber.popug.employee.billing.mapping.TasksCUDKafkaEventMapper;
 import org.uber.popug.employee.billing.mapping.TasksPersistenceMapper;
 import org.uber.popug.employee.billing.repository.TaskRepository;
@@ -17,8 +17,8 @@ public class TaskBillingReplicationServiceImpl implements TaskBillingReplication
     private final TasksPersistenceMapper tasksPersistenceMapper;
 
     @Override
-    public void replicateTaskToBilling(TaskCreatedReplicationEvent taskCreatedReplicationEvent) {
-        final var taskCreationInfo = tasksCUDKafkaEventMapper.toBusiness(taskCreatedReplicationEvent);
+    public void replicateTaskToBilling(TaskCreatedReplicationEventV1 taskCreatedReplicationEventV1) {
+        final var taskCreationInfo = tasksCUDKafkaEventMapper.toBusiness(taskCreatedReplicationEventV1);
         final var replicatedTaskWithAssignee = taskBillingAssignmentService.assembleTaskWithAssignee(taskCreationInfo);
         final var replicatedTaskEntity = tasksPersistenceMapper.fromBusiness(replicatedTaskWithAssignee);
 
