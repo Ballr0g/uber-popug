@@ -19,7 +19,7 @@ public class KafkaTemplateTasksCUDEventProducer implements TasksCUDEventProducer
     @Override
     public void sendTaskCreatedReplicationEvent(Task task) {
         final var taskCreatedProducerRecord
-                = taskCreatedReplicationEventFactory.createdReplicationEventV1(task, tasksCUDKafkaTopicName);
+                = taskCreatedReplicationEventFactory.createReplicationEventV1(task, tasksCUDKafkaTopicName);
 
         kafkaTemplate.send(taskCreatedProducerRecord);
     }

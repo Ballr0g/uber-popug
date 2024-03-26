@@ -30,7 +30,7 @@ public class TaskCreatedReplicationEventFactoryImpl implements TaskCreatedReplic
 
     private final JsonSchema taskCreatedReplicationEventV1JsonSchema;
 
-    public ProducerRecord<String, Object> createdReplicationEventV1(@Nonnull Task task, @Nonnull String topicName) {
+    public ProducerRecord<String, Object> createReplicationEventV1(@Nonnull Task task, @Nonnull String topicName) {
         final var taskCreatedReplicationEvent = buildTaskReplicationEventFromBusiness(task);
         final var taskCreatedHeaders = buildHeadersForEvent(taskCreatedReplicationEvent);
 
