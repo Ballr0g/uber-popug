@@ -1,9 +1,9 @@
 package org.uber.popug.employee.billing.service;
 
-import org.uber.popug.employee.billing.kafka.event.business.TaskCompletedEvent;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV1;
 
 public interface TaskCompletionService {
 
-    void handleTaskCompletion(TaskCompletedEvent taskReassignedEvent);
+    void handleTaskCompletion(TaskCompletedEventV1 taskCompletedEventV1);
 
 }

@@ -1,7 +1,7 @@
 package org.uber.popug.employee.billing.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.uber.popug.employee.billing.kafka.event.business.TaskReassignedEvent;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV1;
 import org.uber.popug.employee.billing.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.employee.billing.service.TaskReassignmentService;
 import org.uber.popug.employee.billing.service.TransactionalTaskReassignmentService;
@@ -16,7 +16,7 @@ public class TaskReassignmentServiceImpl implements TaskReassignmentService {
 
 
     @Override
-    public void handleTaskReassignment(TaskReassignedEvent taskReassignedEvent) {
+    public void handleTaskReassignment(TaskReassignedEventV1 taskReassignedEvent) {
         final var taskForReassignmentRequest = tasksBusinessKafkaEventMapper.toBusiness(taskReassignedEvent);
         final var taskForReassignment = userAccountMembershipCheckingService
                 .retrieveTaskForReassignmentIfRequestValid(taskForReassignmentRequest);

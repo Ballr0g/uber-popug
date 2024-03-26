@@ -18,3 +18,6 @@ build/
 
 # Allure results
 **/allure-results
+
+# Automaticall downloaded artifacts (like JSON schemas)
+**/resources/downloads/*

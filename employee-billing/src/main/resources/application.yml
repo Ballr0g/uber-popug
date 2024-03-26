@@ -46,3 +46,12 @@ kafka:
       bootstrap-servers: localhost:29092
       group-id: uber-popug.employee-billing.tasks-workflow.1
       topics: tasks-workflow.1
+  downloaded-schemas:
+    task-created-replication-event:
+      v1: classpath:downloads/json/schema/task-created-replication-event-v1.json
+    task-created-event:
+      v1: classpath:downloads/json/schema/task-created-event-v1.json
+    task-reassigned-event:
+      v1: classpath:downloads/json/schema/task-reassigned-event-v1.json
+    task-completed-event:
+      v1: classpath:downloads/json/schema/task-completed-event-v1.json
