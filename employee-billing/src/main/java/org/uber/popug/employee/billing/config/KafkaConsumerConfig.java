@@ -18,7 +18,10 @@ import org.uber.popug.employee.billing.kafka.TasksBusinessWorkflowJsonSchemaDese
 import org.uber.popug.employee.billing.kafka.TasksCUDJsonSchemaDeserializer;
 import org.uber.popug.employee.billing.kafka.consumer.JsonSchemaWithClass;
 import org.uber.popug.employee.billing.kafka.consumer.NamedJsonSchema;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedEventV1;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV1;
 import org.uber.popug.employee.billing.kafka.impl.CommonJsonSchemaRegistry;
 
 import java.util.List;
@@ -37,6 +40,15 @@ public class KafkaConsumerConfig {
 
     @Value("${kafka.downloaded-schemas.task-created-replication-event.v1}")
     private Resource taskReplicationEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-created-event.v1}")
+    private Resource taskCreatedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-reassigned-event.v1}")
+    private Resource taskReassignedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
+    private Resource taskCompletedEventV1Schema;
 
     @Bean
     public StringDeserializer stringDeserializer() {
@@ -101,7 +113,35 @@ public class KafkaConsumerConfig {
     public JsonSchemaRegistry<Object> tasksBusinessJsonSchemaRegistry(
             JsonSchemaFactory jsonSchemaFactory
     ) {
-        final var supportedSchemas = List.<NamedJsonSchema<Object>>of();
+        final var supportedSchemas = List.<NamedJsonSchema<Object>>of(
+                new NamedJsonSchema<>(
+                        "task.created",
+                        Map.ofEntries(
+                                Map.entry(1, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskCreatedEventV1Schema.getInputStream()),
+                                        TaskCreatedEventV1.class
+                                ))
+                        )
+                ),
+                new NamedJsonSchema<>(
+                        "task.reassigned",
+                        Map.ofEntries(
+                                Map.entry(1, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskReassignedEventV1Schema.getInputStream()),
+                                        TaskReassignedEventV1.class
+                                ))
+                        )
+                ),
+                new NamedJsonSchema<>(
+                        "task.completed",
+                        Map.ofEntries(
+                                Map.entry(1, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskCompletedEventV1Schema.getInputStream()),
+                                        TaskCompletedEventV1.class
+                                ))
+                        )
+                )
+        );
 
         return new CommonJsonSchemaRegistry<>(supportedSchemas);
     }
