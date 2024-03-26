@@ -17,11 +17,16 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.uber.popug.task.tracker.kafka.producer.TasksBusinessEventProducer;
 import org.uber.popug.task.tracker.kafka.producer.TasksCUDEventProducer;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCompletedEventFactory;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskCreatedEventFactory;
+import org.uber.popug.task.tracker.kafka.producer.event.business.TaskReassignedEventFactory;
+import org.uber.popug.task.tracker.kafka.producer.event.business.impl.TaskCompletedEventFactoryImpl;
+import org.uber.popug.task.tracker.kafka.producer.event.business.impl.TaskCreatedEventFactoryImpl;
+import org.uber.popug.task.tracker.kafka.producer.event.business.impl.TaskReassignedEventFactoryImpl;
 import org.uber.popug.task.tracker.kafka.producer.event.cud.TaskCreatedReplicationEventFactory;
 import org.uber.popug.task.tracker.kafka.producer.event.cud.impl.TaskCreatedReplicationEventFactoryImpl;
 import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksBusinessEventProducer;
 import org.uber.popug.task.tracker.kafka.producer.impl.KafkaTemplateTasksCUDEventProducer;
-import org.uber.popug.task.tracker.mapping.TasksBusinessKafkaEventMapper;
 
 import java.util.HashMap;
 
@@ -33,6 +38,15 @@ public class KafkaProducerConfig {
 
     @Value("${kafka.downloaded-schemas.task-created-replication-event.v1}")
     private Resource taskCreatedReplicationEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-created-event.v1}")
+    private Resource taskCreatedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-reassigned-event.v1}")
+    private Resource taskReassignedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
+    private Resource taskCompletedEventV1Schema;
 
     @Bean
     public StringSerializer stringSerializer() {
@@ -65,11 +79,66 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskCreatedEventV1JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCreatedEventV1Schema.getInputStream());
+    }
+
+    @Bean
+    public TaskCreatedEventFactory taskCreatedEventFactory(
+            ObjectMapper objectMapper,
+            JsonSchema taskCreatedEventV1JsonSchema
+    ) {
+        return new TaskCreatedEventFactoryImpl(objectMapper, taskCreatedEventV1JsonSchema);
+    }
+
+    @Bean
+    @SneakyThrows
+    public JsonSchema taskReassignedEventV1JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskReassignedEventV1Schema.getInputStream());
+    }
+
+    @Bean
+    public TaskReassignedEventFactory taskReassignedEventFactory(
+            ObjectMapper objectMapper,
+            JsonSchema taskReassignedEventV1JsonSchema
+    ) {
+        return new TaskReassignedEventFactoryImpl(objectMapper, taskReassignedEventV1JsonSchema);
+    }
+
+    @Bean
+    @SneakyThrows
+    public JsonSchema taskCompletedEventV1JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCompletedEventV1Schema.getInputStream());
+    }
+
+    @Bean
+    public TaskCompletedEventFactory taskCompletedEventFactory(
+            ObjectMapper objectMapper,
+            JsonSchema taskCompletedEventV1JsonSchema
+    ) {
+        return new TaskCompletedEventFactoryImpl(objectMapper, taskCompletedEventV1JsonSchema);
+    }
+
+    @Bean
     public TasksBusinessEventProducer tasksBusinessEventProducer(
             KafkaTemplate<String, Object> kafkaTemplate,
-            TasksBusinessKafkaEventMapper tasksBusinessKafkaEventMapper
+            TaskCreatedEventFactory taskCreatedEventFactory,
+            TaskReassignedEventFactory taskReassignedEventFactory,
+            TaskCompletedEventFactory taskCompletedEventFactory
     ) {
-        return new KafkaTemplateTasksBusinessEventProducer(kafkaTemplate, tasksBusinessKafkaEventMapper);
+        return new KafkaTemplateTasksBusinessEventProducer(
+                kafkaTemplate,
+                taskCreatedEventFactory,
+                taskReassignedEventFactory,
+                taskCompletedEventFactory
+        );
     }
 
     @Bean
