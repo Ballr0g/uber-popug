@@ -1,7 +1,9 @@
 package org.uber.popug.employee.billing.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.uber.popug.employee.billing.domain.task.completion.TaskCompletionInfo;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV2;
 import org.uber.popug.employee.billing.mapping.TasksBusinessKafkaEventMapper;
 import org.uber.popug.employee.billing.service.TaskCompletionService;
 import org.uber.popug.employee.billing.service.TransactionalTaskCompletionService;
@@ -17,8 +19,19 @@ public class TaskCompletionServiceImpl implements TaskCompletionService {
     @Override
     public void handleTaskCompletion(TaskCompletedEventV1 taskReassignedEventV1) {
         final var taskForCompletionRequest = tasksBusinessKafkaEventMapper.toBusiness(taskReassignedEventV1);
+        handleTaskCompletionCommon(taskForCompletionRequest);
+    }
+
+    @Override
+    public void handleTaskCompletion(TaskCompletedEventV2 taskCompletedEventV2) {
+        final var taskForCompletionRequest = tasksBusinessKafkaEventMapper.toBusiness(taskCompletedEventV2);
+        handleTaskCompletionCommon(taskForCompletionRequest);
+    }
+
+    private void handleTaskCompletionCommon(TaskCompletionInfo taskCompletionInfo) {
         final var taskForCompletion = userAccountMembershipCheckingService
-                .retrieveTaskForCompletionIfRequestValid(taskForCompletionRequest);
+                .retrieveTaskForCompletionIfRequestValid(taskCompletionInfo);
         transactionalTaskCompletionService.performTransactionalCompletion(taskForCompletion);
     }
+
 }

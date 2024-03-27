@@ -5,8 +5,11 @@ import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV2;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedEventV2;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV2;
 import org.uber.popug.employee.billing.service.TaskAssignmentService;
 import org.uber.popug.employee.billing.service.TaskCompletionService;
 import org.uber.popug.employee.billing.service.TaskReassignmentService;
@@ -30,13 +33,28 @@ public class TaskWorkflowActionsBusinessEventListener {
     }
 
     @KafkaHandler
+    public void handleTaskCreatedBusinessEvent(TaskCreatedEventV2 taskCreatedEventV2) {
+        taskAssignmentService.handleTaskAssignment(taskCreatedEventV2);
+    }
+
+    @KafkaHandler
     public void handleTaskReassignedBusinessEvent(TaskReassignedEventV1 taskReassignedEventV1) {
         taskReassignmentService.handleTaskReassignment(taskReassignedEventV1);
     }
 
     @KafkaHandler
+    public void handleTaskReassignedBusinessEvent(TaskReassignedEventV2 taskReassignedEventV2) {
+        taskReassignmentService.handleTaskReassignment(taskReassignedEventV2);
+    }
+
+    @KafkaHandler
     public void handleTaskCompletedBusinessEvent(TaskCompletedEventV1 taskCompletedEventV1) {
         taskCompletionService.handleTaskCompletion(taskCompletedEventV1);
+    }
+
+    @KafkaHandler
+    public void handleTaskCompletedBusinessEvent(TaskCompletedEventV2 taskCompletedEventV2) {
+        taskCompletionService.handleTaskCompletion(taskCompletedEventV2);
     }
 
 }
