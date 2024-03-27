@@ -15,7 +15,7 @@ import org.uber.popug.employee.billing.service.TaskBillingReplicationService;
         groupId = "${kafka.listener.task-lifecycle-stream.group-id}",
         containerFactory = "tasksCUDListenerContainerFactory"
 )
-public class TaskLifecycleCUDEventListener {
+public class TasksStreamCUDEventListener {
 
     private final TaskBillingReplicationService taskBillingReplicationService;
 
