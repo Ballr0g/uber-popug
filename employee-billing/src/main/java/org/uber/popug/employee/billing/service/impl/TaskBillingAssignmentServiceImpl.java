@@ -25,7 +25,7 @@ public class TaskBillingAssignmentServiceImpl implements TaskBillingAssignmentSe
     @Override
     public TaskWithAssignee assembleTaskWithAssignee(TaskReplicationInfo taskReplicationInfo) {
         final var taskAssignee = getAssigneeIfExistsByPublicId(taskReplicationInfo.assigneeId());
-        final var replicatedTask = Task.replicate(
+        final var replicatedTask = Task.replicateNoJiraId(
                 taskIdProvider,
                 taskCostsProvider,
                 taskReplicationInfo

@@ -20,6 +20,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
                     rs.getLong("id"),
                     rs.getObject("ext_public_id", UUID.class),
                     rs.getLong("assignee_id"),
+                    rs.getString("jira_id"),
                     rs.getString("description"),
                     TaskEntity.Status.valueOf(rs.getString("status")),
                     rs.getLong("assignment_cost"),
@@ -34,15 +35,15 @@ public class JdbcClientTaskRepository implements TaskRepository {
     private static final String INSERT_BILLING_TASK_SQL = /* language=postgresql */
             """
             INSERT INTO EMPLOYEE_BILLING.TASKS
-                (id, ext_public_id, assignee_id, description, assignment_cost, completion_cost)
+                (id, ext_public_id, assignee_id, jira_id, description, assignment_cost, completion_cost)
             VALUES
-                (:id, :extPublicId, :assigneeId, :description, :assignmentCost, :completionCost)
+                (:id, :extPublicId, :assigneeId, :jiraId, :description, :assignmentCost, :completionCost)
             """;
 
     private static final String FIND_TASK_TO_USER_ENTITY_BY_PUBLIC_TASK_ID_SQL = /* language=postgresql */
             """
             SELECT t.id AS task_id, t.ext_public_id AS ext_public_task_id, t.assignee_id AS assignee_id,
-                   t.description AS task_description, t.status AS task_status,
+                   t.jira_id AS task_jira_id, t.description AS task_description, t.status AS task_status,
                    t.assignment_cost AS task_assignment_cost, t.completion_cost AS task_completion_cost,
                    u.ext_public_id AS ext_public_assignee_id, u.login AS assignee_login
             FROM EMPLOYEE_BILLING.TASKS t
@@ -55,7 +56,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
             UPDATE EMPLOYEE_BILLING.TASKS
             SET assignee_id = :newAssigneeId
             WHERE id = :taskId
-            RETURNING id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
+            RETURNING id, ext_public_id, assignee_id, jira_id, description, status, assignment_cost, completion_cost
             """;
 
     private static final String UPDATE_TASK_STATUS_TO_COMPLETED_BY_ID_SQL = /* language=postgresql */
@@ -63,7 +64,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
             UPDATE EMPLOYEE_BILLING.TASKS
             SET status = 'COMPLETED'
             WHERE id = :taskId
-            RETURNING id, ext_public_id, assignee_id, description, status, assignment_cost, completion_cost
+            RETURNING id, ext_public_id, assignee_id, jira_id, description, status, assignment_cost, completion_cost
             """;
 
 
@@ -82,6 +83,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 .param("id", task.id())
                 .param("extPublicId", task.extPublicId())
                 .param("assigneeId", task.assigneeId())
+                .param("jiraId", task.jiraId())
                 .param("description", task.description())
                 .param("assignmentCost", task.assignmentCost())
                 .param("completionCost", task.completionCost())
@@ -98,6 +100,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
                                         rs.getLong("task_id"),
                                         rs.getObject("ext_public_task_id", UUID.class),
                                         rs.getLong("assignee_id"),
+                                        rs.getString("task_jira_id"),
                                         rs.getString("task_description"),
                                         TaskEntity.Status.valueOf(rs.getString("task_status")),
                                         rs.getLong("task_assignment_cost"),
