@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "TaskCompletedEvent.v2",
+  "description": "JSON schema for task completion business event (version 2).",
+
+  "definitions": {
+    "eventData": {
+      "type": "object",
+      "title": "TaskCompletedEventData.v2",
+      "properties": {
+        "taskId": {
+          "description": "A globally unique ID of a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "assigneeId": {
+          "description": "A globally unique ID of the assignee completing a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "jiraId": {
+          "description": "String-based task ID used in the task tracker.",
+          "type": "string"
+        },
+        "taskDescription": {
+          "description": "Description of a task.",
+          "type": "string"
+        },
+        "completionDate": {
+          "description": "Date-time of task completion.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+
+      "required": [
+        "taskId",
+        "assigneeId",
+        "jiraId",
+        "taskDescription",
+        "completionDate"
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventName":    { "type": "string", "enum": ["task.completed"] },
+    "eventVersion": { "type": "integer", "enum": [2] },
+    "eventId":      { "type": "string", "format": "uuid" },
+    "eventTime":    { "type": "string", "format": "date-time" },
+    "producer":     { "type": "string" },
+
+    "data": { "$ref": "#/definitions/eventData" }
+  },
+
+  "required": [
+    "eventName",
+    "eventVersion",
+    "eventId",
+    "eventTime",
+    "producer",
+    "data"
+  ]
+}
