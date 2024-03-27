@@ -1,28 +1,31 @@
 # Compatibility-breaking extraction of jira_id from description
 ## State of the Case
-1. Separate description into taskId and description by business demand, prohibiting inclusion of taskId into the
-description part.
-2. Make the migration as seamless as possible while considering the system is running in production mode with its
-current state. It is not possible to remove specific API as its being consumed by Uber Popug co., only deprecate.
-3. The change is confirmed to be a breaking change, requiring.
+1. Separate description into jira_id and description by business demand, prohibiting inclusion of jira_id into the
+description part after the migration is over.
+2. Make the migration as seamless as possible while considering the system is running in production mode in its
+current state. It is not possible to remove specific API as its being consumed by Uber Popug co.,
+only deprecate it first.
+3. The change is confirmed to be breaking, requiring extra effort for supporting seamless migration.
 
 ## Solution
 1. Design a set of v2 CUD and business events.
 2. Upload updated contracts into a schema-registry as v2 for existing contracts.
 3. Support CUD v2 events on employee-billing side:
    1. Adopt DB schema by adding a new nullable database field jira_id to the employee_billing.tasks table. jira_id is
-   intentionally left nullable to adopt the system with existing payload in mind. Lack of jira_id means old format,
-   while its presence is mandatory for all incoming events (including v1 starting with next release) after the feature
-   related to this ADR is implemented.
-   2. Ensure all the listeners of V1 events refrain from applying of structure validation due to the contract not being
-   strictly enforced previously while trying to separate jira_id from description where it's possible.
+   intentionally left nullable to adopt the system with existing data in mind. Lack of jira_id means old format,
+   while its presence is mandatory for all incoming events (including v1 with jira_id provided as a part of description)
+   after the features related to this ADR are fully implemented.
+   2. Ensure all the listeners of V1 events refrain from applying structure validations due to the contract not being
+   strictly enforced previously while trying to separate jira_id from description where it's possible:
+      1. jira_id is absent but description contains it exactly as the first part of payload in the form of:
+         **\[jira-id\] \<Description\>**.
    3. Pull the necessary contracts, provide their handling by the listeners. Ensure description of v2 events never
-   has jira id included as a part of description.
+   has jira_id included as a part of description.
 4. Ensure events V1 are never produced by task-tracker and gradually migrate from them:
    1. Like in employee-billing, adopt DB schema by adding a new nullable database field jira_id to the
    task_tracker.tasks table. jira_id is intentionally left nullable to adopt the system with existing payload in mind.
-   Lack of jira_id means old format, while its presence is mandatory for all incoming events (including v1 starting
-   with next release) after the feature related to this ADR is implemented.
+   Lack of jira_id means old format, while its presence is mandatory for all incoming events (including v1 with jira_id 
+   provided as a part of description) after the feature related to this ADR is implemented.
    2. Mark POST /tasks as deprecated:
       1. Add an optional jira_id field to the old contract as a backwards-compatible way to supply the id for existing
       consumers.
