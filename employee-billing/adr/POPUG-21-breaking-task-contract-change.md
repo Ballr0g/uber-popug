@@ -7,7 +7,7 @@ current state. It is not possible to remove specific API as its being consumed b
 3. The change is confirmed to be a breaking change, requiring.
 
 ## Solution
-1. Design updated contract of POST /tasks and a set of v2 CUD and business events.
+1. Design a set of v2 CUD and business events.
 2. Upload updated contracts into a schema-registry as v2 for existing contracts.
 3. Support CUD v2 events on employee-billing side:
    1. Adopt DB schema by adding a new nullable database field jira_id to the employee_billing.tasks table. jira_id is
