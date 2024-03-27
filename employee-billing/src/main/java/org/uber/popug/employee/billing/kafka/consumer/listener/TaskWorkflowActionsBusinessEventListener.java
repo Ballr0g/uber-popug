@@ -1,4 +1,4 @@
-package org.uber.popug.employee.billing.kafka;
+package org.uber.popug.employee.billing.kafka.consumer.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaHandler;

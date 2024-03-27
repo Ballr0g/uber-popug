@@ -1,4 +1,4 @@
-package org.uber.popug.employee.billing.kafka;
+package org.uber.popug.employee.billing.kafka.consumer.deserializer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
@@ -9,8 +9,9 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.Assert;
 import org.uber.popug.employee.billing.exception.technical.JsonClassMappingImpossibleException;
 import org.uber.popug.employee.billing.exception.technical.JsonSchemaEventViolationException;
-import org.uber.popug.employee.billing.kafka.consumer.NamedJsonSchema;
-import org.uber.popug.employee.billing.kafka.consumer.JsonSchemaWithClass;
+import org.uber.popug.employee.billing.kafka.common.JsonSchemaRegistry;
+import org.uber.popug.employee.billing.kafka.common.NamedJsonSchema;
+import org.uber.popug.employee.billing.kafka.common.JsonSchemaWithClass;
 
 import java.io.IOException;
 
