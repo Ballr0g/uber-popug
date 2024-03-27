@@ -13,6 +13,7 @@ public class CommonJsonSchemaRegistry<T> implements JsonSchemaRegistry<T> {
     private final Map<String, NamedJsonSchema<T>> jsonSchemaInfoMap;
 
     public CommonJsonSchemaRegistry(Collection<NamedJsonSchema<T>> schemas) {
+        // Todo: Handling of IllegalStateException on duplicate elements.
         this.jsonSchemaInfoMap = schemas.stream()
                 .collect(Collectors.toMap(NamedJsonSchema::name, schema -> schema));
     }

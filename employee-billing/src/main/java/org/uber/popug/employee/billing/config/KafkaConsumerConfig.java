@@ -65,6 +65,7 @@ public class KafkaConsumerConfig {
                         "task.entity.created",
                         Map.ofEntries(
                                 Map.entry(1, new JsonSchemaWithClass<>(
+                                        // Todo: see if we need to close the file for getInputStream() for Spring.
                                         jsonSchemaFactory.getSchema(taskReplicationEventV1Schema.getInputStream()),
                                         TaskCreatedReplicationEventV1.class
                                 ))
