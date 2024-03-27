@@ -33,7 +33,7 @@ public record Task(
         return new Task(
                 taskIdProvider.generateDbTaskId(),
                 taskReplicationInfo.id(),
-                null,
+                taskReplicationInfo.jiraId(),
                 taskReplicationInfo.description(),
                 Status.OPEN,
                 new Costs(
