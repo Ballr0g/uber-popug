@@ -19,6 +19,7 @@ public class TaskManagementController implements TasksCreationApi {
     private final TaskAddingService taskAddingService;
 
     @Override
+    @Deprecated(since = "0.0.2", forRemoval = true)
     @PreAuthorize("hasRole('client_developer')")
     public ResponseEntity<PostAddTaskResponseDto> addTask(PostAddTaskRequestDto postTasksRequestDto) {
         return new ResponseEntity<>(taskAddingService.addNewTask(postTasksRequestDto), HttpStatus.CREATED);
@@ -27,7 +28,7 @@ public class TaskManagementController implements TasksCreationApi {
     @Override
     @PreAuthorize("hasRole('client_developer')")
     public ResponseEntity<PostAddTaskV2ResponseDto> addTaskV2(PostAddTaskV2RequestDto postAddTaskV2RequestDto) {
-        throw new UnsupportedOperationException("TaskManagementController.addTaskV2 is not implemented");
+        return new ResponseEntity<>(taskAddingService.addNewTask(postAddTaskV2RequestDto), HttpStatus.CREATED);
     }
 
 }
