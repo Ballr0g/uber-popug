@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
 
-  "title": "BillingOperationAddedEvent.v1",
+  "title": "BillingOperationCreatedEvent.v1",
   "description": "JSON schema for billing operation data replication event (version 1).",
 
   "definitions": {
     "eventData": {
       "type": "object",
-      "title": "BillingOperationAddedEventData.v1",
+      "title": "BillingOperationCreatedEventData.v1",
       "properties": {
         "billingOperationId": {
           "description": "A globally unique ID of a billing operation.",
