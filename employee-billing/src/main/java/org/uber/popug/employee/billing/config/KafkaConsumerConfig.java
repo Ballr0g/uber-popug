@@ -19,10 +19,14 @@ import org.uber.popug.employee.billing.kafka.consumer.deserializer.TasksCUDJsonS
 import org.uber.popug.employee.billing.kafka.common.JsonSchemaWithClass;
 import org.uber.popug.employee.billing.kafka.common.NamedJsonSchema;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCompletedEventV2;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedEventV2;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV1;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskCreatedReplicationEventV2;
 import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV1;
 import org.uber.popug.employee.billing.kafka.common.impl.CommonJsonSchemaRegistry;
+import org.uber.popug.employee.billing.kafka.generated.dto.TaskReassignedEventV2;
 
 import java.util.List;
 import java.util.Map;
@@ -41,14 +45,26 @@ public class KafkaConsumerConfig {
     @Value("${kafka.downloaded-schemas.task-created-replication-event.v1}")
     private Resource taskReplicationEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-created-replication-event.v2}")
+    private Resource taskReplicationEventV2Schema;
+
     @Value("${kafka.downloaded-schemas.task-created-event.v1}")
     private Resource taskCreatedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-created-event.v2}")
+    private Resource taskCreatedEventV2Schema;
 
     @Value("${kafka.downloaded-schemas.task-reassigned-event.v1}")
     private Resource taskReassignedEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-reassigned-event.v2}")
+    private Resource taskReassignedEventV2Schema;
+
     @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
     private Resource taskCompletedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-completed-event.v2}")
+    private Resource taskCompletedEventV2Schema;
 
     @Bean
     public StringDeserializer stringDeserializer() {
@@ -60,7 +76,7 @@ public class KafkaConsumerConfig {
     public JsonSchemaRegistry<Object> tasksCUDJsonSchemaRegistry(
             JsonSchemaFactory jsonSchemaFactory
     ) {
-        final var supportedSchemas = List.<NamedJsonSchema<Object>>of(
+        final var supportedSchemas = List.of(
                 new NamedJsonSchema<>(
                         "task.entity.created",
                         Map.ofEntries(
@@ -68,6 +84,10 @@ public class KafkaConsumerConfig {
                                         // Todo: see if we need to close the file for getInputStream() for Spring.
                                         jsonSchemaFactory.getSchema(taskReplicationEventV1Schema.getInputStream()),
                                         TaskCreatedReplicationEventV1.class
+                                )),
+                                Map.entry(2, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskReplicationEventV2Schema.getInputStream()),
+                                        TaskCreatedReplicationEventV2.class
                                 ))
                         )
                 )
@@ -114,13 +134,17 @@ public class KafkaConsumerConfig {
     public JsonSchemaRegistry<Object> tasksBusinessJsonSchemaRegistry(
             JsonSchemaFactory jsonSchemaFactory
     ) {
-        final var supportedSchemas = List.<NamedJsonSchema<Object>>of(
+        final var supportedSchemas = List.of(
                 new NamedJsonSchema<>(
                         "task.created",
                         Map.ofEntries(
                                 Map.entry(1, new JsonSchemaWithClass<>(
                                         jsonSchemaFactory.getSchema(taskCreatedEventV1Schema.getInputStream()),
                                         TaskCreatedEventV1.class
+                                )),
+                                Map.entry(2, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskCreatedEventV2Schema.getInputStream()),
+                                        TaskCreatedEventV2.class
                                 ))
                         )
                 ),
@@ -130,6 +154,10 @@ public class KafkaConsumerConfig {
                                 Map.entry(1, new JsonSchemaWithClass<>(
                                         jsonSchemaFactory.getSchema(taskReassignedEventV1Schema.getInputStream()),
                                         TaskReassignedEventV1.class
+                                )),
+                                Map.entry(2, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskReassignedEventV2Schema.getInputStream()),
+                                        TaskReassignedEventV2.class
                                 ))
                         )
                 ),
@@ -139,6 +167,10 @@ public class KafkaConsumerConfig {
                                 Map.entry(1, new JsonSchemaWithClass<>(
                                         jsonSchemaFactory.getSchema(taskCompletedEventV1Schema.getInputStream()),
                                         TaskCompletedEventV1.class
+                                )),
+                                Map.entry(2, new JsonSchemaWithClass<>(
+                                        jsonSchemaFactory.getSchema(taskCompletedEventV2Schema.getInputStream()),
+                                        TaskCompletedEventV2.class
                                 ))
                         )
                 )
