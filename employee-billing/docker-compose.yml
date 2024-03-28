@@ -12,3 +12,45 @@ services:
       POSTGRES_PASSWORD: 'dbpassword'
     labels:
       org.springframework.boot.ignore: true
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    container_name: uber-popug-employee-billing-kafka-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2180
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - '22180:2180'
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: uber-popug-employee-billing-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - '29091:29091'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2180
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9091,PLAINTEXT_HOST://localhost:29091
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  init-kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: uber-popug-employee-billing-kafka-init
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka:9091 --list
+
+      echo -e 'Creating kafka topics...'
+      kafka-topics --bootstrap-server kafka:9091 --create --if-not-exists --topic billing-operations-workflow.1 --replication-factor 1 --partitions 1
+
+      echo -e 'Available topics after setup:'
+      kafka-topics --bootstrap-server kafka:9091 --list
+      "

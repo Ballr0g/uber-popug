@@ -35,6 +35,7 @@ val necessaryJsonSchemas: Map<String, String> = mapOf(
     schemaRegistryPath.format("business", "task-created", 2) to "task-created-event-v2.json",
     schemaRegistryPath.format("business", "task-reassigned", 2) to "task-reassigned-event-v2.json",
     schemaRegistryPath.format("business", "task-completed", 2) to "task-completed-event-v2.json",
+    schemaRegistryPath.format("cud", "billing-operation-created", 1) to "billing-operation-created-replication-event-v1.json",
 )
 
 repositories {
