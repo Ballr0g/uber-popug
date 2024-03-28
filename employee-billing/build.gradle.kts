@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.uber.popug.employee.billing"
-version = "0.0.1"
+version = "0.0.2"
 
 val junitVersion: String by project
 val springBootVersion: String by project
@@ -90,6 +90,10 @@ dependencies {
 tasks {
     test {
         useJUnitPlatform()
+    }
+
+    named<ProcessResources>("processResources") {
+        dependsOn("downloadMissingJsonSchemas")
     }
 
     named<JavaCompile>("compileJava") {
