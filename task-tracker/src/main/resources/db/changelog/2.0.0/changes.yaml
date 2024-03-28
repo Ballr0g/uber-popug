@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 'changesets/00-alter_table_tasks_add_jira_id_nullable.yaml'
+      relativeToChangelogFile: true
