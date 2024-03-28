@@ -29,7 +29,7 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Override
     public void sendTaskCreationEvent(Task task) {
         final var taskCreatedProducerRecord
-                = taskCreatedEventFactory.createTaskCreatedEventV1(task, tasksBusinessKafkaTopicName);
+                = taskCreatedEventFactory.createTaskCreatedEvent(task, tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(taskCreatedProducerRecord);
     }
