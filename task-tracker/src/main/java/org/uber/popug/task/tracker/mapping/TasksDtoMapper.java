@@ -8,6 +8,7 @@ import org.uber.popug.task.tracker.rest.generated.model.GetTasksByUserTaskDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskRequestDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskResponseDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskV2RequestDto;
+import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskV2ResponseDto;
 
 import java.util.List;
 
@@ -25,6 +26,10 @@ public interface TasksDtoMapper {
     @Mapping(source = "publicId", target = "taskId")
     @Mapping(source = "assignee.extPublicId", target = "taskAssigneeId")
     PostAddTaskResponseDto postTasksResponseDtoFromBusiness(Task task);
+
+    @Mapping(source = "publicId", target = "taskId")
+    @Mapping(source = "assignee.extPublicId", target = "taskAssigneeId")
+    PostAddTaskV2ResponseDto postTasksResponseV2DtoFromBusiness(Task task);
 
     @Mapping(source = "publicId", target = "taskId")
     @Mapping(source = "description", target = "taskDescription")
