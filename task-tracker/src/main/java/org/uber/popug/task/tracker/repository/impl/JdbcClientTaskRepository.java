@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JdbcClientTaskRepository implements TaskRepository {
 
-    private static final String INSERT_TASK_SQL = /*language=sql*/
+    private static final String INSERT_TASK_SQL = /* language=postgresql */
             """
             INSERT INTO TASK_TRACKER.TASKS
                 (id, public_id, assignee_id, description)
@@ -23,47 +23,47 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 (:id, :publicId, :assigneeId, :description)
             """;
 
-    private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /*language=sql*/
+    private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /* language=postgresql */
             """
             SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.public_id = :publicId
             """;
 
-    private static final String FIND_TASK_BY_ID_SQL = /*language=sql*/
+    private static final String FIND_TASK_BY_ID_SQL = /* language=postgresql */
             """
             SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.id = :id
             """;
 
-    private static final String COMPLETE_TASK_SQL = /*language=sql*/
+    private static final String COMPLETE_TASK_SQL = /* language=postgresql */
             """
             UPDATE TASK_TRACKER.TASKS
             SET status = 'COMPLETED'
             WHERE id = :id AND assignee_id = :assigneeId
             """;
 
-    private static final String GENERATE_NEXT_TASK_ID_SQL = /*language=sql*/
+    private static final String GENERATE_NEXT_TASK_ID_SQL = /* language=postgresql */
             """
             SELECT NEXTVAL('TASK_TRACKER.tasks_id_seq')
             """;
 
-    private static final String SELECT_ALL_OPEN_TASKS_SQL = /*language=sql*/
+    private static final String SELECT_ALL_OPEN_TASKS_SQL = /* language=postgresql */
             """
             SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.status = 'OPEN'
             """;
 
-    private static final String REASSIGN_TASK_SQL = /*language=sql*/
+    private static final String REASSIGN_TASK_SQL = /* language=postgresql */
             """
             UPDATE TASK_TRACKER.TASKS
             SET assignee_id = :assigneeId
             WHERE id = :id
             """;
 
-    private static final String FIND_TASKS_BY_ASSIGNEE_ID_SQL = /*language=sql*/
+    private static final String FIND_TASKS_BY_ASSIGNEE_ID_SQL = /* language=postgresql */
             """
             SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
