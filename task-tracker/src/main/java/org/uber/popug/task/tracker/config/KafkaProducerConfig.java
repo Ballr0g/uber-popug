@@ -51,6 +51,9 @@ public class KafkaProducerConfig {
     @Value("${kafka.downloaded-schemas.task-reassigned-event.v1}")
     private Resource taskReassignedEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-reassigned-event.v2}")
+    private Resource taskReassignedEventV2Schema;
+
     @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
     private Resource taskCompletedEventV1Schema;
 
@@ -122,11 +125,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskReassignedEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskReassignedEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskReassignedEventFactory taskReassignedEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskReassignedEventV1JsonSchema
+            JsonSchema taskReassignedEventV1JsonSchema,
+            JsonSchema taskReassignedEventV2JsonSchema
     ) {
-        return new TaskReassignedEventFactoryImpl(objectMapper, taskReassignedEventV1JsonSchema);
+        return new TaskReassignedEventFactoryImpl(
+                objectMapper,
+                taskReassignedEventV1JsonSchema,
+                taskReassignedEventV2JsonSchema
+        );
     }
 
     @Bean

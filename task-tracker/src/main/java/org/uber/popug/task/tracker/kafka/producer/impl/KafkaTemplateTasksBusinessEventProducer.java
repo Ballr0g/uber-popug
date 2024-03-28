@@ -38,7 +38,7 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Transactional
     public void sendTaskReassignmentEventsTransactional(List<ReassignedTaskEntity> tasksForReassignment) {
         tasksForReassignment.stream()
-                .map(task -> taskReassignedEventFactory.createTaskReassignedEventV1(task, tasksBusinessKafkaTopicName))
+                .map(task -> taskReassignedEventFactory.createTaskReassignedEvent(task, tasksBusinessKafkaTopicName))
                 .forEach(kafkaTemplate::send);
     }
 

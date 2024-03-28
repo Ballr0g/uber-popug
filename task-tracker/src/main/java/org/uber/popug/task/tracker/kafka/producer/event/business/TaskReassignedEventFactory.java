@@ -6,7 +6,7 @@ import org.uber.popug.task.tracker.entity.composite.ReassignedTaskEntity;
 
 public interface TaskReassignedEventFactory {
 
-    ProducerRecord<String, Object> createTaskReassignedEventV1(
+    ProducerRecord<String, Object> createTaskReassignedEvent(
             @Nonnull ReassignedTaskEntity reassignedTask,
             @Nonnull String topicName
     );
