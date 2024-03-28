@@ -32,11 +32,18 @@ spring:
       leak-detection-threshold: 300000
   liquibase:
     changelog: classpath:/db/changelog/changelog.yaml
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29091
+      client-id: uber-popug-employee-billing-1
 
 billing-cycles:
   closing-interval: 0 0 0 * * *
 
 kafka:
+  producer:
+    billing-operations-stream:
+      topic: billing-operations-workflow.1
   listener:
     task-lifecycle-stream:
       bootstrap-servers: localhost:29092
@@ -59,3 +66,5 @@ kafka:
     task-completed-event:
       v1: classpath:downloads/json/schema/task-completed-event-v1.json
       v2: classpath:downloads/json/schema/task-completed-event-v2.json
+    billing-operation-created-replication-event:
+      v1: classpath:downloads/json/schema/billing-operation-created-replication-event-v1.json

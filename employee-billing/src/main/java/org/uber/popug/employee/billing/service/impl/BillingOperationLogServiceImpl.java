@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.uber.popug.employee.billing.domain.aggregates.BillingCycleProvider;
 import org.uber.popug.employee.billing.domain.aggregates.BillingOperationFullData;
 import org.uber.popug.employee.billing.domain.aggregates.TaskWithAssignee;
+import org.uber.popug.employee.billing.kafka.producer.BillingOperationsCUDEventProducer;
 import org.uber.popug.employee.billing.mapping.BillingOperationsPersistenceMapper;
 import org.uber.popug.employee.billing.repository.ImmutableBillingOperationsRepository;
 import org.uber.popug.employee.billing.service.BillingOperationLogService;
@@ -16,12 +17,14 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
     private final BillingCycleProvider billingCycleProvider;
     private final BillingOperationsPersistenceMapper billingOperationsPersistenceMapper;
     private final ImmutableBillingOperationsRepository billingOperationsRepository;
+    private final BillingOperationsCUDEventProducer billingOperationsCUDEventProducer;
 
     @Override
     public BillingOperationFullData createNewTaskBillingOperationLogEntry(TaskWithAssignee taskWithAssignee) {
         final var billingOperationAggregate = retrieveNewTaskBillingOperationAggregate(taskWithAssignee);
         final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
         billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
+        billingOperationsCUDEventProducer.sendTaskCreatedReplicationEvent(billingOperationAggregate);
 
         return billingOperationAggregate;
     }
@@ -31,6 +34,7 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
         final var billingOperationAggregate = retrieveReassignedTaskBillingOperationAggregate(taskWithAssignee);
         final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
         billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
+        billingOperationsCUDEventProducer.sendTaskCreatedReplicationEvent(billingOperationAggregate);
 
         return billingOperationAggregate;
     }
@@ -40,6 +44,7 @@ public class BillingOperationLogServiceImpl implements BillingOperationLogServic
         final var billingOperationAggregate = retrieveCompletedTaskBillingOperationAggregate(taskWithAssignee);
         final var billingOperationEntity = billingOperationsPersistenceMapper.fromBusiness(billingOperationAggregate);
         billingOperationsRepository.appendBillingOperationEntry(billingOperationEntity);
+        billingOperationsCUDEventProducer.sendTaskCreatedReplicationEvent(billingOperationAggregate);
 
         return billingOperationAggregate;
     }
