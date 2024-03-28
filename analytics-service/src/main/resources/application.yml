@@ -1,0 +1,29 @@
+logging:
+  level:
+    org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter: DEBUG
+
+server:
+  shutdown: graceful
+  port: 8087
+
+spring:
+  profiles:
+    active:
+      - ${SPRING_PROFILE_NAME:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: 4m
+  main:
+    banner-mode: off
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
+
+kafka:
+  listener:
+    billing-operations-stream:
+      bootstrap-servers: localhost:29091
+      group-id: uber-popug.analytics-service.billing-operations.stream.1
+      topics: billing-operations-workflow.1
+  downloaded-schemas:
+    billing-operation-created-replication-event:
+      v1: classpath:downloads/json/schema/billing-operation-created-replication-event-v1.json
