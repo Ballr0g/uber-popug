@@ -45,7 +45,7 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Override
     public void sendTaskCompletionEvent(TaskEntity task, UserEntity assignee) {
         final var taskCreatedProducerRecord
-                = taskCompletedEventFactory.createTaskCompletedEventV1(task, assignee, tasksBusinessKafkaTopicName);
+                = taskCompletedEventFactory.createTaskCompletedEvent(task, assignee, tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(taskCreatedProducerRecord);
     }

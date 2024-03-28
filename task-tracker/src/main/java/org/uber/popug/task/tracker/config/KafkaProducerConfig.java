@@ -57,6 +57,9 @@ public class KafkaProducerConfig {
     @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
     private Resource taskCompletedEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-completed-event.v2}")
+    private Resource taskCompletedEventV2Schema;
+
     @Bean
     public StringSerializer stringSerializer() {
         return new StringSerializer();
@@ -154,11 +157,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskCompletedEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCompletedEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskCompletedEventFactory taskCompletedEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskCompletedEventV1JsonSchema
+            JsonSchema taskCompletedEventV1JsonSchema,
+            JsonSchema taskCompletedEventV2JsonSchema
     ) {
-        return new TaskCompletedEventFactoryImpl(objectMapper, taskCompletedEventV1JsonSchema);
+        return new TaskCompletedEventFactoryImpl(
+                objectMapper,
+                taskCompletedEventV1JsonSchema,
+                taskCompletedEventV2JsonSchema
+        );
     }
 
     @Bean

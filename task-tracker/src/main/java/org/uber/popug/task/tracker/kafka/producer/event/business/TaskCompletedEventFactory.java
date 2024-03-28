@@ -7,7 +7,7 @@ import org.uber.popug.task.tracker.entity.user.UserEntity;
 
 public interface TaskCompletedEventFactory {
 
-    ProducerRecord<String, Object> createTaskCompletedEventV1(
+    ProducerRecord<String, Object> createTaskCompletedEvent(
             @Nonnull TaskEntity task,
             @Nonnull UserEntity assignee,
             @Nonnull String topicName
