@@ -12,6 +12,7 @@ public interface TasksPersistenceMapper {
 
     @Mapping(source = "taskEntity.id", target = "id")
     @Mapping(source = "taskEntity.publicId", target = "publicId")
+    @Mapping(source = "taskEntity.jiraId", target = "jiraId")
     @Mapping(source = "taskEntity.description", target = "description")
     @Mapping(source = "taskEntity.status", target = "status")
     @Mapping(source = "assigneeEntity", target = "assignee")

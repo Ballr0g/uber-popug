@@ -39,14 +39,26 @@ public class KafkaProducerConfig {
     @Value("${kafka.downloaded-schemas.task-created-replication-event.v1}")
     private Resource taskCreatedReplicationEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-created-replication-event.v2}")
+    private Resource taskCreatedReplicationEventV2Schema;
+
     @Value("${kafka.downloaded-schemas.task-created-event.v1}")
     private Resource taskCreatedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-created-event.v2}")
+    private Resource taskCreatedEventV2Schema;
 
     @Value("${kafka.downloaded-schemas.task-reassigned-event.v1}")
     private Resource taskReassignedEventV1Schema;
 
+    @Value("${kafka.downloaded-schemas.task-reassigned-event.v2}")
+    private Resource taskReassignedEventV2Schema;
+
     @Value("${kafka.downloaded-schemas.task-completed-event.v1}")
     private Resource taskCompletedEventV1Schema;
+
+    @Value("${kafka.downloaded-schemas.task-completed-event.v2}")
+    private Resource taskCompletedEventV2Schema;
 
     @Bean
     public StringSerializer stringSerializer() {
@@ -87,11 +99,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskCreatedEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCreatedEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskCreatedEventFactory taskCreatedEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskCreatedEventV1JsonSchema
+            JsonSchema taskCreatedEventV1JsonSchema,
+            JsonSchema taskCreatedEventV2JsonSchema
     ) {
-        return new TaskCreatedEventFactoryImpl(objectMapper, taskCreatedEventV1JsonSchema);
+        return new TaskCreatedEventFactoryImpl(
+                objectMapper,
+                taskCreatedEventV1JsonSchema,
+                taskCreatedEventV2JsonSchema
+        );
     }
 
     @Bean
@@ -103,11 +128,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskReassignedEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskReassignedEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskReassignedEventFactory taskReassignedEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskReassignedEventV1JsonSchema
+            JsonSchema taskReassignedEventV1JsonSchema,
+            JsonSchema taskReassignedEventV2JsonSchema
     ) {
-        return new TaskReassignedEventFactoryImpl(objectMapper, taskReassignedEventV1JsonSchema);
+        return new TaskReassignedEventFactoryImpl(
+                objectMapper,
+                taskReassignedEventV1JsonSchema,
+                taskReassignedEventV2JsonSchema
+        );
     }
 
     @Bean
@@ -119,11 +157,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskCompletedEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCompletedEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskCompletedEventFactory taskCompletedEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskCompletedEventV1JsonSchema
+            JsonSchema taskCompletedEventV1JsonSchema,
+            JsonSchema taskCompletedEventV2JsonSchema
     ) {
-        return new TaskCompletedEventFactoryImpl(objectMapper, taskCompletedEventV1JsonSchema);
+        return new TaskCompletedEventFactoryImpl(
+                objectMapper,
+                taskCompletedEventV1JsonSchema,
+                taskCompletedEventV2JsonSchema
+        );
     }
 
     @Bean
@@ -155,11 +206,24 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    @SneakyThrows
+    public JsonSchema taskCreatedReplicationEventV2JsonSchema(
+            JsonSchemaFactory jsonSchemaFactory
+    ) {
+        return jsonSchemaFactory.getSchema(taskCreatedReplicationEventV2Schema.getInputStream());
+    }
+
+    @Bean
     public TaskCreatedReplicationEventFactory taskCreatedReplicationEventFactory(
             ObjectMapper objectMapper,
-            JsonSchema taskCreatedReplicationEventV1JsonSchema
+            JsonSchema taskCreatedReplicationEventV1JsonSchema,
+            JsonSchema taskCreatedReplicationEventV2JsonSchema
     ) {
-        return new TaskCreatedReplicationEventFactoryImpl(objectMapper, taskCreatedReplicationEventV1JsonSchema);
+        return new TaskCreatedReplicationEventFactoryImpl(
+                objectMapper,
+                taskCreatedReplicationEventV1JsonSchema,
+                taskCreatedReplicationEventV2JsonSchema
+        );
     }
 
     @Bean

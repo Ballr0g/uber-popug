@@ -1,7 +1,7 @@
-package org.uber.popug.employee.billing.kafka.impl;
+package org.uber.popug.employee.billing.kafka.common.impl;
 
-import org.uber.popug.employee.billing.kafka.JsonSchemaRegistry;
-import org.uber.popug.employee.billing.kafka.consumer.NamedJsonSchema;
+import org.uber.popug.employee.billing.kafka.common.JsonSchemaRegistry;
+import org.uber.popug.employee.billing.kafka.common.NamedJsonSchema;
 
 import java.util.Collection;
 import java.util.Map;
@@ -13,6 +13,7 @@ public class CommonJsonSchemaRegistry<T> implements JsonSchemaRegistry<T> {
     private final Map<String, NamedJsonSchema<T>> jsonSchemaInfoMap;
 
     public CommonJsonSchemaRegistry(Collection<NamedJsonSchema<T>> schemas) {
+        // Todo: Handling of IllegalStateException on duplicate elements.
         this.jsonSchemaInfoMap = schemas.stream()
                 .collect(Collectors.toMap(NamedJsonSchema::name, schema -> schema));
     }

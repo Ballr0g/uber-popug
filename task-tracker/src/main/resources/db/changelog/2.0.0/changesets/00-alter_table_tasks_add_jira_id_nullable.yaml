@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: '2.0.0-00-0'
+      author: 'd.sagalov'
+      comment: 'Alter table task_tracker.tasks - add column jira_id'
+      changes:
+        - addColumn:
+            tableName: tasks
+            schemaName: task_tracker
+            columns:
+              - column:
+                  name: jira_id
+                  remarks: 'String ID of the task for visual convenience.'
+                  type: varchar(31)
+                  # The column is kept as nullable at the time of feature/POPUG-023 for compatibility reasons.
+                  constraints:
+                    nullable: true

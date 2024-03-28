@@ -1,7 +1,4 @@
-package org.uber.popug.employee.billing.kafka;
-
-import org.uber.popug.employee.billing.kafka.consumer.NamedJsonSchema;
-import org.uber.popug.employee.billing.kafka.consumer.JsonSchemaWithClass;
+package org.uber.popug.employee.billing.kafka.common;
 
 import java.util.Optional;
 

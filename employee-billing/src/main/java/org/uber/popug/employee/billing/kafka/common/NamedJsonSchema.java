@@ -1,4 +1,4 @@
-package org.uber.popug.employee.billing.kafka.consumer;
+package org.uber.popug.employee.billing.kafka.common;
 
 import jakarta.annotation.Nonnull;
 

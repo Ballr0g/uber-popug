@@ -29,7 +29,7 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Override
     public void sendTaskCreationEvent(Task task) {
         final var taskCreatedProducerRecord
-                = taskCreatedEventFactory.createTaskCreatedEventV1(task, tasksBusinessKafkaTopicName);
+                = taskCreatedEventFactory.createTaskCreatedEvent(task, tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(taskCreatedProducerRecord);
     }
@@ -38,14 +38,14 @@ public class KafkaTemplateTasksBusinessEventProducer implements TasksBusinessEve
     @Transactional
     public void sendTaskReassignmentEventsTransactional(List<ReassignedTaskEntity> tasksForReassignment) {
         tasksForReassignment.stream()
-                .map(task -> taskReassignedEventFactory.createTaskReassignedEventV1(task, tasksBusinessKafkaTopicName))
+                .map(task -> taskReassignedEventFactory.createTaskReassignedEvent(task, tasksBusinessKafkaTopicName))
                 .forEach(kafkaTemplate::send);
     }
 
     @Override
     public void sendTaskCompletionEvent(TaskEntity task, UserEntity assignee) {
         final var taskCreatedProducerRecord
-                = taskCompletedEventFactory.createTaskCompletedEventV1(task, assignee, tasksBusinessKafkaTopicName);
+                = taskCompletedEventFactory.createTaskCompletedEvent(task, assignee, tasksBusinessKafkaTopicName);
 
         kafkaTemplate.send(taskCreatedProducerRecord);
     }

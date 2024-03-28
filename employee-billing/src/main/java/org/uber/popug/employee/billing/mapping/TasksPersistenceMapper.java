@@ -15,6 +15,7 @@ public interface TasksPersistenceMapper {
     @Mapping(source = "task.extPublicId", target = "extPublicId")
     @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "task.description", target = "description")
+    @Mapping(source = "task.jiraId", target = "jiraId")
     @Mapping(source = "task.status", target = "status")
     @Mapping(source = "task.costs.assignmentCost", target = "assignmentCost")
     @Mapping(source = "task.costs.completionCost", target = "completionCost")
@@ -39,6 +40,7 @@ public interface TasksPersistenceMapper {
         return new Task(
                 taskEntity.task().id(),
                 taskEntity.task().extPublicId(),
+                taskEntity.task().jiraId(),
                 taskEntity.task().description(),
                 toBusiness(taskEntity.task().status()),
                 new Task.Costs(taskEntity.task().assignmentCost(), taskEntity.task().completionCost())

@@ -49,9 +49,13 @@ kafka:
   downloaded-schemas:
     task-created-replication-event:
       v1: classpath:downloads/json/schema/task-created-replication-event-v1.json
+      v2: classpath:downloads/json/schema/task-created-replication-event-v2.json
     task-created-event:
       v1: classpath:downloads/json/schema/task-created-event-v1.json
+      v2: classpath:downloads/json/schema/task-created-event-v2.json
     task-reassigned-event:
       v1: classpath:downloads/json/schema/task-reassigned-event-v1.json
+      v2: classpath:downloads/json/schema/task-reassigned-event-v2.json
     task-completed-event:
       v1: classpath:downloads/json/schema/task-completed-event-v1.json
+      v2: classpath:downloads/json/schema/task-completed-event-v2.json

@@ -25,6 +25,6 @@ public class TaskAssignmentServiceImpl implements TaskAssignmentService {
         final var selectedTaskAssigneeEntity = randomUserEntityService.getRandomUserEntityFromList(availableTaskAssignees);
         final var taskAssignee = usersPersistenceMapper.userEntityToTaskAssignee(selectedTaskAssigneeEntity);
 
-        return Task.create(taskIdProvider, task.description(), taskAssignee);
+        return Task.create(taskIdProvider, task, taskAssignee);
     }
 }

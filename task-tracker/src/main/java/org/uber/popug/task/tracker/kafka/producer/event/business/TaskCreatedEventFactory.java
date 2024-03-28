@@ -6,6 +6,6 @@ import org.uber.popug.task.tracker.domain.task.Task;
 
 public interface TaskCreatedEventFactory {
 
-    ProducerRecord<String, Object> createTaskCreatedEventV1(@Nonnull Task task, @Nonnull String topicName);
+    ProducerRecord<String, Object> createTaskCreatedEvent(@Nonnull Task task, @Nonnull String topicName);
 
 }
