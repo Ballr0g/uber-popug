@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "BillingOperationCreatedEvent.v1",
+  "description": "JSON schema for billing operation data replication event (version 1).",
+
+  "definitions": {
+    "eventData": {
+      "type": "object",
+      "title": "BillingOperationCreatedEventData.v1",
+      "properties": {
+        "billingOperationId": {
+          "description": "A globally unique ID of a billing operation.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "associatedUserId": {
+          "description": "A globally unique ID a user this operation is associated with.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "billedFor": {
+          "description": "The entry the user was billed for.",
+          "type": "string"
+        },
+        "billingOperationDescription": {
+          "description": "Description of a billing operation.",
+          "type": "string"
+        },
+        "operationType": {
+          "description": "Type of action in the operation.",
+          "type": "string",
+          "enum": [
+            "credit",
+            "debit"
+          ]
+        },
+        "operationTotal": {
+          "description": "The amount of money used in the operation.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "operationDate": {
+          "description": "Date-time when this operation occurred.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+
+      "required": [
+        "billingOperationId",
+        "associatedUserId",
+        "billedFor",
+        "billingOperationDescription",
+        "operationType",
+        "operationTotal",
+        "operationDate"
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventName":    { "type": "string", "enum": ["billing.operation.entity.created"] },
+    "eventVersion": { "type": "integer", "enum": [1] },
+    "eventId":      { "type": "string", "format": "uuid" },
+    "eventTime":    { "type": "string", "format": "date-time" },
+    "producer":     { "type": "string" },
+
+    "data": { "$ref": "#/definitions/eventData" }
+  },
+
+  "required": [
+    "eventName",
+    "eventVersion",
+    "eventId",
+    "eventTime",
+    "producer",
+    "data"
+  ]
+}

@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class JdbcClientUserRepository implements UserRepository {
-    private static final String GET_USERS_FOR_ROLE_SQL = /*language=sql*/
+    private static final String GET_USERS_FOR_ROLE_SQL = /* language=postgresql */
             """
             SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
                    ur.id AS user_role_id, ur.name AS user_role_name
@@ -30,7 +30,7 @@ public class JdbcClientUserRepository implements UserRepository {
             WHERE ur.name IN (:roleNames)
             """;
 
-    private static final String FIND_USER_BY_PUBLIC_ID_SQL = /*language=sql*/
+    private static final String FIND_USER_BY_PUBLIC_ID_SQL = /* language=postgresql */
             """
             SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
                    ur.id AS user_role_id, ur.name AS user_role_name
@@ -40,7 +40,7 @@ public class JdbcClientUserRepository implements UserRepository {
             WHERE u.ext_public_id = :extPublicUserId
             """;
 
-    private static final String FIND_USER_BY_ID_SQL = /*language=sql*/
+    private static final String FIND_USER_BY_ID_SQL = /* language=postgresql */
             """
             SELECT u.id AS user_id, u.ext_public_id AS ext_public_user_id, u.login AS user_login,
                    ur.id AS user_role_id, ur.name AS user_role_name

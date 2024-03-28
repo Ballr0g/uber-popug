@@ -1,6 +1,7 @@
 package org.uber.popug.employee.billing.domain.task;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.uber.popug.employee.billing.domain.task.replication.TaskReplicationInfo;
 
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 public record Task(
         long id,
         @Nonnull UUID extPublicId,
+        @Nullable String jiraId,
         @Nonnull String description,
         @Nonnull Status status,
         @Nonnull Costs costs
@@ -23,7 +25,7 @@ public record Task(
     ) {
     }
 
-    public static Task replicate(
+    public static Task replicateNoJiraId(
             @Nonnull TaskIdProvider taskIdProvider,
             @Nonnull TaskCostsProvider taskCostsProvider,
             @Nonnull TaskReplicationInfo taskReplicationInfo
@@ -31,6 +33,7 @@ public record Task(
         return new Task(
                 taskIdProvider.generateDbTaskId(),
                 taskReplicationInfo.id(),
+                taskReplicationInfo.jiraId(),
                 taskReplicationInfo.description(),
                 Status.OPEN,
                 new Costs(

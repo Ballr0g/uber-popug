@@ -11,6 +11,7 @@ import org.uber.popug.employee.billing.domain.billing.operation.impl.BillingOper
 import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskAssignmentBillingOperationDescriptionBuilder;
 import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskCompletionBillingOperationDescriptionBuilder;
 import org.uber.popug.employee.billing.domain.billing.operation.impl.TaskReassignmentBillingOperationDescriptionBuilder;
+import org.uber.popug.employee.billing.kafka.producer.BillingOperationsCUDEventProducer;
 import org.uber.popug.employee.billing.mapping.BillingAccountsPersistenceMapper;
 import org.uber.popug.employee.billing.mapping.BillingCyclesPersistenceMapper;
 import org.uber.popug.employee.billing.mapping.BillingOperationsPersistenceMapper;
@@ -90,13 +91,15 @@ public class BillingServicesConfig {
             TaskBillingOperationAssemblingService billingOperationAssemblingService,
             BillingCycleProvider billingCycleProvider,
             BillingOperationsPersistenceMapper billingOperationsPersistenceMapper,
-            ImmutableBillingOperationsRepository billingOperationsRepository
+            ImmutableBillingOperationsRepository billingOperationsRepository,
+            BillingOperationsCUDEventProducer billingOperationsCUDEventProducer
     ) {
         return new BillingOperationLogServiceImpl(
                 billingOperationAssemblingService,
                 billingCycleProvider,
                 billingOperationsPersistenceMapper,
-                billingOperationsRepository
+                billingOperationsRepository,
+                billingOperationsCUDEventProducer
         );
     }
 

@@ -1,0 +1,40 @@
+openapi: 3.1.0
+info:
+  title: 'uber-popug-schema-registry OpenAPI 3.1 contract.'
+  description: 'uber-popug-schema-registry - service for storing Event Schemas in Uber Popug Co.'
+  version: 0.0.1
+
+paths:
+  /registry/{schemaType}/schemas/{schemaName}/{schemaVersion}:
+    get:
+      operationId: getSchemaByNameAndVersion
+      tags:
+        - SchemaRetrieval
+      description: 'Retrieves the specified version of a schema with a specific schema type.'
+      parameters:
+        - name: schemaType
+          in: path
+          description: 'Type of the schema requested.'
+          required: true
+          schema:
+            type: string
+        - name: schemaName
+          in: path
+          description: 'Name of the requested schema.'
+          required: true
+          schema:
+            type: string
+        - name: schemaVersion
+          in: path
+          description: 'Version of the schema.'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: '[200] Successfully retrieved all tasks assigned to this user.'
+          content:
+            application/json+schema:
+              schema:
+                type: string

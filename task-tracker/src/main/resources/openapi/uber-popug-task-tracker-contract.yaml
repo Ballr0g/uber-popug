@@ -7,6 +7,7 @@ paths:
   /tasks:
     post:
       operationId: addTask
+      deprecated: true
       tags:
         - TasksCreation
       description: 'Creates and adds a new task and assigns it to a random employee.'
@@ -24,6 +25,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostAddTaskResponseDto'
+
+  /v2/tasks:
+    post:
+      operationId: addTaskV2
+      tags:
+        - TasksCreation
+      description: 'Creates and adds a new task and assigns it to a random employee. Unlike v1, this version requires Jira ID.'
+      requestBody:
+        required: true
+        description: 'Data for the new task created, requires a Jira ID.'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAddTaskV2RequestDto'
+      responses:
+        '201':
+          description: '[201] Successful response with task ID and task assignee ID.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostAddTaskV2ResponseDto'
 
   /tasks/reassign-all:
     post:
@@ -101,9 +123,43 @@ components:
           maxLength: 255
           description: 'Description of the new task, length - [1; 255].'
 
+    PostAddTaskV2RequestDto:
+      type: object
+      description: '[Request] Info required to create a task: jiraId and description.'
+      required:
+        - taskJiraId
+        - taskDescription
+      properties:
+        taskJiraId:
+          type: string
+          minLength: 1
+          maxLength: 31
+          description: 'Jira ID of a new task, length - [1; 31].'
+        taskDescription:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: 'Description of the new task, length - [1; 255].'
+
     PostAddTaskResponseDto:
       type: object
       description: '[Response] Task successfully created and assigned to the user specified.'
+      required:
+        - taskId
+        - taskAssigneeId
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: 'ID of the task created.'
+        taskAssigneeId:
+          type: string
+          format: uuid
+          description: 'ID of the task assignee.'
+
+    PostAddTaskV2ResponseDto:
+      type: object
+      description: '[Response] Task successfully created and assigned to the user specified via V2 API.'
       required:
         - taskId
         - taskAssigneeId

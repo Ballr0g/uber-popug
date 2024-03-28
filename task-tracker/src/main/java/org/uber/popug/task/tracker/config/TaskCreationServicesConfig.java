@@ -15,6 +15,7 @@ import org.uber.popug.task.tracker.service.TaskAddingService;
 import org.uber.popug.task.tracker.service.impl.JavaRandomUserEntityService;
 import org.uber.popug.task.tracker.service.impl.TaskAssignmentServiceImpl;
 import org.uber.popug.task.tracker.service.impl.TaskAddingServiceImpl;
+import org.uber.popug.task.tracker.validation.TaskCreationValidator;
 
 import java.util.random.RandomGenerator;
 
@@ -49,14 +50,16 @@ public class TaskCreationServicesConfig {
             TaskAssignmentService taskAssignmentService,
             TaskRepository taskRepository,
             TasksBusinessEventProducer tasksBusinessEventProducer,
-            TasksCUDEventProducer tasksCUDEventProducer
+            TasksCUDEventProducer tasksCUDEventProducer,
+            TaskCreationValidator taskCreationValidator
     ) {
         return new TaskAddingServiceImpl(
                 tasksDtoMapper,
                 taskAssignmentService,
                 taskRepository,
                 tasksBusinessEventProducer,
-                tasksCUDEventProducer
+                tasksCUDEventProducer,
+                taskCreationValidator
         );
     }
 

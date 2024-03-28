@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "TaskCreatedEvent.v1",
+  "description": "JSON schema for task creation business event (version 1).",
+
+  "definitions": {
+    "eventData": {
+      "type": "object",
+      "title": "TaskCreatedEventData.v1",
+      "properties": {
+        "taskId": {
+          "description": "A globally unique ID of a task.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "assigneeId": {
+          "description": "A globally unique ID of an assignee a task belongs to.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "taskDescription": {
+          "description": "Description of a task.",
+          "type": "string"
+        },
+        "creationDate": {
+          "description": "Date-time of task creation.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+
+      "required": [
+        "taskId",
+        "assigneeId",
+        "taskDescription",
+        "creationDate"
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventName":    { "type": "string", "enum": ["task.created"] },
+    "eventVersion": { "type": "integer", "enum": [1] },
+    "eventId":      { "type": "string", "format": "uuid" },
+    "eventTime":    { "type": "string", "format": "date-time" },
+    "producer":     { "type": "string" },
+
+    "data": { "$ref": "#/definitions/eventData" }
+  },
+
+  "required": [
+    "eventName",
+    "eventVersion",
+    "eventId",
+    "eventTime",
+    "producer",
+    "data"
+  ]
+}
