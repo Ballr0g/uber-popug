@@ -18,7 +18,7 @@ public interface TasksCUDKafkaEventMapper {
 
     @Mapping(source = "data.taskId", target = "id")
     @Mapping(source = "data.assigneeId", target = "assigneeId")
-    @Mapping(source = "data.taskDescription", target = "jiraId")
+    @Mapping(source = "data.jiraId", target = "jiraId")
     @Mapping(source = "data.taskDescription", target = "description")
     @Mapping(source = "data.creationDate", target = "creationDate")
     TaskReplicationInfo toBusiness(TaskCreatedReplicationEventV2 taskCreatedReplicationEventV1);
