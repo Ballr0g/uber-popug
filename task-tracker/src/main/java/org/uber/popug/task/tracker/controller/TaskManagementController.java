@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.uber.popug.task.tracker.rest.generated.api.TasksCreationApi;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskRequestDto;
 import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskResponseDto;
+import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskV2RequestDto;
+import org.uber.popug.task.tracker.rest.generated.model.PostAddTaskV2ResponseDto;
 import org.uber.popug.task.tracker.service.TaskAddingService;
 
 @RestController
@@ -20,6 +22,12 @@ public class TaskManagementController implements TasksCreationApi {
     @PreAuthorize("hasRole('client_developer')")
     public ResponseEntity<PostAddTaskResponseDto> addTask(PostAddTaskRequestDto postTasksRequestDto) {
         return new ResponseEntity<>(taskAddingService.addNewTask(postTasksRequestDto), HttpStatus.CREATED);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('client_developer')")
+    public ResponseEntity<PostAddTaskV2ResponseDto> addTaskV2(PostAddTaskV2RequestDto postAddTaskV2RequestDto) {
+        throw new UnsupportedOperationException("TaskManagementController.addTaskV2 is not implemented");
     }
 
 }
