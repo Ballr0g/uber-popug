@@ -18,21 +18,21 @@ public class JdbcClientTaskRepository implements TaskRepository {
     private static final String INSERT_TASK_SQL = /* language=postgresql */
             """
             INSERT INTO TASK_TRACKER.TASKS
-                (id, public_id, assignee_id, description)
+                (id, public_id, assignee_id, jira_id, description)
             VALUES
-                (:id, :publicId, :assigneeId, :description)
+                (:id, :publicId, :assigneeId, :jiraId, :description)
             """;
 
     private static final String FIND_TASK_BY_PUBLIC_ID_SQL = /* language=postgresql */
             """
-            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            SELECT t.id, t.public_id, t.assignee_id, t.jira_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.public_id = :publicId
             """;
 
     private static final String FIND_TASK_BY_ID_SQL = /* language=postgresql */
             """
-            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            SELECT t.id, t.public_id, t.assignee_id, t.jira_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.id = :id
             """;
@@ -51,7 +51,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
 
     private static final String SELECT_ALL_OPEN_TASKS_SQL = /* language=postgresql */
             """
-            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            SELECT t.id, t.public_id, t.assignee_id, t.jira_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.status = 'OPEN'
             """;
@@ -65,7 +65,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
 
     private static final String FIND_TASKS_BY_ASSIGNEE_ID_SQL = /* language=postgresql */
             """
-            SELECT t.id, t.public_id, t.assignee_id, t.description, t.status
+            SELECT t.id, t.public_id, t.assignee_id, t.jira_id, t.description, t.status
             FROM TASK_TRACKER.TASKS t
             WHERE t.assignee_id = :assigneeId
             """;
@@ -85,6 +85,7 @@ public class JdbcClientTaskRepository implements TaskRepository {
                 .param("id", task.id())
                 .param("publicId", task.publicId())
                 .param("assigneeId", task.assignee().id())
+                .param("jiraId", task.jiraId())
                 .param("description", task.description())
                 .update();
     }

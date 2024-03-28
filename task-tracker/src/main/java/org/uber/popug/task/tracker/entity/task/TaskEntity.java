@@ -1,6 +1,7 @@
 package org.uber.popug.task.tracker.entity.task;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ public record TaskEntity(
         long id,
         @Nonnull UUID publicId,
         long assigneeId,
+        @Nullable String jiraId,
         @Nonnull String description,
         @Nonnull Status status
 ) {
